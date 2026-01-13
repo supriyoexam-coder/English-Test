@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Beginners Quiz Reading Comprehension Set -2 Quiz | MockTest Buddy</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<script src="../home.js"></script>
+
+<style>
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --bg: #f3f4f6;
+    --card-bg: #ffffff;
+    --text: #111827;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --danger: #ef4444;
+    --success: #22c55e;
+    --marked: #7c3aed;
+    --correct-bg: #ecfdf3;
+    --wrong-bg: #fef2f2;
+    --marked-bg: #f3e8ff;
+}
+
+/* Reset-ish */
+* {
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: radial-gradient(circle at top left, #dbeafe, #eff6ff 40%, #f9fafb 80%);
+    color: var(--text);
+}
+
+/* Instruction header (brand only) */
+.brand-header {
+    background: linear-gradient(90deg, #0f172a, #111827);
+    color: #fff;
+    padding: 14px 16px;
+    text-align: center;
+}
+.brand-title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+.brand-sub {
+    font-size: 12px;
+    opacity: 0.8;
+    margin-top: 4px;
+}
+
+/* Test header (only after start) */
+.header-test {
+    display: none;
+    background: linear-gradient(90deg, var(--primary-dark), var(--primary));
+    color: #fff;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.header-left {
+    display: flex;
+    flex-direction: column;
+}
+.header-title {
+    font-size: 20px;
+    font-weight: 600;
+}
+.header-subtitle {
+    font-size: 12px;
+    opacity: 0.9;
+}
+.header-right {
+    font-size: 12px;
+    text-align: right;
+}
+.badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.12);
+    font-size: 11px;
+}
+
+/* Layout */
+.main {
+    max-width: 1000px;
+    margin: 16px auto 28px;
+    padding: 0 12px;
+}
+.card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
+    padding: 18px 16px 16px;
+}
+
+/* Instructions */
+#instructions-container {
+    display: block;
+}
+.instructions-layout {
+    display: flex;
+    gap: 16px;
+}
+.instructions-main {
+    flex: 1;
+}
+.instructions-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+.instructions-list {
+    font-size: 14px;
+    margin-left: 16px;
+    margin-bottom: 12px;
+}
+.instructions-list li {
+    margin-bottom: 4px;
+}
+.instructions-summary {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin: 10px 0 16px;
+}
+.instructions-summary-item {
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #f9fafb;
+    padding: 8px;
+    font-size: 13px;
+}
+.instructions-summary-label {
+    font-size: 11px;
+    color: var(--muted);
+}
+.instructions-summary-value {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* Instruction candidate box (right side) */
+.instructions-side {
+    width: 230px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #f1f5f9;
+    padding: 10px;
+    font-size: 13px;
+}
+.instructions-side-title {
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+.instructions-side-row {
+    margin-bottom: 4px;
+}
+.instructions-side-label {
+    color: var(--muted);
+    font-size: 12px;
+}
+.instructions-side-value {
+    font-weight: 500;
+}
+
+/* Test layout */
+#quiz-container {
+    display: none;
+}
+.header-test {
+    display: none;
+}
+.test-layout {
+    display: flex;
+    gap: 16px;
+}
+.test-main {
+    flex: 1;
+}
+.test-side {
+    width: 300px;
+}
+
+/* Question header */
+.question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 15px;
+    color: var(--muted);
+}
+.q-progress {
+    font-weight: 500;
+}
+.marks-info {
+    font-size: 12px;
+}
+.marks-info span {
+    margin-left: 8px;
+}
+.marks-pos {
+    color: var(--success);
+}
+.marks-neg {
+    color: var(--danger);
+}
+
+/* Question body */
+.question-body {
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    padding: 12px 10px;
+    background: #f9fafb;
+    margin-bottom: 12px;
+    font-size: 17px;
+	line-height: 1.5;
+}
+.question-body p {
+    margin: 4px 0;
+}
+
+/* Options */
+.options-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.option {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #fff;
+    cursor: pointer;
+    transition: background 0.12s ease, border-color 0.12s ease, transform 0.08s ease;
+}
+.option:hover {
+    background: #eff6ff;
+    border-color: var(--primary);
+    transform: translateY(-1px);
+}
+.option input {
+    margin-top: 3px;
+}
+.option-text {
+    font-size: 17px;
+	line-height: 1.4;
+}
+
+/* Nav buttons */
+.nav-bar {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.nav-left,
+.nav-right {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.btn {
+    border: none;
+    border-radius: 999px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.12s ease, transform 0.08s ease, box-shadow 0.12s ease;
+}
+.btn:active {
+    transform: translateY(1px);
+}
+.btn-primary {
+    background: var(--primary);
+    color: #fff;
+    box-shadow: 0 8px 16px rgba(37, 99, 235, 0.3);
+}
+.btn-primary:hover {
+    background: var(--primary-dark);
+}
+.btn-secondary {
+    background: #e5e7eb;
+    color: #111827;
+}
+.btn-secondary:hover {
+    background: #d1d5db;
+}
+.btn-danger {
+    background: var(--danger);
+    color: #fff;
+}
+.btn-danger:hover {
+    background: #b91c1c;
+}
+
+/* Side panel (palette only during test) */
+.sidebar-card {
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #f9fafb;
+    padding: 10px;
+    font-size: 12px;
+}
+
+/* Palette */
+.palette {
+    margin-top: 0;
+}
+.palette-title {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+.palette-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.palette-item {
+    min-width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 2px solid #d1d5db;
+    font-size: 18px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.15s;
+}
+.palette-item:hover {
+    transform: scale(1.08);
+    border-color: #3b82f6;
+}
+.palette-item.current {
+    outline: 2px solid var(--primary);
+}
+
+/* Palette colors per your request */
+.palette-item.state-notVisited {
+    background: #9ca3af;  /* darker grey */
+    color: #ffffff;
+}
+.palette-item.state-notAnswered {
+    background: #ef4444;  /* red */
+    color: #ffffff;
+}
+.palette-item.state-answered {
+    background: #22c55e;  /* green */
+    color: #ffffff;
+}
+.palette-item.state-marked {
+    background: #8b5cf6;  /* strong purple */
+    color: #ffffff;
+}
+
+/* Palette legend */
+.palette-legend {
+    margin-top: 8px;
+    font-size: 11px;
+    color: var(--muted);
+}
+.palette-legend-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 2px;
+}
+.legend-box {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+}
+.legend-notVisited { background: #e5e7eb; }
+.legend-notAnswered { background: #fee2e2; border-color:#fecaca; }
+.legend-answered { background: #dcfce7; border-color:#bbf7d0; }
+.legend-marked { background: #e9d5ff; border-color:#c4b5fd; }
+
+/* Solutions page */
+#solutions-container {
+    display: none;
+}
+.solutions-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+.solutions-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 10px;
+}
+.solution-item {
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+    margin-top: 10px;
+}
+.solution-item:first-child {
+    border-top: none;
+    padding-top: 0;
+    margin-top: 0;
+}
+.solution-question {
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+.solution-options {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+.solution-option {
+    display: flex;
+    gap: 6px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #fff;
+}
+.solution-option.correct {
+    background: var(--correct-bg);
+    border-color: var(--success);
+}
+.solution-option.wrong {
+    background: var(--wrong-bg);
+    border-color: var(--danger);
+}
+.solution-label {
+    font-size: 13px;
+    font-weight: 600;
+}
+.solution-text {
+    flex: 1;
+    font-size: 13px;
+}
+.solution-explanation {
+    font-size: 13px;
+    background: #eef2ff;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+/* Overlay */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15,23,42,0.55);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+}
+.overlay-content {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 16px 16px 14px;
+    width: 94%;
+    max-width: 430px;
+    box-shadow: 0 26px 50px rgba(15,23,42,0.4);
+}
+.overlay-header h2 {
+    margin: 0;
+    font-size: 20px;
+}
+.overlay-body {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 8px 0 10px;
+}
+.overlay-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-bottom: 10px;
+    font-size: 13px;
+}
+.metric-card {
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    padding: 8px;
+    background: #f9fafb;
+}
+.metric-label {
+    font-size: 11px;
+    color: var(--muted);
+}
+.metric-value {
+    font-size: 15px;
+    font-weight: 600;
+    margin-top: 2px;
+}
+.overlay-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+/* Utils */
+.hidden {
+    display: none !important;
+}
+
+/* Responsive: hide side panels & palette on phones */
+@media (max-width: 768px) {
+    .instructions-layout,
+    .test-layout {
+        flex-direction: column;
+    }
+    .instructions-side,
+    .test-side {
+        display: none;
+    }
+    .card {
+        padding: 16px 12px 14px;
+    }
+}
+
+/* >>> ADD NEW CODE BELOW <<< */
+
+/* Expand quiz layout width */
+.main {
+    max-width: 1400px !important;
+}
+
+/* Expand quiz card width */
+#quiz-container.card {
+    width: 100% !important;
+    padding: 20px !important;
+}
+
+/* Reduce left+right margin */
+.main {
+    margin: 10px auto !important;
+    padding: 0px 5px !important;
+}
+
+/* Ensure question+palette stay visible side by side */
+.test-layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 16px;
+}
+
+/* Reduce question padding */
+.question-body {
+    padding: 12px !important;
+}
+
+/* Keep buttons in one row */
+.nav-bar {
+    flex-wrap: nowrap !important;
+    justify-content: space-between !important;
+}
+
+.nav-left button,
+.nav-right button {
+    white-space: nowrap !important;
+}
+
+/* Medium screen adjustments */
+@media (max-width: 1100px) {
+    .test-layout {
+        display: block !important;
+    }
+    .test-side {
+        display: none !important;
+    }
+    #quiz-container.card {
+        padding: 10px !important;
+    }
+    .question-body {
+        font-size: 18px !important;
+    }
+    .btn {
+        font-size: 16px !important;
+    }
+}
+
+/* Small screen adjustments */
+@media (max-width: 600px) {
+    body {
+        font-size: 16px !important;
+    }
+    .btn {
+        padding: 10px 16px !important;
+        font-size: 15px !important;
+    }
+    .option-text {
+        font-size: 18px !important;
+    }
+}
+/* Buttons shown on desktop */
+.nav-right .btn-submit {
+    display: inline-flex;
+}
+
+/* Buttons shown on mobile */
+@media (max-width: 600px) {
+    .btn-submit {
+        display: none !important;
+    }
+
+    .btn-mark {
+        display: inline-flex !important;
+    }
+
+    .btn-clear {
+        display: inline-flex !important;
+    }
+
+    .btn-save {
+        display: inline-flex !important;
+    }
+
+    /* Change button labels visually */
+    .btn-mark::after {
+        content: "Mark";
+    }
+    .btn-clear::after {
+        content: "Clear";
+    }
+    .btn-save::after {
+        content: "Save & Next";
+    }
+
+    /* hide original text inside buttons */
+    .btn-mark span,
+    .btn-clear span,
+    .btn-save span {
+        display: none;
+    }
+
+    /* Make buttons larger and easier to tap */
+    .nav-left button,
+    .nav-right button {
+        padding: 14px 20px;
+        font-size: 18px;
+        border-radius: 8px;
+    }
+}
+
+@media (max-width: 600px) {
+    .header-test {
+        flex-wrap: wrap;
+        padding: 8px 10px;
+        gap: 6px;
+    }
+
+    .header-left {
+        flex: 1 1 100%;
+    }
+
+    .header-title {
+        font-size: 14px;
+        line-height: 1.2;
+    }
+
+    .header-subtitle {
+        font-size: 11px;
+    }
+
+    .header-right {
+        flex: 1 1 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 11px;
+    }
+
+    .badge {
+        font-size: 10px;
+        padding: 2px 6px;
+    }
+}
+/* ===== HAMBURGER MENU ===== */
+.menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .menu-btn {
+        display: block;
+    }
+}
+
+/* ===== PALETTE DRAWER ===== */
+.palette-drawer {
+    position: fixed;
+    top: 0;
+    left: -320px;
+    width: 300px;
+    height: 100dvh; /* mobile safe height */
+    background: #ffffff;
+    box-shadow: 2px 0 20px rgba(0,0,0,0.2);
+    z-index: 100;
+    padding: 12px;
+    transition: left 0.3s ease;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.palette-drawer.open {
+    left: 0;
+}
+
+.drawer-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    display: none;
+    z-index: 90;
+}
+
+.drawer-overlay.show {
+    display: block;
+}
+#palette-drawer-container {
+    flex: 0 0 auto;          
+    max-height: calc(100dvh - 170px); 
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+/* Improve scroll on mobile */
+#palette-drawer-container::-webkit-scrollbar {
+    width: 6px;
+}
+#palette-drawer-container::-webkit-scrollbar-thumb {
+    background: #c7d2fe;
+    border-radius: 6px;
+}
+/* Keep legend always visible */
+.palette-drawer .palette-legend {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid #e5e7eb;
+    flex-shrink: 0;
+}
+
+body.drawer-open {
+    overflow: hidden;
+}
+</style>
+</head>
+<body>
+
+<div id="drawer-overlay" class="drawer-overlay"></div>
+
+<div id="palette-drawer" class="palette-drawer">
+    <h3 style="margin:6px 0 10px;font-size:14px;">Question Palette</h3>
+
+    <div id="palette-drawer-container" class="palette-grid"></div>
+
+    <!-- LEGEND FOR MOBILE -->
+    <div class="palette-legend">
+        <div class="palette-legend-row">
+            <span class="legend-box legend-notVisited"></span> Not visited
+        </div>
+        <div class="palette-legend-row">
+            <span class="legend-box legend-notAnswered"></span> Not answered
+        </div>
+        <div class="palette-legend-row">
+            <span class="legend-box legend-answered"></span> Answered
+        </div>
+        <div class="palette-legend-row">
+            <span class="legend-box legend-marked"></span> Marked for review
+        </div>
+    </div>
+</div>
+
+<!-- INSTRUCTION HEADER (BRAND ONLY) -->
+<div id="instruction-header" class="brand-header">
+    <div class="brand-title">MockTest Buddy</div>
+    <div class="brand-sub">by Team LuciferBanker</div>
+</div>
+
+<!-- TEST HEADER (ONLY AFTER START) -->
+<div id="quiz-header" class="header-test">
+    <button id="menu-btn" class="menu-btn">☰</button>
+    <div class="header-left">
+        <span class="header-title">Beginners Quiz Reading Comprehension Set -2</span>
+        <span class="header-subtitle">Single-correct MCQ • One question per screen</span>
+    </div>
+    <div class="header-right">
+        <span class="badge">Quiz Mode</span><br />
+        <span style="font-size: 11px;">Marks: +1 / −0.25</span><br />
+        <span id="timer-label" style="font-size: 11px;">Time: 00:00:00</span>
+    </div>
+</div>
+
+<div class="main">
+
+    <!-- INSTRUCTIONS SCREEN -->
+    <div class="card" id="instructions-container">
+        <div class="instructions-layout">
+            <div class="instructions-main">
+                <div class="instructions-title">Instructions</div>
+                <p style="font-size:14px;margin-bottom:6px;">
+                    Read the instructions carefully before starting. Once started, the timer will not stop.
+                </p>
+
+                <div class="instructions-summary">
+                    <div class="instructions-summary-item">
+                        <div class="instructions-summary-label">Total Questions</div>
+                        <div class="instructions-summary-value" id="inst-total-questions">16</div>
+                    </div>
+                    <div class="instructions-summary-item">
+                        <div class="instructions-summary-label">Marks / Q</div>
+                        <div class="instructions-summary-value">+1</div>
+                    </div>
+                    <div class="instructions-summary-item">
+                        <div class="instructions-summary-label">Negative</div>
+                        <div class="instructions-summary-value">−0.25</div>
+                    </div>
+                </div>
+
+                <ul class="instructions-list">
+                    <li>Each question has a single correct answer.</li>
+                    <li>Use the palette on the right to move between questions or sections.</li>
+                    <li>Use <strong>Mark for Review &amp; Next</strong> to mark questions you want to review later.</li>
+                    <li>You can submit the test anytime using the <strong>Submit</strong> button.</li>
+                </ul>
+
+                <button class="btn btn-primary" id="start-test-btn">Start Test</button>
+            </div>
+
+            <div class="instructions-side">
+                <div class="instructions-side-title">Details</div>
+                <div class="instructions-side-row">
+                    <div class="instructions-side-label">Canditate</div>
+                    <div class="instructions-side-value">Guest User</div>
+                </div>
+                <div class="instructions-side-row">
+                    <div class="instructions-side-label">Section</div>
+                    <div class="instructions-side-value" id="inst-section-name">Beginners Quiz Reading Comprehension Set -2</div>
+                </div>
+                <div class="instructions-side-row">
+                    <div class="instructions-side-label">Questions</div>
+                    <div class="instructions-side-value" id="inst-side-total">16</div>
+                </div>
+                <div class="instructions-side-row">
+                    <div class="instructions-side-label">Marks</div>
+                    <div class="instructions-side-value">+1 / −0.25</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- QUIZ SCREEN -->
+    <div class="card" id="quiz-container">
+        <div class="test-layout">
+            <div class="test-main">
+                <div class="question-header">
+                    <div class="q-progress" id="q-progress">Question 1 of 16</div>
+                    <div class="marks-info">
+                        <span class="marks-pos">+1 mark</span>
+                        <span class="marks-neg">−0.25 negative</span>
+                    </div>
+                </div>
+                <div class="question-body" id="question-text"></div>
+                <div class="options-group" id="options-container"></div>
+
+                <div class="nav-bar">
+					<div class="nav-left">
+						<button class="btn btn-secondary" id="clear-btn">
+							<svg width="18" height="18" viewBox="0 0 24 24" class="btn-icon"><path d="M6 19L19 6" stroke="currentColor" stroke-width="2"/><path d="M6 6L19 19" stroke="currentColor" stroke-width="2"/></svg>
+							<span class="btn-text">Clear Response</span>
+						</button>
+						<button class="btn btn-secondary" id="mark-btn">
+							<svg width="18" height="18" viewBox="0 0 24 24" class="btn-icon"><path d="M6 3h12v18l-6-4-6 4V3z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+							<span class="btn-text">Mark for Review & Next</span>
+						</button>
+					</div>
+					<div class="nav-right">
+						<button class="btn btn-primary" id="next-btn">
+							<svg width="18" height="18" viewBox="0 0 24 24" class="btn-icon"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+							<span class="btn-text">Save & Next</span>
+						</button>
+						<button class="btn btn-danger" id="submit-btn">
+							<svg width="18" height="18" viewBox="0 0 24 24" class="btn-icon"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+							<span class="btn-text">Submit</span>
+						</button>
+					</div>
+				</div>
+
+            </div>
+
+            <aside class="test-side">
+                <div class="sidebar-card palette">
+                    <div class="palette-title">Question Palette</div>
+                    <div class="palette-grid" id="palette-container"></div>
+                    <div class="palette-legend">
+                        <div class="palette-legend-row">
+                            <span class="legend-box legend-notVisited"></span> Not visited
+                        </div>
+                        <div class="palette-legend-row">
+                            <span class="legend-box legend-notAnswered"></span> Not answered
+                        </div>
+                        <div class="palette-legend-row">
+                            <span class="legend-box legend-answered"></span> Answered
+                        </div>
+                        <div class="palette-legend-row">
+                            <span class="legend-box legend-marked"></span> Marked for review
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- SOLUTIONS SCREEN -->
+    <div class="card" id="solutions-container">
+        <div class="solutions-title">Solutions – Beginners Quiz Reading Comprehension Set -2</div>
+        <div class="solutions-sub">
+            Correct options are highlighted in <span style="color:var(--success);font-weight:600;">green</span>.
+            Your wrong selections (if any) are highlighted in <span style="color:var(--danger);font-weight:600;">red</span>.
+        </div>
+        <div id="solutions-list"></div>
+        <div style="margin-top:12px; display:flex; justify-content:flex-end; gap:8px;">
+            <button class="btn btn-secondary" id="solutions-back-btn">&larr; Back to Result</button>
+        </div>
+    </div>
+</div>
+
+<!-- RESULT OVERLAY -->
+<div class="overlay" id="result-overlay">
+    <div class="overlay-content">
+        <div class="overlay-header">
+            <h2>Quiz Summary</h2>
+        </div>
+        <div class="overlay-body">
+            Here is your performance analytics for this test.
+        </div>
+        <div class="overlay-metrics">
+            <div class="metric-card">
+                <div class="metric-label">Total Marks</div>
+                <div class="metric-value" id="metric-marks">0</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Correct Answers</div>
+                <div class="metric-value" id="metric-correct">0</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Wrong Answers</div>
+                <div class="metric-value" id="metric-wrong">0</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Questions Attempted</div>
+                <div class="metric-value" id="metric-attempted">0</div>
+            </div>
+			<div class="metric-card">
+				<div class="metric-label">Avg Time / Question</div>
+				<div class="metric-value" id="metric-avgtime">0</div>
+			</div>
+        </div>
+        <div class="overlay-footer">
+            <button class="btn btn-secondary" id="home-btn">Home</button>
+            <button class="btn btn-primary" id="view-solutions-btn">View Solutions</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const TEST_DURATION_SECONDS = 600;
+
+const questions = [{"question": "<p><strong>The passage given below contains information that is followed by questions based on the same. You must read the same carefully and choose an option that would be the best answer for each one. </strong></p>\n<p>The recent stand-off between the Indian and Chinese armies in Tawang needs to be seen in the strategic political and cultural significance of the 3,488 km LAC area running all along the Himalayan ridgeline which is undemarcated. The situation is further complicated by the fact that the perception of where the LAC runs varies by several km at certain places and troops of either side patrol in these disputed sections. The two countries signed an agreement in January 2012 to establish a “Working mechanism for consultation and coordination on Indo-China Affairs”. The main objective of this agreement was to address issues and diffuse situations that may arise in border areas and affect peace and tranquillity. However, the repeated<strong> ___________ </strong>the two armies over the years indicated that this agreement was not successful.</p>\n<p>According to a report, China made at least 300 attempts at infiltration inside the Indian side from 2005 to 2015 whereas during the period of 2015 to 2020 such attempts increased to 600.</p>\n<p>Considering Tawang, there are three “agreed areas” of differing Indian and Chinese perceptions of the LAC. The site of the recent confrontation, Yangtse, which is about 25 Km from Tawang town, North of the Lungroo grazing ground, is one of those areas. Consequently, it has been the site of regular physical contact between the Indian and Chinese armies, especially as the high ground is on the Indian side, giving it a commanding view of the Chinese side. In order to understand the ground realities and the problem of confrontation between the two countries, we need to explore the history of the region. Historically, Tawang was under the control of Tibet for a long time. Tibet and British India signed an agreement in the 1914 Shimla Conference to delineate their common boundary in the Assam Himalaya region which was called the Mac Mohan Line. According to this agreement, Tibet <strong>relinquished</strong> several hundred square miles of its territory, including Tawang to the British. Since the British were unable to get China’s acceptance, the Tibetans regarded the “Mac Mohan line” invalid and Tawang continued to be administered by Tibet. Tawang was important to the Tibetans due to the Tawang Monastery. In 1938, the British made a move to assert sovereignty over Tawang by sending a military which was met with strong resistance from the Tibetan government. After the outbreak of war between China and Japan, the government of Assam undertook a number of ‘Forward Policy’ measures to tighten its hold on the North-Eastern Frontier Agency (NEFA) area which was later recognized as Arunachal Pradesh. The situation took a decisive turn in 1950 when Tibet lost its autonomy and was incorporated into the newly established People’s Republic of China. In February 1951, India took control of the remainder of the Tawang tract from the Tibetans, removing the Tibetan administration. This move was warmly welcomed by the native population. During the 1962 Sino-India war, Tawang briefly fell under Chinese control, but China voluntarily withdrew its troops at the end of the war and Tawang returned to the Indian administration. But, since then, China has not relinquished its claim on most of Arunachal Pradesh including Tawang.</p>\n<p>There have been reports from the China side of large-scale constructions of roads and other infrastructure along the Indian border. Taking note of these developments, in the last few years, India has taken concrete steps to improve the infrastructure on its side of LAC in the Tawang area. The Border Road Organisation (BRO) has constructed a tunnel at Sela Pass which could be ready by January 2023 and would provide crucial all-weather connectivity between Tezpur in Assam and Tawang. Another 1,500-km Frontier Highway project is coming up which will run from Tawang in the West to Vijayanagar in East Arunachal along the state’s frontier with China. The Indian government is taking all steps to counter the adverse designs of China in this area, but much more needs to be done. Considering the evil designs of China, we need to be well prepared to meet any eventuality in the times to come. The Indian Army and Air Force need to be kept in a state of good preparedness to match the military force of China.</p><br><p><strong>Why was an agreement signed between India and China in January 2012?</strong></p>", "options": ["<p>To stop the stand-offs between the Indian and the Chinese armies in Tawang</p>", "<p>To make the area along the LAC that is undemarcated, markedly visible</p>", "<p>For consultation and coordination on Indo-Chinese affairs</p>", "<p>To address the issues that interfere with the peace and tranquillity of the countries of the world</p>", "<p>Both (c) and (d)</p>"], "correctIndex": 2, "solution": "<p><strong>Answer: C</strong></p>\n<p>The first paragraph tells us clearly that there have been various instances of tussles between India and China. The recent one being the Tawang incidence. In the past it says the two countries signed an agreement which mandated that the two countries would not indulge in any action that disturbs the peace. Also, this can be achieved through talks and consultations for which an agreement was signed in 2012.</p>\n<p>The first option specifically talks about Tawang and is not correct as, it isn’t only about Tawang. (b) is also not the correct reason for the same. (d) is distorted as it mentions the countries of the world which is not correct.</p>\n<p>Therefore, the only option that is true is (c).</p>"}, {"question": "<p><strong>The passage given below contains information that is followed by questions based on the same. You must read the same carefully and choose an option that would be the best answer for each one. </strong></p>\n<p>The recent stand-off between the Indian and Chinese armies in Tawang needs to be seen in the strategic political and cultural significance of the 3,488 km LAC area running all along the Himalayan ridgeline which is undemarcated. The situation is further complicated by the fact that the perception of where the LAC runs varies by several km at certain places and troops of either side patrol in these disputed sections. The two countries signed an agreement in January 2012 to establish a “Working mechanism for consultation and coordination on Indo-China Affairs”. The main objective of this agreement was to address issues and diffuse situations that may arise in border areas and affect peace and tranquillity. However, the repeated<strong> ___________ </strong>the two armies over the years indicated that this agreement was not successful.</p>\n<p>According to a report, China made at least 300 attempts at infiltration inside the Indian side from 2005 to 2015 whereas during the period of 2015 to 2020 such attempts increased to 600.</p>\n<p>Considering Tawang, there are three “agreed areas” of differing Indian and Chinese perceptions of the LAC. The site of the recent confrontation, Yangtse, which is about 25 Km from Tawang town, North of the Lungroo grazing ground, is one of those areas. Consequently, it has been the site of regular physical contact between the Indian and Chinese armies, especially as the high ground is on the Indian side, giving it a commanding view of the Chinese side. In order to understand the ground realities and the problem of confrontation between the two countries, we need to explore the history of the region. Historically, Tawang was under the control of Tibet for a long time. Tibet and British India signed an agreement in the 1914 Shimla Conference to delineate their common boundary in the Assam Himalaya region which was called the Mac Mohan Line. According to this agreement, Tibet <strong>relinquished</strong> several hundred square miles of its territory, including Tawang to the British. Since the British were unable to get China’s acceptance, the Tibetans regarded the “Mac Mohan line” invalid and Tawang continued to be administered by Tibet. Tawang was important to the Tibetans due to the Tawang Monastery. In 1938, the British made a move to assert sovereignty over Tawang by sending a military which was met with strong resistance from the Tibetan government. After the outbreak of war between China and Japan, the government of Assam undertook a number of ‘Forward Policy’ measures to tighten its hold on the North-Eastern Frontier Agency (NEFA) area which was later recognized as Arunachal Pradesh. The situation took a decisive turn in 1950 when Tibet lost its autonomy and was incorporated into the newly established People’s Republic of China. In February 1951, India took control of the remainder of the Tawang tract from the Tibetans, removing the Tibetan administration. This move was warmly welcomed by the native population. During the 1962 Sino-India war, Tawang briefly fell under Chinese control, but China voluntarily withdrew its troops at the end of the war and Tawang returned to the Indian administration. But, since then, China has not relinquished its claim on most of Arunachal Pradesh including Tawang.</p>\n<p>There have been reports from the China side of large-scale constructions of roads and other infrastructure along the Indian border. Taking note of these developments, in the last few years, India has taken concrete steps to improve the infrastructure on its side of LAC in the Tawang area. The Border Road Organisation (BRO) has constructed a tunnel at Sela Pass which could be ready by January 2023 and would provide crucial all-weather connectivity between Tezpur in Assam and Tawang. Another 1,500-km Frontier Highway project is coming up which will run from Tawang in the West to Vijayanagar in East Arunachal along the state’s frontier with China. The Indian government is taking all steps to counter the adverse designs of China in this area, but much more needs to be done. Considering the evil designs of China, we need to be well prepared to meet any eventuality in the times to come. The Indian Army and Air Force need to be kept in a state of good preparedness to match the military force of China.</p><br><p><strong>Which of the given options is true as per the passage?</strong></p>", "options": ["<p>China&rsquo;s infiltration attempts in India have increased in the past few years</p>", "<p>India and China have their own maps of what they consider parts of the LAC</p>", "<p>China does not spend much on infrastructure development in the LAC area</p>", "<p>Tawang was a free area in the days of British India</p>", "<p>All options are true</p>"], "correctIndex": 0, "solution": "<p><strong>Answer: A</strong></p>\n<p>Refer to the lines given below:</p>\n<p>According to a report, China made at least <strong><em>300 attempts</em></strong> at infiltration inside the Indian side <strong><em>from 2005 to 2015</em></strong> whereas during the period of <strong><em>2015 to 2020 such attempts increased to 600</em></strong>.</p>\n<p>These lines make it very clear that the infiltration attempts have gone up and this makes the first option ie; (a) the most appropriate answer.</p>"}, {"question": "<p><strong>The passage given below contains information that is followed by questions based on the same. You must read the same carefully and choose an option that would be the best answer for each one. </strong></p>\n<p>The recent stand-off between the Indian and Chinese armies in Tawang needs to be seen in the strategic political and cultural significance of the 3,488 km LAC area running all along the Himalayan ridgeline which is undemarcated. The situation is further complicated by the fact that the perception of where the LAC runs varies by several km at certain places and troops of either side patrol in these disputed sections. The two countries signed an agreement in January 2012 to establish a “Working mechanism for consultation and coordination on Indo-China Affairs”. The main objective of this agreement was to address issues and diffuse situations that may arise in border areas and affect peace and tranquillity. However, the repeated<strong> ___________ </strong>the two armies over the years indicated that this agreement was not successful.</p>\n<p>According to a report, China made at least 300 attempts at infiltration inside the Indian side from 2005 to 2015 whereas during the period of 2015 to 2020 such attempts increased to 600.</p>\n<p>Considering Tawang, there are three “agreed areas” of differing Indian and Chinese perceptions of the LAC. The site of the recent confrontation, Yangtse, which is about 25 Km from Tawang town, North of the Lungroo grazing ground, is one of those areas. Consequently, it has been the site of regular physical contact between the Indian and Chinese armies, especially as the high ground is on the Indian side, giving it a commanding view of the Chinese side. In order to understand the ground realities and the problem of confrontation between the two countries, we need to explore the history of the region. Historically, Tawang was under the control of Tibet for a long time. Tibet and British India signed an agreement in the 1914 Shimla Conference to delineate their common boundary in the Assam Himalaya region which was called the Mac Mohan Line. According to this agreement, Tibet <strong>relinquished</strong> several hundred square miles of its territory, including Tawang to the British. Since the British were unable to get China’s acceptance, the Tibetans regarded the “Mac Mohan line” invalid and Tawang continued to be administered by Tibet. Tawang was important to the Tibetans due to the Tawang Monastery. In 1938, the British made a move to assert sovereignty over Tawang by sending a military which was met with strong resistance from the Tibetan government. After the outbreak of war between China and Japan, the government of Assam undertook a number of ‘Forward Policy’ measures to tighten its hold on the North-Eastern Frontier Agency (NEFA) area which was later recognized as Arunachal Pradesh. The situation took a decisive turn in 1950 when Tibet lost its autonomy and was incorporated into the newly established People’s Republic of China. In February 1951, India took control of the remainder of the Tawang tract from the Tibetans, removing the Tibetan administration. This move was warmly welcomed by the native population. During the 1962 Sino-India war, Tawang briefly fell under Chinese control, but China voluntarily withdrew its troops at the end of the war and Tawang returned to the Indian administration. But, since then, China has not relinquished its claim on most of Arunachal Pradesh including Tawang.</p>\n<p>There have been reports from the China side of large-scale constructions of roads and other infrastructure along the Indian border. Taking note of these developments, in the last few years, India has taken concrete steps to improve the infrastructure on its side of LAC in the Tawang area. The Border Road Organisation (BRO) has constructed a tunnel at Sela Pass which could be ready by January 2023 and would provide crucial all-weather connectivity between Tezpur in Assam and Tawang. Another 1,500-km Frontier Highway project is coming up which will run from Tawang in the West to Vijayanagar in East Arunachal along the state’s frontier with China. The Indian government is taking all steps to counter the adverse designs of China in this area, but much more needs to be done. Considering the evil designs of China, we need to be well prepared to meet any eventuality in the times to come. The Indian Army and Air Force need to be kept in a state of good preparedness to match the military force of China.</p><br><p><strong>With which of the following would the author most likely agree?</strong></p>", "options": ["<p>The government should prioritise peace and let go of the part that China keeps claiming</p>", "<p>The government must be ready for everything and should not treat border conflicts casually</p>", "<p>Tibetans gave Tawang to India and the Chinese should better accept the fact</p>", "<p>There are acts of intrusions from both sides of the border so, both are equally responsible</p>", "<p>None of these</p>"], "correctIndex": 1, "solution": "<p><strong>Answer: B</strong></p>\n<p>The first option is superfluous as the author has nowhere been found supporting such an extreme claim.</p>\n<p>If we read the last few lines of the last paragraph, we find that the author feels the government should be ready for any eventuality. This makes the second option the most logical.</p>\n<p>The third and the fourth options are mere wordplays and can be left out.</p>\n<p>So, the best would be to mark option (b) as the answer.</p>"}, {"question": "<p><strong>The passage given below contains information that is followed by questions based on the same. You must read the same carefully and choose an option that would be the best answer for each one. </strong></p>\n<p>The recent stand-off between the Indian and Chinese armies in Tawang needs to be seen in the strategic political and cultural significance of the 3,488 km LAC area running all along the Himalayan ridgeline which is undemarcated. The situation is further complicated by the fact that the perception of where the LAC runs varies by several km at certain places and troops of either side patrol in these disputed sections. The two countries signed an agreement in January 2012 to establish a “Working mechanism for consultation and coordination on Indo-China Affairs”. The main objective of this agreement was to address issues and diffuse situations that may arise in border areas and affect peace and tranquillity. However, the repeated<strong> ___________ </strong>the two armies over the years indicated that this agreement was not successful.</p>\n<p>According to a report, China made at least 300 attempts at infiltration inside the Indian side from 2005 to 2015 whereas during the period of 2015 to 2020 such attempts increased to 600.</p>\n<p>Considering Tawang, there are three “agreed areas” of differing Indian and Chinese perceptions of the LAC. The site of the recent confrontation, Yangtse, which is about 25 Km from Tawang town, North of the Lungroo grazing ground, is one of those areas. Consequently, it has been the site of regular physical contact between the Indian and Chinese armies, especially as the high ground is on the Indian side, giving it a commanding view of the Chinese side. In order to understand the ground realities and the problem of confrontation between the two countries, we need to explore the history of the region. Historically, Tawang was under the control of Tibet for a long time. Tibet and British India signed an agreement in the 1914 Shimla Conference to delineate their common boundary in the Assam Himalaya region which was called the Mac Mohan Line. According to this agreement, Tibet <strong>relinquished</strong> several hundred square miles of its territory, including Tawang to the British. Since the British were unable to get China’s acceptance, the Tibetans regarded the “Mac Mohan line” invalid and Tawang continued to be administered by Tibet. Tawang was important to the Tibetans due to the Tawang Monastery. In 1938, the British made a move to assert sovereignty over Tawang by sending a military which was met with strong resistance from the Tibetan government. After the outbreak of war between China and Japan, the government of Assam undertook a number of ‘Forward Policy’ measures to tighten its hold on the North-Eastern Frontier Agency (NEFA) area which was later recognized as Arunachal Pradesh. The situation took a decisive turn in 1950 when Tibet lost its autonomy and was incorporated into the newly established People’s Republic of China. In February 1951, India took control of the remainder of the Tawang tract from the Tibetans, removing the Tibetan administration. This move was warmly welcomed by the native population. During the 1962 Sino-India war, Tawang briefly fell under Chinese control, but China voluntarily withdrew its troops at the end of the war and Tawang returned to the Indian administration. But, since then, China has not relinquished its claim on most of Arunachal Pradesh including Tawang.</p>\n<p>There have been reports from the China side of large-scale constructions of roads and other infrastructure along the Indian border. Taking note of these developments, in the last few years, India has taken concrete steps to improve the infrastructure on its side of LAC in the Tawang area. The Border Road Organisation (BRO) has constructed a tunnel at Sela Pass which could be ready by January 2023 and would provide crucial all-weather connectivity between Tezpur in Assam and Tawang. Another 1,500-km Frontier Highway project is coming up which will run from Tawang in the West to Vijayanagar in East Arunachal along the state’s frontier with China. The Indian government is taking all steps to counter the adverse designs of China in this area, but much more needs to be done. Considering the evil designs of China, we need to be well prepared to meet any eventuality in the times to come. The Indian Army and Air Force need to be kept in a state of good preparedness to match the military force of China.</p><br><p><strong>Which of the following is the reason that would help us understand tussle?</strong></p>", "options": ["<p>The Indian side is always compelled to retaliate as the Chinese side aggravates issues</p>", "<p>The area of Tawang has been under the control of Tibet before it was taken over by India</p>", "<p>China tries to establish its monopoly over regions that were parts of Tibet before India took over</p>", "<p>Both (a) and (c)</p>", "<p>Both (c) and (b)</p>"], "correctIndex": 4, "solution": "<p><strong>Answer: E</strong></p>\n<p>The tussle indicates at the skirmishes between India and China in which this article deals with the recent Tawang issue. It has been explained in the third paragraph very extensively that the history behind the regions under tussle needs to be understood to understand the tussle reasonably. This makes the fifth option which is a combination of the history that has been explained above.</p>\n<p>Therefore, the best would be to go with option (e) as the answer.</p>"}, {"question": "<p><strong>The passage given below contains information that is followed by questions based on the same. You must read the same carefully and choose an option that would be the best answer for each one. </strong></p>\n<p>The recent stand-off between the Indian and Chinese armies in Tawang needs to be seen in the strategic political and cultural significance of the 3,488 km LAC area running all along the Himalayan ridgeline which is undemarcated. The situation is further complicated by the fact that the perception of where the LAC runs varies by several km at certain places and troops of either side patrol in these disputed sections. The two countries signed an agreement in January 2012 to establish a “Working mechanism for consultation and coordination on Indo-China Affairs”. The main objective of this agreement was to address issues and diffuse situations that may arise in border areas and affect peace and tranquillity. However, the repeated<strong> ___________ </strong>the two armies over the years indicated that this agreement was not successful.</p>\n<p>According to a report, China made at least 300 attempts at infiltration inside the Indian side from 2005 to 2015 whereas during the period of 2015 to 2020 such attempts increased to 600.</p>\n<p>Considering Tawang, there are three “agreed areas” of differing Indian and Chinese perceptions of the LAC. The site of the recent confrontation, Yangtse, which is about 25 Km from Tawang town, North of the Lungroo grazing ground, is one of those areas. Consequently, it has been the site of regular physical contact between the Indian and Chinese armies, especially as the high ground is on the Indian side, giving it a commanding view of the Chinese side. In order to understand the ground realities and the problem of confrontation between the two countries, we need to explore the history of the region. Historically, Tawang was under the control of Tibet for a long time. Tibet and British India signed an agreement in the 1914 Shimla Conference to delineate their common boundary in the Assam Himalaya region which was called the Mac Mohan Line. According to this agreement, Tibet <strong>relinquished</strong> several hundred square miles of its territory, including Tawang to the British. Since the British were unable to get China’s acceptance, the Tibetans regarded the “Mac Mohan line” invalid and Tawang continued to be administered by Tibet. Tawang was important to the Tibetans due to the Tawang Monastery. In 1938, the British made a move to assert sovereignty over Tawang by sending a military which was met with strong resistance from the Tibetan government. After the outbreak of war between China and Japan, the government of Assam undertook a number of ‘Forward Policy’ measures to tighten its hold on the North-Eastern Frontier Agency (NEFA) area which was later recognized as Arunachal Pradesh. The situation took a decisive turn in 1950 when Tibet lost its autonomy and was incorporated into the newly established People’s Republic of China. In February 1951, India took control of the remainder of the Tawang tract from the Tibetans, removing the Tibetan administration. This move was warmly welcomed by the native population. During the 1962 Sino-India war, Tawang briefly fell under Chinese control, but China voluntarily withdrew its troops at the end of the war and Tawang returned to the Indian administration. But, since then, China has not relinquished its claim on most of Arunachal Pradesh including Tawang.</p>\n<p>There have been reports from the China side of large-scale constructions of roads and other infrastructure along the Indian border. Taking note of these developments, in the last few years, India has taken concrete steps to improve the infrastructure on its side of LAC in the Tawang area. The Border Road Organisation (BRO) has constructed a tunnel at Sela Pass which could be ready by January 2023 and would provide crucial all-weather connectivity between Tezpur in Assam and Tawang. Another 1,500-km Frontier Highway project is coming up which will run from Tawang in the West to Vijayanagar in East Arunachal along the state’s frontier with China. The Indian government is taking all steps to counter the adverse designs of China in this area, but much more needs to be done. Considering the evil designs of China, we need to be well prepared to meet any eventuality in the times to come. The Indian Army and Air Force need to be kept in a state of good preparedness to match the military force of China.</p><br><p><strong>Which of the given options is not true as per the given passage?</strong></p>", "options": ["<p>The agreement signed between India and China in 2012 has been successful</p>", "<p>During the war of 1962, the Chinese withdrew their troops from the Tawang region</p>", "<p>The BRO is trying to do everything possible to complete the tunnel that provides year-long connectivity</p>", "<p>India is keeping a vigil on the activities of the Chinese along our borders</p>", "<p>All the statements are true</p>"], "correctIndex": 0, "solution": "<p><strong>Answer: A</strong></p>\n<p>The last line of the first paragraph clarifies that the agreement that is being mentioned couldn’t bear fruit as the infiltrations and activities that disturb the peace still continue along the border from the Chinese side.</p>\n<p>The other sentences are all correct as they have directly been given.</p>\n<p>So, the best would be to mark the answer as option (a).</p>"}, {"question": "<p><strong>The passage given below contains information that is followed by questions based on the same. You must read the same carefully and choose an option that would be the best answer for each one. </strong></p>\n<p>The recent stand-off between the Indian and Chinese armies in Tawang needs to be seen in the strategic political and cultural significance of the 3,488 km LAC area running all along the Himalayan ridgeline which is undemarcated. The situation is further complicated by the fact that the perception of where the LAC runs varies by several km at certain places and troops of either side patrol in these disputed sections. The two countries signed an agreement in January 2012 to establish a “Working mechanism for consultation and coordination on Indo-China Affairs”. The main objective of this agreement was to address issues and diffuse situations that may arise in border areas and affect peace and tranquillity. However, the repeated<strong> ___________ </strong>the two armies over the years indicated that this agreement was not successful.</p>\n<p>According to a report, China made at least 300 attempts at infiltration inside the Indian side from 2005 to 2015 whereas during the period of 2015 to 2020 such attempts increased to 600.</p>\n<p>Considering Tawang, there are three “agreed areas” of differing Indian and Chinese perceptions of the LAC. The site of the recent confrontation, Yangtse, which is about 25 Km from Tawang town, North of the Lungroo grazing ground, is one of those areas. Consequently, it has been the site of regular physical contact between the Indian and Chinese armies, especially as the high ground is on the Indian side, giving it a commanding view of the Chinese side. In order to understand the ground realities and the problem of confrontation between the two countries, we need to explore the history of the region. Historically, Tawang was under the control of Tibet for a long time. Tibet and British India signed an agreement in the 1914 Shimla Conference to delineate their common boundary in the Assam Himalaya region which was called the Mac Mohan Line. According to this agreement, Tibet <strong>relinquished</strong> several hundred square miles of its territory, including Tawang to the British. Since the British were unable to get China’s acceptance, the Tibetans regarded the “Mac Mohan line” invalid and Tawang continued to be administered by Tibet. Tawang was important to the Tibetans due to the Tawang Monastery. In 1938, the British made a move to assert sovereignty over Tawang by sending a military which was met with strong resistance from the Tibetan government. After the outbreak of war between China and Japan, the government of Assam undertook a number of ‘Forward Policy’ measures to tighten its hold on the North-Eastern Frontier Agency (NEFA) area which was later recognized as Arunachal Pradesh. The situation took a decisive turn in 1950 when Tibet lost its autonomy and was incorporated into the newly established People’s Republic of China. In February 1951, India took control of the remainder of the Tawang tract from the Tibetans, removing the Tibetan administration. This move was warmly welcomed by the native population. During the 1962 Sino-India war, Tawang briefly fell under Chinese control, but China voluntarily withdrew its troops at the end of the war and Tawang returned to the Indian administration. But, since then, China has not relinquished its claim on most of Arunachal Pradesh including Tawang.</p>\n<p>There have been reports from the China side of large-scale constructions of roads and other infrastructure along the Indian border. Taking note of these developments, in the last few years, India has taken concrete steps to improve the infrastructure on its side of LAC in the Tawang area. The Border Road Organisation (BRO) has constructed a tunnel at Sela Pass which could be ready by January 2023 and would provide crucial all-weather connectivity between Tezpur in Assam and Tawang. Another 1,500-km Frontier Highway project is coming up which will run from Tawang in the West to Vijayanagar in East Arunachal along the state’s frontier with China. The Indian government is taking all steps to counter the adverse designs of China in this area, but much more needs to be done. Considering the evil designs of China, we need to be well prepared to meet any eventuality in the times to come. The Indian Army and Air Force need to be kept in a state of good preparedness to match the military force of China.</p><br><p><strong>What is the tone of the passage?</strong></p>", "options": ["<p>Critical</p>", "<p>Analytical</p>", "<p>Speculative</p>", "<p>Discursive</p>", "<p>Sardonic</p>"], "correctIndex": 1, "solution": "<p><strong>Answer: B</strong></p>\n<p><strong>Critical -----&gt;</strong> describes a fault-finding attitude of the author; in a negative sense.</p>\n<p><strong>Analytical ------&gt;</strong> the presence of reasons or logic/justifications to support something.</p>\n<p><strong>Speculative ------&gt;</strong> when the theory is doubted and questioned in a slightly unreasonable manner.</p>\n<p><strong>Discursive -------&gt;</strong> moving from one point to another without any strict structure</p>\n<p><strong>Sardonic --------&gt;</strong> disdainfully or cynically humorous, or scornfully mocking.</p>\n<p>The above explanations clarify that the correct answer should be (b).</p>"}, {"question": "<p><strong>The passage given below contains information that is followed by questions based on the same. You must read the same carefully and choose an option that would be the best answer for each one. </strong></p>\n<p>The recent stand-off between the Indian and Chinese armies in Tawang needs to be seen in the strategic political and cultural significance of the 3,488 km LAC area running all along the Himalayan ridgeline which is undemarcated. The situation is further complicated by the fact that the perception of where the LAC runs varies by several km at certain places and troops of either side patrol in these disputed sections. The two countries signed an agreement in January 2012 to establish a “Working mechanism for consultation and coordination on Indo-China Affairs”. The main objective of this agreement was to address issues and diffuse situations that may arise in border areas and affect peace and tranquillity. However, the repeated<strong> ___________ </strong>the two armies over the years indicated that this agreement was not successful.</p>\n<p>According to a report, China made at least 300 attempts at infiltration inside the Indian side from 2005 to 2015 whereas during the period of 2015 to 2020 such attempts increased to 600.</p>\n<p>Considering Tawang, there are three “agreed areas” of differing Indian and Chinese perceptions of the LAC. The site of the recent confrontation, Yangtse, which is about 25 Km from Tawang town, North of the Lungroo grazing ground, is one of those areas. Consequently, it has been the site of regular physical contact between the Indian and Chinese armies, especially as the high ground is on the Indian side, giving it a commanding view of the Chinese side. In order to understand the ground realities and the problem of confrontation between the two countries, we need to explore the history of the region. Historically, Tawang was under the control of Tibet for a long time. Tibet and British India signed an agreement in the 1914 Shimla Conference to delineate their common boundary in the Assam Himalaya region which was called the Mac Mohan Line. According to this agreement, Tibet <strong>relinquished</strong> several hundred square miles of its territory, including Tawang to the British. Since the British were unable to get China’s acceptance, the Tibetans regarded the “Mac Mohan line” invalid and Tawang continued to be administered by Tibet. Tawang was important to the Tibetans due to the Tawang Monastery. In 1938, the British made a move to assert sovereignty over Tawang by sending a military which was met with strong resistance from the Tibetan government. After the outbreak of war between China and Japan, the government of Assam undertook a number of ‘Forward Policy’ measures to tighten its hold on the North-Eastern Frontier Agency (NEFA) area which was later recognized as Arunachal Pradesh. The situation took a decisive turn in 1950 when Tibet lost its autonomy and was incorporated into the newly established People’s Republic of China. In February 1951, India took control of the remainder of the Tawang tract from the Tibetans, removing the Tibetan administration. This move was warmly welcomed by the native population. During the 1962 Sino-India war, Tawang briefly fell under Chinese control, but China voluntarily withdrew its troops at the end of the war and Tawang returned to the Indian administration. But, since then, China has not relinquished its claim on most of Arunachal Pradesh including Tawang.</p>\n<p>There have been reports from the China side of large-scale constructions of roads and other infrastructure along the Indian border. Taking note of these developments, in the last few years, India has taken concrete steps to improve the infrastructure on its side of LAC in the Tawang area. The Border Road Organisation (BRO) has constructed a tunnel at Sela Pass which could be ready by January 2023 and would provide crucial all-weather connectivity between Tezpur in Assam and Tawang. Another 1,500-km Frontier Highway project is coming up which will run from Tawang in the West to Vijayanagar in East Arunachal along the state’s frontier with China. The Indian government is taking all steps to counter the adverse designs of China in this area, but much more needs to be done. Considering the evil designs of China, we need to be well prepared to meet any eventuality in the times to come. The Indian Army and Air Force need to be kept in a state of good preparedness to match the military force of China.</p><br><p><strong>Choose the best synonym of the word <em>‘relinquished’ </em>as used above.</strong></p>", "options": ["<p>Possessed</p>", "<p>Renounced</p>", "<p>Retained</p>", "<p>Kept</p>", "<p>Claimed</p>"], "correctIndex": 1, "solution": "<p><strong>Answer: B</strong></p>\n<p>The word <strong>relinquished </strong>means given up. The words in options other than (b) are all antonyms to the given word.</p>\n<p>This makes the word <strong>renounced </strong>the best synonym.</p>\n<p>Therefore, (b) is the correct answer.</p>"}, {"question": "<p><strong>The passage given below contains information that is followed by questions based on the same. You must read the same carefully and choose an option that would be the best answer for each one. </strong></p>\n<p>The recent stand-off between the Indian and Chinese armies in Tawang needs to be seen in the strategic political and cultural significance of the 3,488 km LAC area running all along the Himalayan ridgeline which is undemarcated. The situation is further complicated by the fact that the perception of where the LAC runs varies by several km at certain places and troops of either side patrol in these disputed sections. The two countries signed an agreement in January 2012 to establish a “Working mechanism for consultation and coordination on Indo-China Affairs”. The main objective of this agreement was to address issues and diffuse situations that may arise in border areas and affect peace and tranquillity. However, the repeated<strong> ___________ </strong>the two armies over the years indicated that this agreement was not successful.</p>\n<p>According to a report, China made at least 300 attempts at infiltration inside the Indian side from 2005 to 2015 whereas during the period of 2015 to 2020 such attempts increased to 600.</p>\n<p>Considering Tawang, there are three “agreed areas” of differing Indian and Chinese perceptions of the LAC. The site of the recent confrontation, Yangtse, which is about 25 Km from Tawang town, North of the Lungroo grazing ground, is one of those areas. Consequently, it has been the site of regular physical contact between the Indian and Chinese armies, especially as the high ground is on the Indian side, giving it a commanding view of the Chinese side. In order to understand the ground realities and the problem of confrontation between the two countries, we need to explore the history of the region. Historically, Tawang was under the control of Tibet for a long time. Tibet and British India signed an agreement in the 1914 Shimla Conference to delineate their common boundary in the Assam Himalaya region which was called the Mac Mohan Line. According to this agreement, Tibet <strong>relinquished</strong> several hundred square miles of its territory, including Tawang to the British. Since the British were unable to get China’s acceptance, the Tibetans regarded the “Mac Mohan line” invalid and Tawang continued to be administered by Tibet. Tawang was important to the Tibetans due to the Tawang Monastery. In 1938, the British made a move to assert sovereignty over Tawang by sending a military which was met with strong resistance from the Tibetan government. After the outbreak of war between China and Japan, the government of Assam undertook a number of ‘Forward Policy’ measures to tighten its hold on the North-Eastern Frontier Agency (NEFA) area which was later recognized as Arunachal Pradesh. The situation took a decisive turn in 1950 when Tibet lost its autonomy and was incorporated into the newly established People’s Republic of China. In February 1951, India took control of the remainder of the Tawang tract from the Tibetans, removing the Tibetan administration. This move was warmly welcomed by the native population. During the 1962 Sino-India war, Tawang briefly fell under Chinese control, but China voluntarily withdrew its troops at the end of the war and Tawang returned to the Indian administration. But, since then, China has not relinquished its claim on most of Arunachal Pradesh including Tawang.</p>\n<p>There have been reports from the China side of large-scale constructions of roads and other infrastructure along the Indian border. Taking note of these developments, in the last few years, India has taken concrete steps to improve the infrastructure on its side of LAC in the Tawang area. The Border Road Organisation (BRO) has constructed a tunnel at Sela Pass which could be ready by January 2023 and would provide crucial all-weather connectivity between Tezpur in Assam and Tawang. Another 1,500-km Frontier Highway project is coming up which will run from Tawang in the West to Vijayanagar in East Arunachal along the state’s frontier with China. The Indian government is taking all steps to counter the adverse designs of China in this area, but much more needs to be done. Considering the evil designs of China, we need to be well prepared to meet any eventuality in the times to come. The Indian Army and Air Force need to be kept in a state of good preparedness to match the military force of China.</p><br><p><strong>Which of the given options would best fill the blank in the passage above?</strong></p>", "options": ["<p>clashes between</p>", "<p>tussle</p>", "<p>fight by</p>", "<p>skirmish among</p>", "<p>None of these</p>"], "correctIndex": 0, "solution": "<p><strong>Answer: A<br/></strong>The best phrase can be found in the first option.</p>\n<p>The blank needs a word and a preposition as well because the connection between the two parts separated with a blank is missing.</p>\n<p>This makes the first option the most appropriate.</p>\n<p>Therefore, (a) is the correct answer.</p>"}, {"question": "<p><strong>The passage given below contains information that is followed by questions based on the same. You must read the same carefully and choose an option that would be the best answer for each one. </strong></p>\n<p>Economic growth is the watchword these days. Every individual, every community, every society, and every country seems to be interested in such growth. Today, we indulge in glib talk of economic growth all the time. The developed countries as much as the developing and the laggard countries seem to be obsessed with this term. Every political head talks of growth and makes it the prime agenda item of governance. Institutional agencies work overtime to analyse the growth patterns of various countries and extrapolate them and, at the same time, attempt to draw a policy framework to accelerate growth. Economic growth seems to have become the key issue for the welfare of nations as also human individuals.</p>\n<p>Is the above obsession with economic growth really proper? Does it necessarily lead to individual and collective action conducive to peace, progress, and prosperity? Does it result in action that enhances the happiness quotient of people? Does it lead to living paradigms that protect the global physical environment? Does it engender a human approach that affects the improvement of the quality of human life on this planet? Is it consistent with the spiritual character of a man? These important questions cry for urgent answers because our progeny’s survival is at stake. We need to find answers because our sustenance on this planet is threatened by the adverse fallouts of environmental degradation. It seems that this relentless pursuit of economic growth by all has eroded the happiness of people. It has generated newer types of problems unforeseen by the human population. We know that earth has plenty of material resources for its 7.9 billion human population. Beyond any semblance of doubt, there exists in this world enough to satisfy everyone’s needs but not enough to satisfy everyone’s greed.</p>\n<p>The concept of economic growth is closely linked to productivity, for productive work creates wealth. But a person cannot become productive without a supporting ecosystem. Also, a person cannot be expected to be productive if he is deprived of the necessities of life like adequate food and nutrition, and housing. In the twenty-first century world too, there are close to 200 million humans who live in deprivation of such necessities. The stark disparity of wealth prevalent in the 19th and 20th centuries continues into the 21st century. Even today, 15 percent of the global population owns or consumes 80 percent of the global wealth.</p>\n<p>Growth is commonly understood as an accretion to wealth and well-being. Such growth, therefore, means purely economic growth. But consider the fact that the planet has limited, finite resources, and its population is only increasing, not falling. Growth without human values is lopsided growth or exclusive growth. These values are humanism, righteousness, and preservation of environmental purity. Assiduous adherence to these values will bring about inclusive growth and maintain peace and harmony. Scientific techniques and technological processes that degrade the environment lead to growth with <strong>deleterious</strong> side effects. A work culture devoid of spiritual values leads to exploitation and plunder, driven by greed. It leads to malignant growth, like the growth of cancer cells.</p>\n<p>Man’s obsession with material growth should be supplanted by an obsession with balanced growth, which is material cum spiritual, driven by principles of righteousness or dharma. Only such type of growth establishes and maintains stability. It prevents ruthless exploitation of man by man and does not let grave disparity and inequality set in. It promotes harmony, peace, and happiness and is sublime. We surely need to develop paradigms of living that will bring about the balanced growth of humans inhabiting this planet. These paradigms will be necessarily built upon a humanistic work culture and environmentally friendly technologies. They will be built on collaboration rather than fierce competition. They will be premised on the welfare of all rather than the survival of the fittest. They will be based on the growth of true knowledge, maturity, and humanism rather than the growth of gross wealth.</p>\n<p>Our pursuit of unbridled material growth has created a huge ecological and environmental crisis. Many of our so-called scientific processes are based on half knowledge because we are unable to control or counteract their dangerous side effects. The cost of rapid industrialization has been tremendous. We have burdened mother earth with a heavy concentration of solid, liquid, and gaseous pollutants and are witness to severe <strong>sporadic</strong> spells of cyclones, tsunamis, dry spells, wildfires, and floods. We do realize that global warming, climate change, and ocean level rise are the result of environmental degradation caused by our crude, cruel and inferior technologies coupled with the near-mad pursuit of economic growth. We need to align our thinking with nature and the principles of harmonious existence (dharma) delivered to us by the Creator to achieve growth that is in sync with nature, conducive to universal welfare, and sustainable.</p><br><p><strong>What has created a huge environmental crisis?</strong></p>", "options": ["<p>The dangerous side-effects of manufacturing</p>", "<p>Development of technology to face competition</p>", "<p>The idea of growth and governance</p>", "<p>The desire for unrestricted growth</p>", "<p>None of these</p>"], "correctIndex": 3, "solution": "<p><strong>Answer: D</strong></p>\n<p>It has been mentioned multiple times in the passage that the pursuit of unbridled material growth has brought the humanity and the ecology to peril.</p>\n<p>The first option is superfluous and can be eliminated.</p>\n<p>The second option makes no sense as it has nowhere been discussed.</p>\n<p>The third option cannot be taken as the reason for the question asked.</p>\n<p>This makes the fourth option ie; (d) the best.</p>"}, {"question": "<p><strong>The passage given below contains information that is followed by questions based on the same. You must read the same carefully and choose an option that would be the best answer for each one. </strong></p>\n<p>Economic growth is the watchword these days. Every individual, every community, every society, and every country seems to be interested in such growth. Today, we indulge in glib talk of economic growth all the time. The developed countries as much as the developing and the laggard countries seem to be obsessed with this term. Every political head talks of growth and makes it the prime agenda item of governance. Institutional agencies work overtime to analyse the growth patterns of various countries and extrapolate them and, at the same time, attempt to draw a policy framework to accelerate growth. Economic growth seems to have become the key issue for the welfare of nations as also human individuals.</p>\n<p>Is the above obsession with economic growth really proper? Does it necessarily lead to individual and collective action conducive to peace, progress, and prosperity? Does it result in action that enhances the happiness quotient of people? Does it lead to living paradigms that protect the global physical environment? Does it engender a human approach that affects the improvement of the quality of human life on this planet? Is it consistent with the spiritual character of a man? These important questions cry for urgent answers because our progeny’s survival is at stake. We need to find answers because our sustenance on this planet is threatened by the adverse fallouts of environmental degradation. It seems that this relentless pursuit of economic growth by all has eroded the happiness of people. It has generated newer types of problems unforeseen by the human population. We know that earth has plenty of material resources for its 7.9 billion human population. Beyond any semblance of doubt, there exists in this world enough to satisfy everyone’s needs but not enough to satisfy everyone’s greed.</p>\n<p>The concept of economic growth is closely linked to productivity, for productive work creates wealth. But a person cannot become productive without a supporting ecosystem. Also, a person cannot be expected to be productive if he is deprived of the necessities of life like adequate food and nutrition, and housing. In the twenty-first century world too, there are close to 200 million humans who live in deprivation of such necessities. The stark disparity of wealth prevalent in the 19th and 20th centuries continues into the 21st century. Even today, 15 percent of the global population owns or consumes 80 percent of the global wealth.</p>\n<p>Growth is commonly understood as an accretion to wealth and well-being. Such growth, therefore, means purely economic growth. But consider the fact that the planet has limited, finite resources, and its population is only increasing, not falling. Growth without human values is lopsided growth or exclusive growth. These values are humanism, righteousness, and preservation of environmental purity. Assiduous adherence to these values will bring about inclusive growth and maintain peace and harmony. Scientific techniques and technological processes that degrade the environment lead to growth with <strong>deleterious</strong> side effects. A work culture devoid of spiritual values leads to exploitation and plunder, driven by greed. It leads to malignant growth, like the growth of cancer cells.</p>\n<p>Man’s obsession with material growth should be supplanted by an obsession with balanced growth, which is material cum spiritual, driven by principles of righteousness or dharma. Only such type of growth establishes and maintains stability. It prevents ruthless exploitation of man by man and does not let grave disparity and inequality set in. It promotes harmony, peace, and happiness and is sublime. We surely need to develop paradigms of living that will bring about the balanced growth of humans inhabiting this planet. These paradigms will be necessarily built upon a humanistic work culture and environmentally friendly technologies. They will be built on collaboration rather than fierce competition. They will be premised on the welfare of all rather than the survival of the fittest. They will be based on the growth of true knowledge, maturity, and humanism rather than the growth of gross wealth.</p>\n<p>Our pursuit of unbridled material growth has created a huge ecological and environmental crisis. Many of our so-called scientific processes are based on half knowledge because we are unable to control or counteract their dangerous side effects. The cost of rapid industrialization has been tremendous. We have burdened mother earth with a heavy concentration of solid, liquid, and gaseous pollutants and are witness to severe <strong>sporadic</strong> spells of cyclones, tsunamis, dry spells, wildfires, and floods. We do realize that global warming, climate change, and ocean level rise are the result of environmental degradation caused by our crude, cruel and inferior technologies coupled with the near-mad pursuit of economic growth. We need to align our thinking with nature and the principles of harmonious existence (dharma) delivered to us by the Creator to achieve growth that is in sync with nature, conducive to universal welfare, and sustainable.</p><br><p><strong>What is the author trying to state in the last line of the first paragraph?</strong></p>", "options": ["<p>The people have become obsessed with growth and development</p>", "<p>Growth should simply be understood as economic in nature</p>", "<p>Growth has become the central point of talk of every leader and even humans</p>", "<p>To draw attention to man&rsquo;s pursuit of material growth</p>", "<p>Both (a) and (d)</p>"], "correctIndex": 2, "solution": "<p><strong>Answer: C</strong></p>\n<p>The entire first paragraph explains the given line appropriately because the whole paragraph explains how material growth has taken the centre stage and how world leaders also mention the same without fail when they talk about governance. It has become a buzz word for every individual these days.</p>\n<p>The first option has been slightly distorted and can be cancelled. The second option is true but is unrelated to the question. The fourth option is not correct.</p>\n<p>The third option explains the stated line most appropriately.</p>\n<p>Hence, the correct answer is option (c).</p>"}, {"question": "<p><strong>The passage given below contains information that is followed by questions based on the same. You must read the same carefully and choose an option that would be the best answer for each one. </strong></p>\n<p>Economic growth is the watchword these days. Every individual, every community, every society, and every country seems to be interested in such growth. Today, we indulge in glib talk of economic growth all the time. The developed countries as much as the developing and the laggard countries seem to be obsessed with this term. Every political head talks of growth and makes it the prime agenda item of governance. Institutional agencies work overtime to analyse the growth patterns of various countries and extrapolate them and, at the same time, attempt to draw a policy framework to accelerate growth. Economic growth seems to have become the key issue for the welfare of nations as also human individuals.</p>\n<p>Is the above obsession with economic growth really proper? Does it necessarily lead to individual and collective action conducive to peace, progress, and prosperity? Does it result in action that enhances the happiness quotient of people? Does it lead to living paradigms that protect the global physical environment? Does it engender a human approach that affects the improvement of the quality of human life on this planet? Is it consistent with the spiritual character of a man? These important questions cry for urgent answers because our progeny’s survival is at stake. We need to find answers because our sustenance on this planet is threatened by the adverse fallouts of environmental degradation. It seems that this relentless pursuit of economic growth by all has eroded the happiness of people. It has generated newer types of problems unforeseen by the human population. We know that earth has plenty of material resources for its 7.9 billion human population. Beyond any semblance of doubt, there exists in this world enough to satisfy everyone’s needs but not enough to satisfy everyone’s greed.</p>\n<p>The concept of economic growth is closely linked to productivity, for productive work creates wealth. But a person cannot become productive without a supporting ecosystem. Also, a person cannot be expected to be productive if he is deprived of the necessities of life like adequate food and nutrition, and housing. In the twenty-first century world too, there are close to 200 million humans who live in deprivation of such necessities. The stark disparity of wealth prevalent in the 19th and 20th centuries continues into the 21st century. Even today, 15 percent of the global population owns or consumes 80 percent of the global wealth.</p>\n<p>Growth is commonly understood as an accretion to wealth and well-being. Such growth, therefore, means purely economic growth. But consider the fact that the planet has limited, finite resources, and its population is only increasing, not falling. Growth without human values is lopsided growth or exclusive growth. These values are humanism, righteousness, and preservation of environmental purity. Assiduous adherence to these values will bring about inclusive growth and maintain peace and harmony. Scientific techniques and technological processes that degrade the environment lead to growth with <strong>deleterious</strong> side effects. A work culture devoid of spiritual values leads to exploitation and plunder, driven by greed. It leads to malignant growth, like the growth of cancer cells.</p>\n<p>Man’s obsession with material growth should be supplanted by an obsession with balanced growth, which is material cum spiritual, driven by principles of righteousness or dharma. Only such type of growth establishes and maintains stability. It prevents ruthless exploitation of man by man and does not let grave disparity and inequality set in. It promotes harmony, peace, and happiness and is sublime. We surely need to develop paradigms of living that will bring about the balanced growth of humans inhabiting this planet. These paradigms will be necessarily built upon a humanistic work culture and environmentally friendly technologies. They will be built on collaboration rather than fierce competition. They will be premised on the welfare of all rather than the survival of the fittest. They will be based on the growth of true knowledge, maturity, and humanism rather than the growth of gross wealth.</p>\n<p>Our pursuit of unbridled material growth has created a huge ecological and environmental crisis. Many of our so-called scientific processes are based on half knowledge because we are unable to control or counteract their dangerous side effects. The cost of rapid industrialization has been tremendous. We have burdened mother earth with a heavy concentration of solid, liquid, and gaseous pollutants and are witness to severe <strong>sporadic</strong> spells of cyclones, tsunamis, dry spells, wildfires, and floods. We do realize that global warming, climate change, and ocean level rise are the result of environmental degradation caused by our crude, cruel and inferior technologies coupled with the near-mad pursuit of economic growth. We need to align our thinking with nature and the principles of harmonious existence (dharma) delivered to us by the Creator to achieve growth that is in sync with nature, conducive to universal welfare, and sustainable.</p><br><p><strong>Which of the following is/are the consequence/s of rapid industrialisation?</strong></p>", "options": ["<p>A work culture devoid of human values</p>", "<p>Mother Earth has been laden with pollutants</p>", "<p>Global warming has degraded the environment</p>", "<p>Collaborations being built on the principal of survival of the fittest</p>", "<p>Both (b) and (c)</p>"], "correctIndex": 4, "solution": "<p><strong>Answer: E</strong></p>\n<p>The last paragraph talks about the question in detail.</p>\n<p>It states two points out of the ones given in the options.</p>\n<p>One being the impact on the environment and the other being the pollutants burdening our planet as a result of rapid industrialisation.</p>\n<p>Apart from these two options, all the other statements can be eliminated.</p>\n<p>Thus, option (e) should be correct.</p>"}, {"question": "<p><strong>The passage given below contains information that is followed by questions based on the same. You must read the same carefully and choose an option that would be the best answer for each one. </strong></p>\n<p>Economic growth is the watchword these days. Every individual, every community, every society, and every country seems to be interested in such growth. Today, we indulge in glib talk of economic growth all the time. The developed countries as much as the developing and the laggard countries seem to be obsessed with this term. Every political head talks of growth and makes it the prime agenda item of governance. Institutional agencies work overtime to analyse the growth patterns of various countries and extrapolate them and, at the same time, attempt to draw a policy framework to accelerate growth. Economic growth seems to have become the key issue for the welfare of nations as also human individuals.</p>\n<p>Is the above obsession with economic growth really proper? Does it necessarily lead to individual and collective action conducive to peace, progress, and prosperity? Does it result in action that enhances the happiness quotient of people? Does it lead to living paradigms that protect the global physical environment? Does it engender a human approach that affects the improvement of the quality of human life on this planet? Is it consistent with the spiritual character of a man? These important questions cry for urgent answers because our progeny’s survival is at stake. We need to find answers because our sustenance on this planet is threatened by the adverse fallouts of environmental degradation. It seems that this relentless pursuit of economic growth by all has eroded the happiness of people. It has generated newer types of problems unforeseen by the human population. We know that earth has plenty of material resources for its 7.9 billion human population. Beyond any semblance of doubt, there exists in this world enough to satisfy everyone’s needs but not enough to satisfy everyone’s greed.</p>\n<p>The concept of economic growth is closely linked to productivity, for productive work creates wealth. But a person cannot become productive without a supporting ecosystem. Also, a person cannot be expected to be productive if he is deprived of the necessities of life like adequate food and nutrition, and housing. In the twenty-first century world too, there are close to 200 million humans who live in deprivation of such necessities. The stark disparity of wealth prevalent in the 19th and 20th centuries continues into the 21st century. Even today, 15 percent of the global population owns or consumes 80 percent of the global wealth.</p>\n<p>Growth is commonly understood as an accretion to wealth and well-being. Such growth, therefore, means purely economic growth. But consider the fact that the planet has limited, finite resources, and its population is only increasing, not falling. Growth without human values is lopsided growth or exclusive growth. These values are humanism, righteousness, and preservation of environmental purity. Assiduous adherence to these values will bring about inclusive growth and maintain peace and harmony. Scientific techniques and technological processes that degrade the environment lead to growth with <strong>deleterious</strong> side effects. A work culture devoid of spiritual values leads to exploitation and plunder, driven by greed. It leads to malignant growth, like the growth of cancer cells.</p>\n<p>Man’s obsession with material growth should be supplanted by an obsession with balanced growth, which is material cum spiritual, driven by principles of righteousness or dharma. Only such type of growth establishes and maintains stability. It prevents ruthless exploitation of man by man and does not let grave disparity and inequality set in. It promotes harmony, peace, and happiness and is sublime. We surely need to develop paradigms of living that will bring about the balanced growth of humans inhabiting this planet. These paradigms will be necessarily built upon a humanistic work culture and environmentally friendly technologies. They will be built on collaboration rather than fierce competition. They will be premised on the welfare of all rather than the survival of the fittest. They will be based on the growth of true knowledge, maturity, and humanism rather than the growth of gross wealth.</p>\n<p>Our pursuit of unbridled material growth has created a huge ecological and environmental crisis. Many of our so-called scientific processes are based on half knowledge because we are unable to control or counteract their dangerous side effects. The cost of rapid industrialization has been tremendous. We have burdened mother earth with a heavy concentration of solid, liquid, and gaseous pollutants and are witness to severe <strong>sporadic</strong> spells of cyclones, tsunamis, dry spells, wildfires, and floods. We do realize that global warming, climate change, and ocean level rise are the result of environmental degradation caused by our crude, cruel and inferior technologies coupled with the near-mad pursuit of economic growth. We need to align our thinking with nature and the principles of harmonious existence (dharma) delivered to us by the Creator to achieve growth that is in sync with nature, conducive to universal welfare, and sustainable.</p><br><p><strong>What is the author trying to convey through the last line of the passage?</strong></p>", "options": ["<p>That the growth objectives should be aligned with the sustainability</p>", "<p>The welfare of the nations can only be achieved through spiritual alignment</p>", "<p>That growth should not come at the cost of sustainable and spiritual values</p>", "<p>Man&rsquo;s pursuit of growth should be filled with spiritual righteousness</p>", "<p>None of these</p>"], "correctIndex": 0, "solution": "<p><strong>Answer: A</strong></p>\n<p>In the last line, the author explains that growth should synchronise with nature and welfare should be achieved in alignment with sustainable objectives.</p>\n<p>The option that explains the same is the first one.</p>\n<p>The second option is a distorted combination of two different ideas being stated in two different paragraphs. Options (c) and (d) can be left out because they do not touch upon the line asked and rather state different points discussed.</p>\n<p>So, the best would be to mark option (a) as the answer.</p>"}, {"question": "<p><strong>The passage given below contains information that is followed by questions based on the same. You must read the same carefully and choose an option that would be the best answer for each one. </strong></p>\n<p>Economic growth is the watchword these days. Every individual, every community, every society, and every country seems to be interested in such growth. Today, we indulge in glib talk of economic growth all the time. The developed countries as much as the developing and the laggard countries seem to be obsessed with this term. Every political head talks of growth and makes it the prime agenda item of governance. Institutional agencies work overtime to analyse the growth patterns of various countries and extrapolate them and, at the same time, attempt to draw a policy framework to accelerate growth. Economic growth seems to have become the key issue for the welfare of nations as also human individuals.</p>\n<p>Is the above obsession with economic growth really proper? Does it necessarily lead to individual and collective action conducive to peace, progress, and prosperity? Does it result in action that enhances the happiness quotient of people? Does it lead to living paradigms that protect the global physical environment? Does it engender a human approach that affects the improvement of the quality of human life on this planet? Is it consistent with the spiritual character of a man? These important questions cry for urgent answers because our progeny’s survival is at stake. We need to find answers because our sustenance on this planet is threatened by the adverse fallouts of environmental degradation. It seems that this relentless pursuit of economic growth by all has eroded the happiness of people. It has generated newer types of problems unforeseen by the human population. We know that earth has plenty of material resources for its 7.9 billion human population. Beyond any semblance of doubt, there exists in this world enough to satisfy everyone’s needs but not enough to satisfy everyone’s greed.</p>\n<p>The concept of economic growth is closely linked to productivity, for productive work creates wealth. But a person cannot become productive without a supporting ecosystem. Also, a person cannot be expected to be productive if he is deprived of the necessities of life like adequate food and nutrition, and housing. In the twenty-first century world too, there are close to 200 million humans who live in deprivation of such necessities. The stark disparity of wealth prevalent in the 19th and 20th centuries continues into the 21st century. Even today, 15 percent of the global population owns or consumes 80 percent of the global wealth.</p>\n<p>Growth is commonly understood as an accretion to wealth and well-being. Such growth, therefore, means purely economic growth. But consider the fact that the planet has limited, finite resources, and its population is only increasing, not falling. Growth without human values is lopsided growth or exclusive growth. These values are humanism, righteousness, and preservation of environmental purity. Assiduous adherence to these values will bring about inclusive growth and maintain peace and harmony. Scientific techniques and technological processes that degrade the environment lead to growth with <strong>deleterious</strong> side effects. A work culture devoid of spiritual values leads to exploitation and plunder, driven by greed. It leads to malignant growth, like the growth of cancer cells.</p>\n<p>Man’s obsession with material growth should be supplanted by an obsession with balanced growth, which is material cum spiritual, driven by principles of righteousness or dharma. Only such type of growth establishes and maintains stability. It prevents ruthless exploitation of man by man and does not let grave disparity and inequality set in. It promotes harmony, peace, and happiness and is sublime. We surely need to develop paradigms of living that will bring about the balanced growth of humans inhabiting this planet. These paradigms will be necessarily built upon a humanistic work culture and environmentally friendly technologies. They will be built on collaboration rather than fierce competition. They will be premised on the welfare of all rather than the survival of the fittest. They will be based on the growth of true knowledge, maturity, and humanism rather than the growth of gross wealth.</p>\n<p>Our pursuit of unbridled material growth has created a huge ecological and environmental crisis. Many of our so-called scientific processes are based on half knowledge because we are unable to control or counteract their dangerous side effects. The cost of rapid industrialization has been tremendous. We have burdened mother earth with a heavy concentration of solid, liquid, and gaseous pollutants and are witness to severe <strong>sporadic</strong> spells of cyclones, tsunamis, dry spells, wildfires, and floods. We do realize that global warming, climate change, and ocean level rise are the result of environmental degradation caused by our crude, cruel and inferior technologies coupled with the near-mad pursuit of economic growth. We need to align our thinking with nature and the principles of harmonious existence (dharma) delivered to us by the Creator to achieve growth that is in sync with nature, conducive to universal welfare, and sustainable.</p><br><p><strong>Which of the following is not true as per the passage?</strong></p>", "options": ["<p>A work culture devoid of values leads to exploitation</p>", "<p>The survival of our future generations is at stake</p>", "<p>Only sustainable growth can help maintain stability</p>", "<p>Humanistic work culture and environment friendly tech can bring about the change</p>", "<p>All statements are true</p>"], "correctIndex": 4, "solution": "<p><strong>Answer: E</strong></p>\n<p>All the given statements can be directly found from the contents of the passage. No statement is false.</p>\n<p>Thus, the correct answer is option (e).</p>"}, {"question": "<p><strong>The passage given below contains information that is followed by questions based on the same. You must read the same carefully and choose an option that would be the best answer for each one. </strong></p>\n<p>Economic growth is the watchword these days. Every individual, every community, every society, and every country seems to be interested in such growth. Today, we indulge in glib talk of economic growth all the time. The developed countries as much as the developing and the laggard countries seem to be obsessed with this term. Every political head talks of growth and makes it the prime agenda item of governance. Institutional agencies work overtime to analyse the growth patterns of various countries and extrapolate them and, at the same time, attempt to draw a policy framework to accelerate growth. Economic growth seems to have become the key issue for the welfare of nations as also human individuals.</p>\n<p>Is the above obsession with economic growth really proper? Does it necessarily lead to individual and collective action conducive to peace, progress, and prosperity? Does it result in action that enhances the happiness quotient of people? Does it lead to living paradigms that protect the global physical environment? Does it engender a human approach that affects the improvement of the quality of human life on this planet? Is it consistent with the spiritual character of a man? These important questions cry for urgent answers because our progeny’s survival is at stake. We need to find answers because our sustenance on this planet is threatened by the adverse fallouts of environmental degradation. It seems that this relentless pursuit of economic growth by all has eroded the happiness of people. It has generated newer types of problems unforeseen by the human population. We know that earth has plenty of material resources for its 7.9 billion human population. Beyond any semblance of doubt, there exists in this world enough to satisfy everyone’s needs but not enough to satisfy everyone’s greed.</p>\n<p>The concept of economic growth is closely linked to productivity, for productive work creates wealth. But a person cannot become productive without a supporting ecosystem. Also, a person cannot be expected to be productive if he is deprived of the necessities of life like adequate food and nutrition, and housing. In the twenty-first century world too, there are close to 200 million humans who live in deprivation of such necessities. The stark disparity of wealth prevalent in the 19th and 20th centuries continues into the 21st century. Even today, 15 percent of the global population owns or consumes 80 percent of the global wealth.</p>\n<p>Growth is commonly understood as an accretion to wealth and well-being. Such growth, therefore, means purely economic growth. But consider the fact that the planet has limited, finite resources, and its population is only increasing, not falling. Growth without human values is lopsided growth or exclusive growth. These values are humanism, righteousness, and preservation of environmental purity. Assiduous adherence to these values will bring about inclusive growth and maintain peace and harmony. Scientific techniques and technological processes that degrade the environment lead to growth with <strong>deleterious</strong> side effects. A work culture devoid of spiritual values leads to exploitation and plunder, driven by greed. It leads to malignant growth, like the growth of cancer cells.</p>\n<p>Man’s obsession with material growth should be supplanted by an obsession with balanced growth, which is material cum spiritual, driven by principles of righteousness or dharma. Only such type of growth establishes and maintains stability. It prevents ruthless exploitation of man by man and does not let grave disparity and inequality set in. It promotes harmony, peace, and happiness and is sublime. We surely need to develop paradigms of living that will bring about the balanced growth of humans inhabiting this planet. These paradigms will be necessarily built upon a humanistic work culture and environmentally friendly technologies. They will be built on collaboration rather than fierce competition. They will be premised on the welfare of all rather than the survival of the fittest. They will be based on the growth of true knowledge, maturity, and humanism rather than the growth of gross wealth.</p>\n<p>Our pursuit of unbridled material growth has created a huge ecological and environmental crisis. Many of our so-called scientific processes are based on half knowledge because we are unable to control or counteract their dangerous side effects. The cost of rapid industrialization has been tremendous. We have burdened mother earth with a heavy concentration of solid, liquid, and gaseous pollutants and are witness to severe <strong>sporadic</strong> spells of cyclones, tsunamis, dry spells, wildfires, and floods. We do realize that global warming, climate change, and ocean level rise are the result of environmental degradation caused by our crude, cruel and inferior technologies coupled with the near-mad pursuit of economic growth. We need to align our thinking with nature and the principles of harmonious existence (dharma) delivered to us by the Creator to achieve growth that is in sync with nature, conducive to universal welfare, and sustainable.</p><br><p><strong>Choose the most suitable title for the given passage.</strong></p>", "options": ["<p>There is no planet</p>", "<p>Obsession with economic growth</p>", "<p>Sustainability versus stability</p>", "<p>The earth and its environment</p>", "<p>None of these</p>"], "correctIndex": 1, "solution": "<p><strong>Answer: B</strong></p>\n<p>The most suitable answer to the given question can be found in the second option because, the passage in many places talks about economic growth that has now become an obsession. Almost everyone is found discussing economy and growth. So much so that the people have forgotten that they are inhabitants of the earth which is bearing the brunt of rapid industrialisation and growth ambitions.</p>\n<p>The first option restricts the idea and only keeps the discussion under the heading conservation of the environment. The third and the fourth options can be cancelled as well for the same reason. This makes the second option the most appropriate answer.</p>"}, {"question": "<p><strong>The passage given below contains information that is followed by questions based on the same. You must read the same carefully and choose an option that would be the best answer for each one. </strong></p>\n<p>Economic growth is the watchword these days. Every individual, every community, every society, and every country seems to be interested in such growth. Today, we indulge in glib talk of economic growth all the time. The developed countries as much as the developing and the laggard countries seem to be obsessed with this term. Every political head talks of growth and makes it the prime agenda item of governance. Institutional agencies work overtime to analyse the growth patterns of various countries and extrapolate them and, at the same time, attempt to draw a policy framework to accelerate growth. Economic growth seems to have become the key issue for the welfare of nations as also human individuals.</p>\n<p>Is the above obsession with economic growth really proper? Does it necessarily lead to individual and collective action conducive to peace, progress, and prosperity? Does it result in action that enhances the happiness quotient of people? Does it lead to living paradigms that protect the global physical environment? Does it engender a human approach that affects the improvement of the quality of human life on this planet? Is it consistent with the spiritual character of a man? These important questions cry for urgent answers because our progeny’s survival is at stake. We need to find answers because our sustenance on this planet is threatened by the adverse fallouts of environmental degradation. It seems that this relentless pursuit of economic growth by all has eroded the happiness of people. It has generated newer types of problems unforeseen by the human population. We know that earth has plenty of material resources for its 7.9 billion human population. Beyond any semblance of doubt, there exists in this world enough to satisfy everyone’s needs but not enough to satisfy everyone’s greed.</p>\n<p>The concept of economic growth is closely linked to productivity, for productive work creates wealth. But a person cannot become productive without a supporting ecosystem. Also, a person cannot be expected to be productive if he is deprived of the necessities of life like adequate food and nutrition, and housing. In the twenty-first century world too, there are close to 200 million humans who live in deprivation of such necessities. The stark disparity of wealth prevalent in the 19th and 20th centuries continues into the 21st century. Even today, 15 percent of the global population owns or consumes 80 percent of the global wealth.</p>\n<p>Growth is commonly understood as an accretion to wealth and well-being. Such growth, therefore, means purely economic growth. But consider the fact that the planet has limited, finite resources, and its population is only increasing, not falling. Growth without human values is lopsided growth or exclusive growth. These values are humanism, righteousness, and preservation of environmental purity. Assiduous adherence to these values will bring about inclusive growth and maintain peace and harmony. Scientific techniques and technological processes that degrade the environment lead to growth with <strong>deleterious</strong> side effects. A work culture devoid of spiritual values leads to exploitation and plunder, driven by greed. It leads to malignant growth, like the growth of cancer cells.</p>\n<p>Man’s obsession with material growth should be supplanted by an obsession with balanced growth, which is material cum spiritual, driven by principles of righteousness or dharma. Only such type of growth establishes and maintains stability. It prevents ruthless exploitation of man by man and does not let grave disparity and inequality set in. It promotes harmony, peace, and happiness and is sublime. We surely need to develop paradigms of living that will bring about the balanced growth of humans inhabiting this planet. These paradigms will be necessarily built upon a humanistic work culture and environmentally friendly technologies. They will be built on collaboration rather than fierce competition. They will be premised on the welfare of all rather than the survival of the fittest. They will be based on the growth of true knowledge, maturity, and humanism rather than the growth of gross wealth.</p>\n<p>Our pursuit of unbridled material growth has created a huge ecological and environmental crisis. Many of our so-called scientific processes are based on half knowledge because we are unable to control or counteract their dangerous side effects. The cost of rapid industrialization has been tremendous. We have burdened mother earth with a heavy concentration of solid, liquid, and gaseous pollutants and are witness to severe <strong>sporadic</strong> spells of cyclones, tsunamis, dry spells, wildfires, and floods. We do realize that global warming, climate change, and ocean level rise are the result of environmental degradation caused by our crude, cruel and inferior technologies coupled with the near-mad pursuit of economic growth. We need to align our thinking with nature and the principles of harmonious existence (dharma) delivered to us by the Creator to achieve growth that is in sync with nature, conducive to universal welfare, and sustainable.</p><br><p><strong>Choose the synonym of the word <em>‘sporadic’</em> as used in the passage.</strong></p>", "options": ["<p>Regular</p>", "<p>Frequent</p>", "<p>Steady</p>", "<p>Consistent</p>", "<p>Periodic</p>"], "correctIndex": 4, "solution": "<p><strong>Answer: E</strong></p>\n<p><strong>Sporadic </strong>means occurring at irregular intervals or only in a few places; scattered or isolated. The only word that fulfils being its synonym is <strong>periodic</strong>.</p>\n<p>The other options are synonyms of the given word and can be eliminated to mark option (e) as the answer.</p>"}, {"question": "<p><strong>The passage given below contains information that is followed by questions based on the same. You must read the same carefully and choose an option that would be the best answer for each one. </strong></p>\n<p>Economic growth is the watchword these days. Every individual, every community, every society, and every country seems to be interested in such growth. Today, we indulge in glib talk of economic growth all the time. The developed countries as much as the developing and the laggard countries seem to be obsessed with this term. Every political head talks of growth and makes it the prime agenda item of governance. Institutional agencies work overtime to analyse the growth patterns of various countries and extrapolate them and, at the same time, attempt to draw a policy framework to accelerate growth. Economic growth seems to have become the key issue for the welfare of nations as also human individuals.</p>\n<p>Is the above obsession with economic growth really proper? Does it necessarily lead to individual and collective action conducive to peace, progress, and prosperity? Does it result in action that enhances the happiness quotient of people? Does it lead to living paradigms that protect the global physical environment? Does it engender a human approach that affects the improvement of the quality of human life on this planet? Is it consistent with the spiritual character of a man? These important questions cry for urgent answers because our progeny’s survival is at stake. We need to find answers because our sustenance on this planet is threatened by the adverse fallouts of environmental degradation. It seems that this relentless pursuit of economic growth by all has eroded the happiness of people. It has generated newer types of problems unforeseen by the human population. We know that earth has plenty of material resources for its 7.9 billion human population. Beyond any semblance of doubt, there exists in this world enough to satisfy everyone’s needs but not enough to satisfy everyone’s greed.</p>\n<p>The concept of economic growth is closely linked to productivity, for productive work creates wealth. But a person cannot become productive without a supporting ecosystem. Also, a person cannot be expected to be productive if he is deprived of the necessities of life like adequate food and nutrition, and housing. In the twenty-first century world too, there are close to 200 million humans who live in deprivation of such necessities. The stark disparity of wealth prevalent in the 19th and 20th centuries continues into the 21st century. Even today, 15 percent of the global population owns or consumes 80 percent of the global wealth.</p>\n<p>Growth is commonly understood as an accretion to wealth and well-being. Such growth, therefore, means purely economic growth. But consider the fact that the planet has limited, finite resources, and its population is only increasing, not falling. Growth without human values is lopsided growth or exclusive growth. These values are humanism, righteousness, and preservation of environmental purity. Assiduous adherence to these values will bring about inclusive growth and maintain peace and harmony. Scientific techniques and technological processes that degrade the environment lead to growth with <strong>deleterious</strong> side effects. A work culture devoid of spiritual values leads to exploitation and plunder, driven by greed. It leads to malignant growth, like the growth of cancer cells.</p>\n<p>Man’s obsession with material growth should be supplanted by an obsession with balanced growth, which is material cum spiritual, driven by principles of righteousness or dharma. Only such type of growth establishes and maintains stability. It prevents ruthless exploitation of man by man and does not let grave disparity and inequality set in. It promotes harmony, peace, and happiness and is sublime. We surely need to develop paradigms of living that will bring about the balanced growth of humans inhabiting this planet. These paradigms will be necessarily built upon a humanistic work culture and environmentally friendly technologies. They will be built on collaboration rather than fierce competition. They will be premised on the welfare of all rather than the survival of the fittest. They will be based on the growth of true knowledge, maturity, and humanism rather than the growth of gross wealth.</p>\n<p>Our pursuit of unbridled material growth has created a huge ecological and environmental crisis. Many of our so-called scientific processes are based on half knowledge because we are unable to control or counteract their dangerous side effects. The cost of rapid industrialization has been tremendous. We have burdened mother earth with a heavy concentration of solid, liquid, and gaseous pollutants and are witness to severe <strong>sporadic</strong> spells of cyclones, tsunamis, dry spells, wildfires, and floods. We do realize that global warming, climate change, and ocean level rise are the result of environmental degradation caused by our crude, cruel and inferior technologies coupled with the near-mad pursuit of economic growth. We need to align our thinking with nature and the principles of harmonious existence (dharma) delivered to us by the Creator to achieve growth that is in sync with nature, conducive to universal welfare, and sustainable.</p><br><p><strong>Which of the given options provide the best antonym to <em>‘deleterious’</em> as used above?</strong></p>", "options": ["<p>Harmful</p>", "<p>Unfavourable</p>", "<p>Beneficial</p>", "<p>Destructive</p>", "<p>Adverse</p>"], "correctIndex": 2, "solution": "<p><strong>Answer: C</strong></p>\n<p><strong>Deleterious </strong>stands for causing harm or damage.</p>\n<p>This word finds its synonyms in the first, second, third and fifth options.</p>\n<p>The only option that is opposite is (c).</p>"}];
+
+// ===== STATE & DOM =====
+let currentIndex = 0;
+const totalQuestions = questions.length;
+const userAnswers = new Array(totalQuestions).fill(null); // selected option index or null
+const questionStates = new Array(totalQuestions).fill("notVisited"); // "notVisited", "notAnswered", "answered", "marked"
+
+// Timer
+const timerLabel = document.getElementById('timer-label');
+let timerInterval = null;
+let remainingSeconds = TEST_DURATION_SECONDS;
+
+// DOM elements
+const instructionHeader = document.getElementById('instruction-header');
+const quizHeader = document.getElementById('quiz-header');
+
+const instructionsContainer = document.getElementById('instructions-container');
+const quizContainer = document.getElementById('quiz-container');
+const solutionsContainer = document.getElementById('solutions-container');
+
+const qProgress = document.getElementById('q-progress');
+const questionText = document.getElementById('question-text');
+const optionsContainer = document.getElementById('options-container');
+
+const clearBtn = document.getElementById('clear-btn');
+const markBtn = document.getElementById('mark-btn');
+const nextBtn = document.getElementById('next-btn');
+const submitBtn = document.getElementById('submit-btn');
+
+const paletteContainer = document.getElementById('palette-container');
+const solutionsList = document.getElementById('solutions-list');
+const solutionsBackBtn = document.getElementById('solutions-back-btn');
+
+const resultOverlay = document.getElementById('result-overlay');
+const metricMarks = document.getElementById('metric-marks');
+const metricCorrect = document.getElementById('metric-correct');
+const metricWrong = document.getElementById('metric-wrong');
+const metricAttempted = document.getElementById('metric-attempted');
+const viewSolutionsBtn = document.getElementById('view-solutions-btn');
+const homeBtn = document.getElementById('home-btn');
+
+const instTotalQuestions = document.getElementById('inst-total-questions');
+const instSideTotal = document.getElementById('inst-side-total');
+const startTestBtn = document.getElementById('start-test-btn');
+
+let questionStartTime = null;
+let questionTimes = new Array(totalQuestions).fill(0);
+
+function formatTime(ms) {
+    const sec = Math.floor(ms / 1000);
+    return sec < 60 ? `${sec}s` : `${Math.floor(sec/60)}m ${sec % 60}s`;
+}
+
+// ===== TIMER FUNCTIONS =====
+function updateTimerLabel() {
+    const h = String(Math.floor(remainingSeconds / 3600)).padStart(2, '0');
+    const m = String(Math.floor((remainingSeconds % 3600) / 60)).padStart(2, '0');
+    const s = String(remainingSeconds % 60).padStart(2, '0');
+    timerLabel.textContent = `Time: ${h}:${m}:${s}`;
+}
+function startTimer() {
+    if (timerInterval) clearInterval(timerInterval);
+
+    updateTimerLabel();
+
+    timerInterval = setInterval(() => {
+        remainingSeconds--;
+
+        if (remainingSeconds <= 0) {
+            remainingSeconds = 0;
+            updateTimerLabel();
+            clearInterval(timerInterval);
+
+            // AUTO SUBMIT
+            if (questionStartTime !== null) {
+                questionTimes[currentIndex] +=
+                    (Date.now() - questionStartTime);
+            }
+            saveAnswerForCurrent();
+            showResultOverlay();
+            return;
+        }
+
+        updateTimerLabel();
+    }, 1000);
+}
+
+// ===== RENDERING =====
+function renderQuestion(index) {
+	if (questionStartTime !== null) {
+    questionTimes[currentIndex] += (Date.now() - questionStartTime);
+	}
+	questionStartTime = Date.now();
+
+    const q = questions[index];
+    qProgress.textContent = `Question ${index + 1} of ${totalQuestions}`;
+    questionText.innerHTML = q.question;
+    optionsContainer.innerHTML = '';
+
+    q.options.forEach((optHtml, optIndex) => {
+        const label = document.createElement('label');
+        label.className = 'option';
+
+        const input = document.createElement('input');
+        input.type = 'radio';
+        input.name = 'option';
+        input.value = optIndex;
+
+        if (userAnswers[index] === optIndex) {
+            input.checked = true;
+        }
+
+        const span = document.createElement('div');
+        span.className = 'option-text';
+        span.innerHTML = optHtml;
+
+        label.appendChild(input);
+        label.appendChild(span);
+
+        label.addEventListener('click', () => {
+            input.checked = true;
+        });
+
+        optionsContainer.appendChild(label);
+    });
+
+    // If first visit, mark as notAnswered for palette
+    if (questionStates[index] === "notVisited") {
+        questionStates[index] = (userAnswers[index] != null) ? "answered" : "notAnswered";
+    }
+
+    updatePalette();
+}
+
+function updatePalette() {
+    paletteContainer.innerHTML = '';
+
+    const drawerContainer =
+        document.getElementById('palette-drawer-container');
+    if (drawerContainer) drawerContainer.innerHTML = '';
+
+    for (let i = 0; i < totalQuestions; i++) {
+
+        function createBtn() {
+            const btn = document.createElement('div');
+            let cls = 'palette-item';
+
+            if (questionStates[i] === 'notVisited') cls += ' state-notVisited';
+            else if (questionStates[i] === 'notAnswered') cls += ' state-notAnswered';
+            else if (questionStates[i] === 'answered') cls += ' state-answered';
+            else if (questionStates[i] === 'marked') cls += ' state-marked';
+
+            if (i === currentIndex) cls += ' current';
+
+            btn.className = cls;
+            btn.textContent = i + 1;
+
+            btn.addEventListener('click', () => {
+                saveAnswerForCurrent();
+                currentIndex = i;
+                renderQuestion(currentIndex);
+                closeDrawer(); // safe on desktop
+            });
+
+            return btn;
+        }
+
+        paletteContainer.appendChild(createBtn());
+        if (drawerContainer) drawerContainer.appendChild(createBtn());
+    }
+}
+
+function getSelectedOptionIndex() {
+    const selected = document.querySelector('input[name="option"]:checked');
+    if (!selected) return null;
+    return parseInt(selected.value, 10);
+}
+
+function saveAnswerForCurrent() {
+    const selIndex = getSelectedOptionIndex();
+    if (selIndex !== null) {
+        userAnswers[currentIndex] = selIndex;
+        questionStates[currentIndex] = "answered";
+    } else {
+        // Only change to notAnswered if not marked
+        if (questionStates[currentIndex] !== "marked") {
+            questionStates[currentIndex] = "notAnswered";
+        }
+    }
+    updatePalette();
+}
+
+// ===== RESULT & SOLUTIONS =====
+function showResultOverlay() {
+    let correct = 0;
+    let attempted = 0;
+
+    const MARKS_PER_Q = 1;
+    const NEGATIVE_MARKS = 0.25;
+    const totalQuestions = questions.length;
+    const maxMarks = totalQuestions * MARKS_PER_Q;
+    let totalMarks = 0;
+
+    questions.forEach((q, i) => {
+        const ans = userAnswers[i];
+        if (ans !== null && ans !== undefined) {
+            attempted++;
+            if (ans === q.correctIndex) {
+                correct++;
+                totalMarks += MARKS_PER_Q;
+            } else {
+                totalMarks -= NEGATIVE_MARKS;
+            }
+        }
+    });
+
+    const wrong = attempted - correct;
+    const avgTime =
+        questionTimes.reduce((a, b) => a + b, 0) / totalQuestions;
+
+    metricMarks.textContent =
+        `${totalMarks.toFixed(2)} / ${maxMarks.toFixed(2)}`;
+    metricCorrect.textContent = correct;
+    metricWrong.textContent = wrong;
+    metricAttempted.textContent = attempted;
+    document.getElementById("metric-avgtime").textContent =
+        formatTime(avgTime);
+
+    resultOverlay.style.display = "flex";
+}
+
+function closeResultOverlay() {
+    resultOverlay.style.display = 'none';
+}
+
+function buildSolutionsView() {
+    solutionsList.innerHTML = '';
+    questions.forEach((q, index) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'solution-item';
+
+        const qDiv = document.createElement('div');
+        qDiv.className = 'solution-question';
+        qDiv.innerHTML = `<strong>Q${index + 1}.</strong> ${q.question}`;
+        wrapper.appendChild(qDiv);
+
+        const optsDiv = document.createElement('div');
+        optsDiv.className = 'solution-options';
+
+        q.options.forEach((optHtml, optIndex) => {
+            const optDiv = document.createElement('div');
+            let cls = 'solution-option';
+            if (optIndex === q.correctIndex) {
+                cls += ' correct';
+            } else if (userAnswers[index] === optIndex) {
+                cls += ' wrong';
+            }
+            optDiv.className = cls;
+
+            const labelSpan = document.createElement('div');
+            labelSpan.className = 'solution-label';
+            labelSpan.textContent = String.fromCharCode(65 + optIndex) + '.';
+
+            const textDiv = document.createElement('div');
+            textDiv.className = 'solution-text';
+            textDiv.innerHTML = optHtml;
+
+            optDiv.appendChild(labelSpan);
+            optDiv.appendChild(textDiv);
+            optsDiv.appendChild(optDiv);
+        });
+
+        wrapper.appendChild(optsDiv);
+
+        const solDiv = document.createElement('div');
+        solDiv.className = 'solution-explanation';
+        const solutionHtml = (q.solution || '')
+			.replace(/\\"/g, '"')      // unescape quotes
+			.replace(/\\n/g, '')       // remove escaped newlines
+			.replace(/\\t/g, '');      // remove escaped tabs
+
+		solDiv.innerHTML = `<strong>Solution:</strong><br>${solutionHtml}`;
+        wrapper.appendChild(solDiv);
+
+        solutionsList.appendChild(wrapper);
+    });
+}
+
+// ===== EVENT HANDLERS =====
+startTestBtn.addEventListener('click', () => {
+    // Hide instruction header + screen
+    instructionHeader.style.display = 'none';
+    instructionsContainer.style.display = 'none';
+
+    // Show quiz header + screen
+    quizHeader.style.display = 'flex';
+    quizContainer.style.display = 'block';
+    solutionsContainer.style.display = 'none';
+
+    currentIndex = 0;
+    renderQuestion(currentIndex);
+    startTimer();
+    questionStartTime = Date.now();
+});
+
+clearBtn.addEventListener('click', () => {
+    // Clear selection & mark as "notAnswered" (red)
+    userAnswers[currentIndex] = null;
+    questionStates[currentIndex] = "notAnswered";
+    renderQuestion(currentIndex);
+});
+
+markBtn.addEventListener('click', () => {
+    // Option 2: DO NOT save answer when marking for review
+    userAnswers[currentIndex] = null;
+    questionStates[currentIndex] = "marked";
+    if (currentIndex < totalQuestions - 1) {
+        currentIndex++;
+        renderQuestion(currentIndex);
+    } else {
+        // stay on last, just refresh colors
+        renderQuestion(currentIndex);
+    }
+});
+
+nextBtn.addEventListener('click', () => {
+    saveAnswerForCurrent();
+    if (currentIndex < totalQuestions - 1) {
+        currentIndex++;
+        renderQuestion(currentIndex);
+    } else {
+        // last question: nothing to move, but answer is saved
+        renderQuestion(currentIndex);
+    }
+});
+
+submitBtn.addEventListener('click', () => {
+	if (questionStartTime !== null) {
+    questionTimes[currentIndex] += (Date.now() - questionStartTime);
+    questionStartTime = null;
+	}
+    saveAnswerForCurrent();
+    clearInterval(timerInterval);
+    showResultOverlay();
+});
+
+viewSolutionsBtn.addEventListener('click', () => {
+    resultOverlay.style.display = 'none';
+    quizContainer.style.display = 'none';
+    solutionsContainer.style.display = 'block';
+    buildSolutionsView();
+});
+
+solutionsBackBtn.addEventListener('click', () => {
+    solutionsContainer.style.display = 'none';
+    quizContainer.style.display = 'none';
+    resultOverlay.style.display = 'flex';
+});
+
+homeBtn.addEventListener('click', () => {
+    resultOverlay.style.display = 'none';
+    solutionsContainer.style.display = 'none';
+    quizContainer.style.display = 'none';       // FIXED
+    instructionsContainer.style.display = 'block'; // FIXED
+
+    instructionHeader.style.display = 'block';
+    quizHeader.style.display = 'none';
+
+    currentIndex = 0;
+    userAnswers.fill(null);
+    questionStates.fill("notVisited");
+
+    window.scrollTo(0, 0);
+});
+
+
+// ===== INIT =====
+instTotalQuestions.textContent = totalQuestions;
+instSideTotal.textContent = totalQuestions;
+
+// ===== HAMBURGER MENU LOGIC =====
+const menuBtn = document.getElementById('menu-btn');
+const drawer = document.getElementById('palette-drawer');
+const drawerOverlay = document.getElementById('drawer-overlay');
+
+function openDrawer() {
+    if (!drawer || !drawerOverlay) return;
+    drawer.classList.add('open');
+    drawerOverlay.classList.add('show');
+    document.body.classList.add('drawer-open');
+}
+
+function closeDrawer() {
+    if (!drawer || !drawerOverlay) return;
+    drawer.classList.remove('open');
+    drawerOverlay.classList.remove('show');
+    document.body.classList.remove('drawer-open');
+}
+
+if (menuBtn) {
+    menuBtn.addEventListener('click', openDrawer);
+}
+
+if (drawerOverlay) {
+    drawerOverlay.addEventListener('click', closeDrawer);
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Beginners Quiz Reading Comprehension Set -5 Quiz | MockTest Buddy</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<script src="../home.js"></script>
+
+<style>
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --bg: #f3f4f6;
+    --card-bg: #ffffff;
+    --text: #111827;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --danger: #ef4444;
+    --success: #22c55e;
+    --marked: #7c3aed;
+    --correct-bg: #ecfdf3;
+    --wrong-bg: #fef2f2;
+    --marked-bg: #f3e8ff;
+}
+
+/* Reset-ish */
+* {
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: radial-gradient(circle at top left, #dbeafe, #eff6ff 40%, #f9fafb 80%);
+    color: var(--text);
+}
+
+/* Instruction header (brand only) */
+.brand-header {
+    background: linear-gradient(90deg, #0f172a, #111827);
+    color: #fff;
+    padding: 14px 16px;
+    text-align: center;
+}
+.brand-title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+.brand-sub {
+    font-size: 12px;
+    opacity: 0.8;
+    margin-top: 4px;
+}
+
+/* Test header (only after start) */
+.header-test {
+    display: none;
+    background: linear-gradient(90deg, var(--primary-dark), var(--primary));
+    color: #fff;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.header-left {
+    display: flex;
+    flex-direction: column;
+}
+.header-title {
+    font-size: 20px;
+    font-weight: 600;
+}
+.header-subtitle {
+    font-size: 12px;
+    opacity: 0.9;
+}
+.header-right {
+    font-size: 12px;
+    text-align: right;
+}
+.badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.12);
+    font-size: 11px;
+}
+
+/* Layout */
+.main {
+    max-width: 1000px;
+    margin: 16px auto 28px;
+    padding: 0 12px;
+}
+.card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
+    padding: 18px 16px 16px;
+}
+
+/* Instructions */
+#instructions-container {
+    display: block;
+}
+.instructions-layout {
+    display: flex;
+    gap: 16px;
+}
+.instructions-main {
+    flex: 1;
+}
+.instructions-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+.instructions-list {
+    font-size: 14px;
+    margin-left: 16px;
+    margin-bottom: 12px;
+}
+.instructions-list li {
+    margin-bottom: 4px;
+}
+.instructions-summary {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin: 10px 0 16px;
+}
+.instructions-summary-item {
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #f9fafb;
+    padding: 8px;
+    font-size: 13px;
+}
+.instructions-summary-label {
+    font-size: 11px;
+    color: var(--muted);
+}
+.instructions-summary-value {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* Instruction candidate box (right side) */
+.instructions-side {
+    width: 230px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #f1f5f9;
+    padding: 10px;
+    font-size: 13px;
+}
+.instructions-side-title {
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+.instructions-side-row {
+    margin-bottom: 4px;
+}
+.instructions-side-label {
+    color: var(--muted);
+    font-size: 12px;
+}
+.instructions-side-value {
+    font-weight: 500;
+}
+
+/* Test layout */
+#quiz-container {
+    display: none;
+}
+.header-test {
+    display: none;
+}
+.test-layout {
+    display: flex;
+    gap: 16px;
+}
+.test-main {
+    flex: 1;
+}
+.test-side {
+    width: 300px;
+}
+
+/* Question header */
+.question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 15px;
+    color: var(--muted);
+}
+.q-progress {
+    font-weight: 500;
+}
+.marks-info {
+    font-size: 12px;
+}
+.marks-info span {
+    margin-left: 8px;
+}
+.marks-pos {
+    color: var(--success);
+}
+.marks-neg {
+    color: var(--danger);
+}
+
+/* Question body */
+.question-body {
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    padding: 12px 10px;
+    background: #f9fafb;
+    margin-bottom: 12px;
+    font-size: 17px;
+	line-height: 1.5;
+}
+.question-body p {
+    margin: 4px 0;
+}
+
+/* Options */
+.options-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.option {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #fff;
+    cursor: pointer;
+    transition: background 0.12s ease, border-color 0.12s ease, transform 0.08s ease;
+}
+.option:hover {
+    background: #eff6ff;
+    border-color: var(--primary);
+    transform: translateY(-1px);
+}
+.option input {
+    margin-top: 3px;
+}
+.option-text {
+    font-size: 17px;
+	line-height: 1.4;
+}
+
+/* Nav buttons */
+.nav-bar {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.nav-left,
+.nav-right {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.btn {
+    border: none;
+    border-radius: 999px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.12s ease, transform 0.08s ease, box-shadow 0.12s ease;
+}
+.btn:active {
+    transform: translateY(1px);
+}
+.btn-primary {
+    background: var(--primary);
+    color: #fff;
+    box-shadow: 0 8px 16px rgba(37, 99, 235, 0.3);
+}
+.btn-primary:hover {
+    background: var(--primary-dark);
+}
+.btn-secondary {
+    background: #e5e7eb;
+    color: #111827;
+}
+.btn-secondary:hover {
+    background: #d1d5db;
+}
+.btn-danger {
+    background: var(--danger);
+    color: #fff;
+}
+.btn-danger:hover {
+    background: #b91c1c;
+}
+
+/* Side panel (palette only during test) */
+.sidebar-card {
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #f9fafb;
+    padding: 10px;
+    font-size: 12px;
+}
+
+/* Palette */
+.palette {
+    margin-top: 0;
+}
+.palette-title {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+.palette-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.palette-item {
+    min-width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 2px solid #d1d5db;
+    font-size: 18px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.15s;
+}
+.palette-item:hover {
+    transform: scale(1.08);
+    border-color: #3b82f6;
+}
+.palette-item.current {
+    outline: 2px solid var(--primary);
+}
+
+/* Palette colors per your request */
+.palette-item.state-notVisited {
+    background: #9ca3af;  /* darker grey */
+    color: #ffffff;
+}
+.palette-item.state-notAnswered {
+    background: #ef4444;  /* red */
+    color: #ffffff;
+}
+.palette-item.state-answered {
+    background: #22c55e;  /* green */
+    color: #ffffff;
+}
+.palette-item.state-marked {
+    background: #8b5cf6;  /* strong purple */
+    color: #ffffff;
+}
+
+/* Palette legend */
+.palette-legend {
+    margin-top: 8px;
+    font-size: 11px;
+    color: var(--muted);
+}
+.palette-legend-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 2px;
+}
+.legend-box {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+}
+.legend-notVisited { background: #e5e7eb; }
+.legend-notAnswered { background: #fee2e2; border-color:#fecaca; }
+.legend-answered { background: #dcfce7; border-color:#bbf7d0; }
+.legend-marked { background: #e9d5ff; border-color:#c4b5fd; }
+
+/* Solutions page */
+#solutions-container {
+    display: none;
+}
+.solutions-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+.solutions-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 10px;
+}
+.solution-item {
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+    margin-top: 10px;
+}
+.solution-item:first-child {
+    border-top: none;
+    padding-top: 0;
+    margin-top: 0;
+}
+.solution-question {
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+.solution-options {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+.solution-option {
+    display: flex;
+    gap: 6px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #fff;
+}
+.solution-option.correct {
+    background: var(--correct-bg);
+    border-color: var(--success);
+}
+.solution-option.wrong {
+    background: var(--wrong-bg);
+    border-color: var(--danger);
+}
+.solution-label {
+    font-size: 13px;
+    font-weight: 600;
+}
+.solution-text {
+    flex: 1;
+    font-size: 13px;
+}
+.solution-explanation {
+    font-size: 13px;
+    background: #eef2ff;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+/* Overlay */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15,23,42,0.55);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+}
+.overlay-content {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 16px 16px 14px;
+    width: 94%;
+    max-width: 430px;
+    box-shadow: 0 26px 50px rgba(15,23,42,0.4);
+}
+.overlay-header h2 {
+    margin: 0;
+    font-size: 20px;
+}
+.overlay-body {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 8px 0 10px;
+}
+.overlay-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-bottom: 10px;
+    font-size: 13px;
+}
+.metric-card {
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    padding: 8px;
+    background: #f9fafb;
+}
+.metric-label {
+    font-size: 11px;
+    color: var(--muted);
+}
+.metric-value {
+    font-size: 15px;
+    font-weight: 600;
+    margin-top: 2px;
+}
+.overlay-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+/* Utils */
+.hidden {
+    display: none !important;
+}
+
+/* Responsive: hide side panels & palette on phones */
+@media (max-width: 768px) {
+    .instructions-layout,
+    .test-layout {
+        flex-direction: column;
+    }
+    .instructions-side,
+    .test-side {
+        display: none;
+    }
+    .card {
+        padding: 16px 12px 14px;
+    }
+}
+
+/* >>> ADD NEW CODE BELOW <<< */
+
+/* Expand quiz layout width */
+.main {
+    max-width: 1400px !important;
+}
+
+/* Expand quiz card width */
+#quiz-container.card {
+    width: 100% !important;
+    padding: 20px !important;
+}
+
+/* Reduce left+right margin */
+.main {
+    margin: 10px auto !important;
+    padding: 0px 5px !important;
+}
+
+/* Ensure question+palette stay visible side by side */
+.test-layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 16px;
+}
+
+/* Reduce question padding */
+.question-body {
+    padding: 12px !important;
+}
+
+/* Keep buttons in one row */
+.nav-bar {
+    flex-wrap: nowrap !important;
+    justify-content: space-between !important;
+}
+
+.nav-left button,
+.nav-right button {
+    white-space: nowrap !important;
+}
+
+/* Medium screen adjustments */
+@media (max-width: 1100px) {
+    .test-layout {
+        display: block !important;
+    }
+    .test-side {
+        display: none !important;
+    }
+    #quiz-container.card {
+        padding: 10px !important;
+    }
+    .question-body {
+        font-size: 18px !important;
+    }
+    .btn {
+        font-size: 16px !important;
+    }
+}
+
+/* Small screen adjustments */
+@media (max-width: 600px) {
+    body {
+        font-size: 16px !important;
+    }
+    .btn {
+        padding: 10px 16px !important;
+        font-size: 15px !important;
+    }
+    .option-text {
+        font-size: 18px !important;
+    }
+}
+/* Buttons shown on desktop */
+.nav-right .btn-submit {
+    display: inline-flex;
+}
+
+/* Buttons shown on mobile */
+@media (max-width: 600px) {
+    .btn-submit {
+        display: none !important;
+    }
+
+    .btn-mark {
+        display: inline-flex !important;
+    }
+
+    .btn-clear {
+        display: inline-flex !important;
+    }
+
+    .btn-save {
+        display: inline-flex !important;
+    }
+
+    /* Change button labels visually */
+    .btn-mark::after {
+        content: "Mark";
+    }
+    .btn-clear::after {
+        content: "Clear";
+    }
+    .btn-save::after {
+        content: "Save & Next";
+    }
+
+    /* hide original text inside buttons */
+    .btn-mark span,
+    .btn-clear span,
+    .btn-save span {
+        display: none;
+    }
+
+    /* Make buttons larger and easier to tap */
+    .nav-left button,
+    .nav-right button {
+        padding: 14px 20px;
+        font-size: 18px;
+        border-radius: 8px;
+    }
+}
+
+@media (max-width: 600px) {
+    .header-test {
+        flex-wrap: wrap;
+        padding: 8px 10px;
+        gap: 6px;
+    }
+
+    .header-left {
+        flex: 1 1 100%;
+    }
+
+    .header-title {
+        font-size: 14px;
+        line-height: 1.2;
+    }
+
+    .header-subtitle {
+        font-size: 11px;
+    }
+
+    .header-right {
+        flex: 1 1 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 11px;
+    }
+
+    .badge {
+        font-size: 10px;
+        padding: 2px 6px;
+    }
+}
+/* ===== HAMBURGER MENU ===== */
+.menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .menu-btn {
+        display: block;
+    }
+}
+
+/* ===== PALETTE DRAWER ===== */
+.palette-drawer {
+    position: fixed;
+    top: 0;
+    left: -320px;
+    width: 300px;
+    height: 100dvh; /* mobile safe height */
+    background: #ffffff;
+    box-shadow: 2px 0 20px rgba(0,0,0,0.2);
+    z-index: 100;
+    padding: 12px;
+    transition: left 0.3s ease;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.palette-drawer.open {
+    left: 0;
+}
+
+.drawer-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    display: none;
+    z-index: 90;
+}
+
+.drawer-overlay.show {
+    display: block;
+}
+#palette-drawer-container {
+    flex: 0 0 auto;          
+    max-height: calc(100dvh - 170px); 
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+/* Improve scroll on mobile */
+#palette-drawer-container::-webkit-scrollbar {
+    width: 6px;
+}
+#palette-drawer-container::-webkit-scrollbar-thumb {
+    background: #c7d2fe;
+    border-radius: 6px;
+}
+/* Keep legend always visible */
+.palette-drawer .palette-legend {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid #e5e7eb;
+    flex-shrink: 0;
+}
+
+body.drawer-open {
+    overflow: hidden;
+}
+</style>
+</head>
+<body>
+
+<div id="drawer-overlay" class="drawer-overlay"></div>
+
+<div id="palette-drawer" class="palette-drawer">
+    <h3 style="margin:6px 0 10px;font-size:14px;">Question Palette</h3>
+
+    <div id="palette-drawer-container" class="palette-grid"></div>
+
+    <!-- LEGEND FOR MOBILE -->
+    <div class="palette-legend">
+        <div class="palette-legend-row">
+            <span class="legend-box legend-notVisited"></span> Not visited
+        </div>
+        <div class="palette-legend-row">
+            <span class="legend-box legend-notAnswered"></span> Not answered
+        </div>
+        <div class="palette-legend-row">
+            <span class="legend-box legend-answered"></span> Answered
+        </div>
+        <div class="palette-legend-row">
+            <span class="legend-box legend-marked"></span> Marked for review
+        </div>
+    </div>
+</div>
+
+<!-- INSTRUCTION HEADER (BRAND ONLY) -->
+<div id="instruction-header" class="brand-header">
+    <div class="brand-title">MockTest Buddy</div>
+    <div class="brand-sub">by Team LuciferBanker</div>
+</div>
+
+<!-- TEST HEADER (ONLY AFTER START) -->
+<div id="quiz-header" class="header-test">
+    <button id="menu-btn" class="menu-btn">☰</button>
+    <div class="header-left">
+        <span class="header-title">Beginners Quiz Reading Comprehension Set -5</span>
+        <span class="header-subtitle">Single-correct MCQ • One question per screen</span>
+    </div>
+    <div class="header-right">
+        <span class="badge">Quiz Mode</span><br />
+        <span style="font-size: 11px;">Marks: +1 / −0.25</span><br />
+        <span id="timer-label" style="font-size: 11px;">Time: 00:00:00</span>
+    </div>
+</div>
+
+<div class="main">
+
+    <!-- INSTRUCTIONS SCREEN -->
+    <div class="card" id="instructions-container">
+        <div class="instructions-layout">
+            <div class="instructions-main">
+                <div class="instructions-title">Instructions</div>
+                <p style="font-size:14px;margin-bottom:6px;">
+                    Read the instructions carefully before starting. Once started, the timer will not stop.
+                </p>
+
+                <div class="instructions-summary">
+                    <div class="instructions-summary-item">
+                        <div class="instructions-summary-label">Total Questions</div>
+                        <div class="instructions-summary-value" id="inst-total-questions">14</div>
+                    </div>
+                    <div class="instructions-summary-item">
+                        <div class="instructions-summary-label">Marks / Q</div>
+                        <div class="instructions-summary-value">+1</div>
+                    </div>
+                    <div class="instructions-summary-item">
+                        <div class="instructions-summary-label">Negative</div>
+                        <div class="instructions-summary-value">−0.25</div>
+                    </div>
+                </div>
+
+                <ul class="instructions-list">
+                    <li>Each question has a single correct answer.</li>
+                    <li>Use the palette on the right to move between questions or sections.</li>
+                    <li>Use <strong>Mark for Review &amp; Next</strong> to mark questions you want to review later.</li>
+                    <li>You can submit the test anytime using the <strong>Submit</strong> button.</li>
+                </ul>
+
+                <button class="btn btn-primary" id="start-test-btn">Start Test</button>
+            </div>
+
+            <div class="instructions-side">
+                <div class="instructions-side-title">Details</div>
+                <div class="instructions-side-row">
+                    <div class="instructions-side-label">Canditate</div>
+                    <div class="instructions-side-value">Guest User</div>
+                </div>
+                <div class="instructions-side-row">
+                    <div class="instructions-side-label">Section</div>
+                    <div class="instructions-side-value" id="inst-section-name">Beginners Quiz Reading Comprehension Set -5</div>
+                </div>
+                <div class="instructions-side-row">
+                    <div class="instructions-side-label">Questions</div>
+                    <div class="instructions-side-value" id="inst-side-total">14</div>
+                </div>
+                <div class="instructions-side-row">
+                    <div class="instructions-side-label">Marks</div>
+                    <div class="instructions-side-value">+1 / −0.25</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- QUIZ SCREEN -->
+    <div class="card" id="quiz-container">
+        <div class="test-layout">
+            <div class="test-main">
+                <div class="question-header">
+                    <div class="q-progress" id="q-progress">Question 1 of 14</div>
+                    <div class="marks-info">
+                        <span class="marks-pos">+1 mark</span>
+                        <span class="marks-neg">−0.25 negative</span>
+                    </div>
+                </div>
+                <div class="question-body" id="question-text"></div>
+                <div class="options-group" id="options-container"></div>
+
+                <div class="nav-bar">
+					<div class="nav-left">
+						<button class="btn btn-secondary" id="clear-btn">
+							<svg width="18" height="18" viewBox="0 0 24 24" class="btn-icon"><path d="M6 19L19 6" stroke="currentColor" stroke-width="2"/><path d="M6 6L19 19" stroke="currentColor" stroke-width="2"/></svg>
+							<span class="btn-text">Clear Response</span>
+						</button>
+						<button class="btn btn-secondary" id="mark-btn">
+							<svg width="18" height="18" viewBox="0 0 24 24" class="btn-icon"><path d="M6 3h12v18l-6-4-6 4V3z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+							<span class="btn-text">Mark for Review & Next</span>
+						</button>
+					</div>
+					<div class="nav-right">
+						<button class="btn btn-primary" id="next-btn">
+							<svg width="18" height="18" viewBox="0 0 24 24" class="btn-icon"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+							<span class="btn-text">Save & Next</span>
+						</button>
+						<button class="btn btn-danger" id="submit-btn">
+							<svg width="18" height="18" viewBox="0 0 24 24" class="btn-icon"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+							<span class="btn-text">Submit</span>
+						</button>
+					</div>
+				</div>
+
+            </div>
+
+            <aside class="test-side">
+                <div class="sidebar-card palette">
+                    <div class="palette-title">Question Palette</div>
+                    <div class="palette-grid" id="palette-container"></div>
+                    <div class="palette-legend">
+                        <div class="palette-legend-row">
+                            <span class="legend-box legend-notVisited"></span> Not visited
+                        </div>
+                        <div class="palette-legend-row">
+                            <span class="legend-box legend-notAnswered"></span> Not answered
+                        </div>
+                        <div class="palette-legend-row">
+                            <span class="legend-box legend-answered"></span> Answered
+                        </div>
+                        <div class="palette-legend-row">
+                            <span class="legend-box legend-marked"></span> Marked for review
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- SOLUTIONS SCREEN -->
+    <div class="card" id="solutions-container">
+        <div class="solutions-title">Solutions – Beginners Quiz Reading Comprehension Set -5</div>
+        <div class="solutions-sub">
+            Correct options are highlighted in <span style="color:var(--success);font-weight:600;">green</span>.
+            Your wrong selections (if any) are highlighted in <span style="color:var(--danger);font-weight:600;">red</span>.
+        </div>
+        <div id="solutions-list"></div>
+        <div style="margin-top:12px; display:flex; justify-content:flex-end; gap:8px;">
+            <button class="btn btn-secondary" id="solutions-back-btn">&larr; Back to Result</button>
+        </div>
+    </div>
+</div>
+
+<!-- RESULT OVERLAY -->
+<div class="overlay" id="result-overlay">
+    <div class="overlay-content">
+        <div class="overlay-header">
+            <h2>Quiz Summary</h2>
+        </div>
+        <div class="overlay-body">
+            Here is your performance analytics for this test.
+        </div>
+        <div class="overlay-metrics">
+            <div class="metric-card">
+                <div class="metric-label">Total Marks</div>
+                <div class="metric-value" id="metric-marks">0</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Correct Answers</div>
+                <div class="metric-value" id="metric-correct">0</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Wrong Answers</div>
+                <div class="metric-value" id="metric-wrong">0</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Questions Attempted</div>
+                <div class="metric-value" id="metric-attempted">0</div>
+            </div>
+			<div class="metric-card">
+				<div class="metric-label">Avg Time / Question</div>
+				<div class="metric-value" id="metric-avgtime">0</div>
+			</div>
+        </div>
+        <div class="overlay-footer">
+            <button class="btn btn-secondary" id="home-btn">Home</button>
+            <button class="btn btn-primary" id="view-solutions-btn">View Solutions</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const TEST_DURATION_SECONDS = 600;
+
+const questions = [{"question": "<p><strong>read the passage carefully and answer the following questions. </strong></p>\n<p>Credit Information Bureau (India) Limited (CIBIL) is a credit company keeping all the records of credit-related activities of individuals as companies, including credit card and loans. This so-called CIBIL score plays a major role in determining one's eligibility to avail a car loan. This series lies in the range of 300-900, a good score is 750+, and a poor is 650 below, a good score increases the chance of eligibility to avail a loan, and a poor score hinders it.</p>\n<p>A consolidated report containing the customers' credit history, bank statements, loan information, personal information, employment information values and validates the consumer’s loan eligibility at great length.</p>\n<p>The CIBIL score is generated by a complex algorithm that looks over the following criteria. Credit history makes up 35% amounting to the individual’s timely payment of loans and debts. It has the complete knowledge of your Equated Monthly Installments, thereby making it necessary for one to pay on time.</p>\n<p>(are availed as they might (P)/ A credit mix of secured (Q)/ is good if either or both types of loans (R)/ and unsecured loans and (S)/ increase your future possibilities (T))</p>\n<p>Apart from the personal information the report also looks over the public record of the customer if they have a criminal record or have bankrupted.</p>\n<p>Whenever a lender looks over the individual’s credit report the inquiry number keeps adding. So the more the number of credit inquiries, the more the number of loans taken. The potential lender may sign in green or red depending on the timely payments and the loan types.</p>\n<p>Credit utilization amounts to 30% of the credit report which refers to the credit per cent you have used and the remaining percent you can use. The higher the percent, the higher the risk of borrowing, good credit utilization should be below 50%.</p>\n<p>Every time you take a loan the new credit adds up, meaning taking multiple loans at a time isn’t very good and hinders future chances of taking a loan.</p>\n<p>CIBIL scores determine the individual’s loan eligibility widely. A car loan is no different from that, the more the credit score, the higher the eligibility. The loan approval for an applicant depends heavily on the credit score, you have a high score, and your process is faster and hassle-free. If not getting to sanction your car loan is much harder and in some cases not possible.</p>\n<p>Sometimes the applicants want the longest time of period to pay their principal and interest and the tenure time is affected by the credit score at great length. If your score is less or poor the chances of getting the tenure you want is low.</p>\n<p>(The interest rate is a (A)/ part of the total amount (B)/ calculated in percentage (C)/ that the loanee need to pay (D)/ every month for the loan amount (E)) The credit score affects this, for a lofty CIBIL score the interest rate is less (scores like 800), whereas though few banks might approve for loans there is a giant chance that the bank increases your interest rate for each month, __________ making you pay more than what is necessary</p><br><p><strong>Which of the following options, in context to the CIBIL is correct?</strong></p>\n<p><strong>a). </strong>The one with poor credit history never able to get loan</p>\n<p><strong>b).</strong> CIBIL is a report card of an individual, whether one can avail loan or not</p>\n<p><strong>c). </strong>To determine the credit score of an individual or a company, the range lies between 300 and 900</p>", "options": ["<p>Only (a)</p>", "<p>Only (b)</p>", "<p>Only (c)</p>", "<p>Both (b) and (c)</p>", "<p>All of the above</p>"], "correctIndex": 3, "solution": "<p><strong>Answer: D</strong></p>\n<p>Option (a) - the option twisted the context of the passage. In the passage it is said that with poor credit score there is a difficulty to get the loan, it is not said in the passage that one never gets the loan. So, the option is eliminated</p>\n<p>Option (b) - it is mentioned in the passage. So, this is the correct option (This so-called CIBIL score plays a major role in determining one's eligibility to avail a car loan)</p>\n<p>Option (c) - it is mentioned in the passage. So, this is the correct option (This series lies in the range of 300-900, a good score is 750+, and a poor is 650 below, a good score increases the chance of eligibility to avail a loan, and a poor score hinders it)</p>"}, {"question": "<p><strong>read the passage carefully and answer the following questions. </strong></p>\n<p>Credit Information Bureau (India) Limited (CIBIL) is a credit company keeping all the records of credit-related activities of individuals as companies, including credit card and loans. This so-called CIBIL score plays a major role in determining one's eligibility to avail a car loan. This series lies in the range of 300-900, a good score is 750+, and a poor is 650 below, a good score increases the chance of eligibility to avail a loan, and a poor score hinders it.</p>\n<p>A consolidated report containing the customers' credit history, bank statements, loan information, personal information, employment information values and validates the consumer’s loan eligibility at great length.</p>\n<p>The CIBIL score is generated by a complex algorithm that looks over the following criteria. Credit history makes up 35% amounting to the individual’s timely payment of loans and debts. It has the complete knowledge of your Equated Monthly Installments, thereby making it necessary for one to pay on time.</p>\n<p>(are availed as they might (P)/ A credit mix of secured (Q)/ is good if either or both types of loans (R)/ and unsecured loans and (S)/ increase your future possibilities (T))</p>\n<p>Apart from the personal information the report also looks over the public record of the customer if they have a criminal record or have bankrupted.</p>\n<p>Whenever a lender looks over the individual’s credit report the inquiry number keeps adding. So the more the number of credit inquiries, the more the number of loans taken. The potential lender may sign in green or red depending on the timely payments and the loan types.</p>\n<p>Credit utilization amounts to 30% of the credit report which refers to the credit per cent you have used and the remaining percent you can use. The higher the percent, the higher the risk of borrowing, good credit utilization should be below 50%.</p>\n<p>Every time you take a loan the new credit adds up, meaning taking multiple loans at a time isn’t very good and hinders future chances of taking a loan.</p>\n<p>CIBIL scores determine the individual’s loan eligibility widely. A car loan is no different from that, the more the credit score, the higher the eligibility. The loan approval for an applicant depends heavily on the credit score, you have a high score, and your process is faster and hassle-free. If not getting to sanction your car loan is much harder and in some cases not possible.</p>\n<p>Sometimes the applicants want the longest time of period to pay their principal and interest and the tenure time is affected by the credit score at great length. If your score is less or poor the chances of getting the tenure you want is low.</p>\n<p>(The interest rate is a (A)/ part of the total amount (B)/ calculated in percentage (C)/ that the loanee need to pay (D)/ every month for the loan amount (E)) The credit score affects this, for a lofty CIBIL score the interest rate is less (scores like 800), whereas though few banks might approve for loans there is a giant chance that the bank increases your interest rate for each month, __________ making you pay more than what is necessary</p><br><p><strong>In the passage, a sentence is given, which is divided into five parts (P), (Q), (R), (S) and (T), the divided parts of the sentence are jumbled into a random order. You have to rearrange the parts of the sentence so that a meaningful sentence can be formed</strong></p>", "options": ["<p>RTSPQ</p>", "<p>PRQTS</p>", "<p>QRPST</p>", "<p>STQRP</p>", "<p>QSRPT</p>"], "correctIndex": 4, "solution": "<p><strong>Answer: E</strong></p>\n<p>After rearrangement - A credit mix of secured and unsecured loans and is good if either or both types of loans are availed as they might increase your future possibilities</p>"}, {"question": "<p><strong>read the passage carefully and answer the following questions. </strong></p>\n<p>Credit Information Bureau (India) Limited (CIBIL) is a credit company keeping all the records of credit-related activities of individuals as companies, including credit card and loans. This so-called CIBIL score plays a major role in determining one's eligibility to avail a car loan. This series lies in the range of 300-900, a good score is 750+, and a poor is 650 below, a good score increases the chance of eligibility to avail a loan, and a poor score hinders it.</p>\n<p>A consolidated report containing the customers' credit history, bank statements, loan information, personal information, employment information values and validates the consumer’s loan eligibility at great length.</p>\n<p>The CIBIL score is generated by a complex algorithm that looks over the following criteria. Credit history makes up 35% amounting to the individual’s timely payment of loans and debts. It has the complete knowledge of your Equated Monthly Installments, thereby making it necessary for one to pay on time.</p>\n<p>(are availed as they might (P)/ A credit mix of secured (Q)/ is good if either or both types of loans (R)/ and unsecured loans and (S)/ increase your future possibilities (T))</p>\n<p>Apart from the personal information the report also looks over the public record of the customer if they have a criminal record or have bankrupted.</p>\n<p>Whenever a lender looks over the individual’s credit report the inquiry number keeps adding. So the more the number of credit inquiries, the more the number of loans taken. The potential lender may sign in green or red depending on the timely payments and the loan types.</p>\n<p>Credit utilization amounts to 30% of the credit report which refers to the credit per cent you have used and the remaining percent you can use. The higher the percent, the higher the risk of borrowing, good credit utilization should be below 50%.</p>\n<p>Every time you take a loan the new credit adds up, meaning taking multiple loans at a time isn’t very good and hinders future chances of taking a loan.</p>\n<p>CIBIL scores determine the individual’s loan eligibility widely. A car loan is no different from that, the more the credit score, the higher the eligibility. The loan approval for an applicant depends heavily on the credit score, you have a high score, and your process is faster and hassle-free. If not getting to sanction your car loan is much harder and in some cases not possible.</p>\n<p>Sometimes the applicants want the longest time of period to pay their principal and interest and the tenure time is affected by the credit score at great length. If your score is less or poor the chances of getting the tenure you want is low.</p>\n<p>(The interest rate is a (A)/ part of the total amount (B)/ calculated in percentage (C)/ that the loanee need to pay (D)/ every month for the loan amount (E)) The credit score affects this, for a lofty CIBIL score the interest rate is less (scores like 800), whereas though few banks might approve for loans there is a giant chance that the bank increases your interest rate for each month, __________ making you pay more than what is necessary</p><br><p><strong>In the passage, a blank is given; you have to fill the appropriate connecter from the following options</strong></p>\n<p><strong>a).</strong> Thereby</p>\n<p><strong>b).</strong> Consequently</p>\n<p><strong>c).</strong> Conversely</p>", "options": ["<p>Only (a)</p>", "<p>Only (b)</p>", "<p>Both (a) and (b)</p>", "<p>Both (b) and (c)</p>", "<p>All of the above</p>"], "correctIndex": 2, "solution": "<p><strong>Answer: C</strong></p>\n<p>The context of the sentence talks about the result of the increment in interest rates by the banks that one has to pay more than what is necessary</p>\n<p>In that case, options (a) and (b) ‘thereby’ and ‘consequently’ both support the context of the sentence</p>\n<p>‘Thereby’ – by that means; as a result of that</p>\n<p>‘Consequently’ – as a result</p>\n<p>Meaning of ‘conversely’ – in an opposite way; contrary</p>"}, {"question": "<p><strong>read the passage carefully and answer the following questions. </strong></p>\n<p>Credit Information Bureau (India) Limited (CIBIL) is a credit company keeping all the records of credit-related activities of individuals as companies, including credit card and loans. This so-called CIBIL score plays a major role in determining one's eligibility to avail a car loan. This series lies in the range of 300-900, a good score is 750+, and a poor is 650 below, a good score increases the chance of eligibility to avail a loan, and a poor score hinders it.</p>\n<p>A consolidated report containing the customers' credit history, bank statements, loan information, personal information, employment information values and validates the consumer’s loan eligibility at great length.</p>\n<p>The CIBIL score is generated by a complex algorithm that looks over the following criteria. Credit history makes up 35% amounting to the individual’s timely payment of loans and debts. It has the complete knowledge of your Equated Monthly Installments, thereby making it necessary for one to pay on time.</p>\n<p>(are availed as they might (P)/ A credit mix of secured (Q)/ is good if either or both types of loans (R)/ and unsecured loans and (S)/ increase your future possibilities (T))</p>\n<p>Apart from the personal information the report also looks over the public record of the customer if they have a criminal record or have bankrupted.</p>\n<p>Whenever a lender looks over the individual’s credit report the inquiry number keeps adding. So the more the number of credit inquiries, the more the number of loans taken. The potential lender may sign in green or red depending on the timely payments and the loan types.</p>\n<p>Credit utilization amounts to 30% of the credit report which refers to the credit per cent you have used and the remaining percent you can use. The higher the percent, the higher the risk of borrowing, good credit utilization should be below 50%.</p>\n<p>Every time you take a loan the new credit adds up, meaning taking multiple loans at a time isn’t very good and hinders future chances of taking a loan.</p>\n<p>CIBIL scores determine the individual’s loan eligibility widely. A car loan is no different from that, the more the credit score, the higher the eligibility. The loan approval for an applicant depends heavily on the credit score, you have a high score, and your process is faster and hassle-free. If not getting to sanction your car loan is much harder and in some cases not possible.</p>\n<p>Sometimes the applicants want the longest time of period to pay their principal and interest and the tenure time is affected by the credit score at great length. If your score is less or poor the chances of getting the tenure you want is low.</p>\n<p>(The interest rate is a (A)/ part of the total amount (B)/ calculated in percentage (C)/ that the loanee need to pay (D)/ every month for the loan amount (E)) The credit score affects this, for a lofty CIBIL score the interest rate is less (scores like 800), whereas though few banks might approve for loans there is a giant chance that the bank increases your interest rate for each month, __________ making you pay more than what is necessary</p><br><p><strong>What is/are the factor (s) discussed in the passage that affect (s) credit score?</strong></p>\n<p><strong>a). </strong>CIBIL score is not only calculated on the basis of credit score but criminal record of an individual also matters</p>\n<p><strong>b).</strong> Credit inquiries play a great role the more the number of inquiries is, the more number of loan can be taken</p>\n<p><strong>c).</strong> Credits of the loan is decreased each time one takes a loan, and may obstruct future possibility of taking loan</p>", "options": ["<p>Only (a)</p>", "<p>Only (b)</p>", "<p>Only (c)</p>", "<p>Both (a) and (c)</p>", "<p>All of the above</p>"], "correctIndex": 3, "solution": "<p><strong>Answer: D</strong></p>\n<p><strong>B is incorrect</strong>: Whenever a lender looks over the individual’s credit report the inquiry number keeps adding. So the more the number of credit inquiries, the more the number of loans taken.\" However, it <em>doesn't</em> say that more inquiries lead to <em>more loans being taken</em>. Instead, it implies that <strong>more inquiries indicate a higher <em>attempt</em> to take loans</strong>, which can be viewed negatively by lenders. It hints that too many inquiries can negatively impact your chances of getting <em>future</em> loans, not increase the number you can take.</p>\n<p>A and C are correct. Hence option D is correct.</p>"}, {"question": "<p><strong>read the passage carefully and answer the following questions. </strong></p>\n<p>Credit Information Bureau (India) Limited (CIBIL) is a credit company keeping all the records of credit-related activities of individuals as companies, including credit card and loans. This so-called CIBIL score plays a major role in determining one's eligibility to avail a car loan. This series lies in the range of 300-900, a good score is 750+, and a poor is 650 below, a good score increases the chance of eligibility to avail a loan, and a poor score hinders it.</p>\n<p>A consolidated report containing the customers' credit history, bank statements, loan information, personal information, employment information values and validates the consumer’s loan eligibility at great length.</p>\n<p>The CIBIL score is generated by a complex algorithm that looks over the following criteria. Credit history makes up 35% amounting to the individual’s timely payment of loans and debts. It has the complete knowledge of your Equated Monthly Installments, thereby making it necessary for one to pay on time.</p>\n<p>(are availed as they might (P)/ A credit mix of secured (Q)/ is good if either or both types of loans (R)/ and unsecured loans and (S)/ increase your future possibilities (T))</p>\n<p>Apart from the personal information the report also looks over the public record of the customer if they have a criminal record or have bankrupted.</p>\n<p>Whenever a lender looks over the individual’s credit report the inquiry number keeps adding. So the more the number of credit inquiries, the more the number of loans taken. The potential lender may sign in green or red depending on the timely payments and the loan types.</p>\n<p>Credit utilization amounts to 30% of the credit report which refers to the credit per cent you have used and the remaining percent you can use. The higher the percent, the higher the risk of borrowing, good credit utilization should be below 50%.</p>\n<p>Every time you take a loan the new credit adds up, meaning taking multiple loans at a time isn’t very good and hinders future chances of taking a loan.</p>\n<p>CIBIL scores determine the individual’s loan eligibility widely. A car loan is no different from that, the more the credit score, the higher the eligibility. The loan approval for an applicant depends heavily on the credit score, you have a high score, and your process is faster and hassle-free. If not getting to sanction your car loan is much harder and in some cases not possible.</p>\n<p>Sometimes the applicants want the longest time of period to pay their principal and interest and the tenure time is affected by the credit score at great length. If your score is less or poor the chances of getting the tenure you want is low.</p>\n<p>(The interest rate is a (A)/ part of the total amount (B)/ calculated in percentage (C)/ that the loanee need to pay (D)/ every month for the loan amount (E)) The credit score affects this, for a lofty CIBIL score the interest rate is less (scores like 800), whereas though few banks might approve for loans there is a giant chance that the bank increases your interest rate for each month, __________ making you pay more than what is necessary</p><br><p><strong>What is/are the benefit (s) of the CIBIL score is/are mentioned in the passage?</strong></p>\n<p><strong>a). </strong>CIBIL score helps the applicant to get the loan in a stress free way</p>\n<p><strong>b).</strong> CIBIL score help the applicant to pay the loan amount with longer tenure of time</p>\n<p><strong>c). </strong>CIBIL score helps the applicant to get discount on loan processing fees and other charges</p>", "options": ["<p>Only (a)</p>", "<p>Only (b)</p>", "<p>Both (a) and (b)</p>", "<p>Both (b) and (c)</p>", "<p>All of the above</p>"], "correctIndex": 2, "solution": "<p><strong>Answer: C</strong></p>\n<p>Option (c) - the option is out of context. No such information about discount on loan processing fees and other charges is mentioned in the passage. So, the option is eliminated</p>\n<p>Option (a) - it is mentioned in the passage. So, this is the correct option (The loan approval for an applicant depends heavily on the credit score, you have a high score, and your process is faster and hassle-free)</p>\n<p>Option (b) - it is mentioned in the passage. So, this is the correct option (Sometimes the applicants want the longest time of period to pay their principal and interest and the tenure time is affected by the credit score at great length. If your score is less or poor the chances of getting the tenure you want is low)</p>"}, {"question": "<p><strong>read the passage carefully and answer the following questions. </strong></p>\n<p>Credit Information Bureau (India) Limited (CIBIL) is a credit company keeping all the records of credit-related activities of individuals as companies, including credit card and loans. This so-called CIBIL score plays a major role in determining one's eligibility to avail a car loan. This series lies in the range of 300-900, a good score is 750+, and a poor is 650 below, a good score increases the chance of eligibility to avail a loan, and a poor score hinders it.</p>\n<p>A consolidated report containing the customers' credit history, bank statements, loan information, personal information, employment information values and validates the consumer’s loan eligibility at great length.</p>\n<p>The CIBIL score is generated by a complex algorithm that looks over the following criteria. Credit history makes up 35% amounting to the individual’s timely payment of loans and debts. It has the complete knowledge of your Equated Monthly Installments, thereby making it necessary for one to pay on time.</p>\n<p>(are availed as they might (P)/ A credit mix of secured (Q)/ is good if either or both types of loans (R)/ and unsecured loans and (S)/ increase your future possibilities (T))</p>\n<p>Apart from the personal information the report also looks over the public record of the customer if they have a criminal record or have bankrupted.</p>\n<p>Whenever a lender looks over the individual’s credit report the inquiry number keeps adding. So the more the number of credit inquiries, the more the number of loans taken. The potential lender may sign in green or red depending on the timely payments and the loan types.</p>\n<p>Credit utilization amounts to 30% of the credit report which refers to the credit per cent you have used and the remaining percent you can use. The higher the percent, the higher the risk of borrowing, good credit utilization should be below 50%.</p>\n<p>Every time you take a loan the new credit adds up, meaning taking multiple loans at a time isn’t very good and hinders future chances of taking a loan.</p>\n<p>CIBIL scores determine the individual’s loan eligibility widely. A car loan is no different from that, the more the credit score, the higher the eligibility. The loan approval for an applicant depends heavily on the credit score, you have a high score, and your process is faster and hassle-free. If not getting to sanction your car loan is much harder and in some cases not possible.</p>\n<p>Sometimes the applicants want the longest time of period to pay their principal and interest and the tenure time is affected by the credit score at great length. If your score is less or poor the chances of getting the tenure you want is low.</p>\n<p>(The interest rate is a (A)/ part of the total amount (B)/ calculated in percentage (C)/ that the loanee need to pay (D)/ every month for the loan amount (E)) The credit score affects this, for a lofty CIBIL score the interest rate is less (scores like 800), whereas though few banks might approve for loans there is a giant chance that the bank increases your interest rate for each month, __________ making you pay more than what is necessary</p><br><p><strong>In the passage, a sentence is given which is divided into five parts (A), (B), (C), (D) and (E). Only one part of the sentence contains error. You have to mark that part of the sentence which contains error</strong></p>", "options": ["<p>A</p>", "<p>B</p>", "<p>C</p>", "<p>D</p>", "<p>E</p>"], "correctIndex": 3, "solution": "<p><strong>Answer: D</strong></p>\n<p>‘Need’ will be replaced by ‘needs’, the subject of the verb is ‘the loanee’, who is singular, so the verb will be used according to its subject. So, ‘need’ is incorrect here</p>"}, {"question": "<p><strong>read the passage carefully and answer the following questions. </strong></p>\n<p>Credit Information Bureau (India) Limited (CIBIL) is a credit company keeping all the records of credit-related activities of individuals as companies, including credit card and loans. This so-called CIBIL score plays a major role in determining one's eligibility to avail a car loan. This series lies in the range of 300-900, a good score is 750+, and a poor is 650 below, a good score increases the chance of eligibility to avail a loan, and a poor score hinders it.</p>\n<p>A consolidated report containing the customers' credit history, bank statements, loan information, personal information, employment information values and validates the consumer’s loan eligibility at great length.</p>\n<p>The CIBIL score is generated by a complex algorithm that looks over the following criteria. Credit history makes up 35% amounting to the individual’s timely payment of loans and debts. It has the complete knowledge of your Equated Monthly Installments, thereby making it necessary for one to pay on time.</p>\n<p>(are availed as they might (P)/ A credit mix of secured (Q)/ is good if either or both types of loans (R)/ and unsecured loans and (S)/ increase your future possibilities (T))</p>\n<p>Apart from the personal information the report also looks over the public record of the customer if they have a criminal record or have bankrupted.</p>\n<p>Whenever a lender looks over the individual’s credit report the inquiry number keeps adding. So the more the number of credit inquiries, the more the number of loans taken. The potential lender may sign in green or red depending on the timely payments and the loan types.</p>\n<p>Credit utilization amounts to 30% of the credit report which refers to the credit per cent you have used and the remaining percent you can use. The higher the percent, the higher the risk of borrowing, good credit utilization should be below 50%.</p>\n<p>Every time you take a loan the new credit adds up, meaning taking multiple loans at a time isn’t very good and hinders future chances of taking a loan.</p>\n<p>CIBIL scores determine the individual’s loan eligibility widely. A car loan is no different from that, the more the credit score, the higher the eligibility. The loan approval for an applicant depends heavily on the credit score, you have a high score, and your process is faster and hassle-free. If not getting to sanction your car loan is much harder and in some cases not possible.</p>\n<p>Sometimes the applicants want the longest time of period to pay their principal and interest and the tenure time is affected by the credit score at great length. If your score is less or poor the chances of getting the tenure you want is low.</p>\n<p>(The interest rate is a (A)/ part of the total amount (B)/ calculated in percentage (C)/ that the loanee need to pay (D)/ every month for the loan amount (E)) The credit score affects this, for a lofty CIBIL score the interest rate is less (scores like 800), whereas though few banks might approve for loans there is a giant chance that the bank increases your interest rate for each month, __________ making you pay more than what is necessary</p><br><p><strong>In context to the passage, which of the following words is synonym of ‘hinders’?</strong></p>\n<p><strong>a).</strong> Facilitate</p>\n<p><strong>b). </strong>Hamper</p>\n<p><strong>c). </strong>Constrain</p>", "options": ["<p>Only (a)</p>", "<p>Only (b)</p>", "<p>Only (c)</p>", "<p>Both (a) and (b)</p>", "<p>Both (b) and (c)</p>"], "correctIndex": 4, "solution": "<p><strong>Answer: E</strong></p>\n<p>Meaning of ‘hinders’ – to make the task or action difficult</p>\n<p>Options (b) and (c) are its synonym</p>\n<p>‘Hamper’ – impede the movement or progress</p>\n<p>‘Constrain’ – restrict the scope or extent of something</p>\n<p>Meaning of ‘facilitate’ – make the action of process easy</p>"}, {"question": "<p><strong>Given below are few questions based on the passage, you have to answer these questions as per the options given after carefully reading the passage.</strong></p>\n<p> Days ahead of a planned trip to Beijing by US Secretary of State Antony Blinken, a Chinese spy balloon has been reported flying over the United States. While the US Air Force readied fighter jets to shoot it out of the sky, President Joe Biden was advised against doing it for fear of debris. The United States took \"custody\" of the balloon when it entered U.S. airspace and had observed it with piloted U.S. military aircraft, one of the officials told reporters on condition of <strong>anonymity</strong>.</p>\n<p>The high-altitude balloons are the same as weather balloons deployed across the world to monitor changes in the local weather of the region. However, when it comes to spy balloons, their purpose is changed. <strong><u>These balloons operate 24,000-37,000 meters above the ground.</u></strong> The altitude that these balloons fly at is well above where commercial air traffic flies. Airliners almost never fly higher than 40,000 feet. The highest-performing fighter aircraft typically do not operate above 65,000 feet, although spy planes such as the U-2 have a service ceiling of 80,000 feet or more. According to a 2009 report by the US Air Force's Air Command and Staff College, the advantages of balloons over satellites include the ability to scan wide <strong>swathes</strong> of territory from closer in, and to be able to spend more time over a target area. Unlike satellites, which require space launchers that cost hundreds of millions of dollars, balloons can be launched cheaply.</p>\n<p>Spy balloons are not new and have been in use since World War II. Just after the end of the war, the US military started exploring the use of high-altitude spy balloons, which led to a large-scale series of missions called Project Genetrix. The project flew photographic balloons over Soviet bloc territory in the 1950s, according to government documents. During World War 2, the Japanese military tried to loft incendiary bombs into U.S. territory using balloons designed to float in jet stream air currents. While it did not damage military targets, it did cause civilian causalities.</p><br><p><strong>Which of the following is correct as per the information given in the passage?</strong></p>", "options": ["<p>During World War 1, the Japanese military tried to loft incendiary bombs into U.S. territory using balloons designed to float in jet stream air currents.</p>", "<p>The highest-performing fighter aircraft typically do not operate above 65,000 feet, although spy planes such as the U-6 have a service ceiling of 80,000 feet or more.</p>", "<p>The high-altitude balloons are the same as weather balloons deployed across the world to monitor changes in the local weather of the region.</p>", "<p>Both A &amp; B</p>", "<p>None of the above</p>"], "correctIndex": 2, "solution": "<p><strong>Answer: C</strong></p>\n<p>Here, option A is incorrect as world war 2 should be there, and in option c U-2 should be there. Only option C is correct as per the information given in the passage. So, option C is the correct answer.</p>"}, {"question": "<p><strong>Given below are few questions based on the passage, you have to answer these questions as per the options given after carefully reading the passage.</strong></p>\n<p> Days ahead of a planned trip to Beijing by US Secretary of State Antony Blinken, a Chinese spy balloon has been reported flying over the United States. While the US Air Force readied fighter jets to shoot it out of the sky, President Joe Biden was advised against doing it for fear of debris. The United States took \"custody\" of the balloon when it entered U.S. airspace and had observed it with piloted U.S. military aircraft, one of the officials told reporters on condition of <strong>anonymity</strong>.</p>\n<p>The high-altitude balloons are the same as weather balloons deployed across the world to monitor changes in the local weather of the region. However, when it comes to spy balloons, their purpose is changed. <strong><u>These balloons operate 24,000-37,000 meters above the ground.</u></strong> The altitude that these balloons fly at is well above where commercial air traffic flies. Airliners almost never fly higher than 40,000 feet. The highest-performing fighter aircraft typically do not operate above 65,000 feet, although spy planes such as the U-2 have a service ceiling of 80,000 feet or more. According to a 2009 report by the US Air Force's Air Command and Staff College, the advantages of balloons over satellites include the ability to scan wide <strong>swathes</strong> of territory from closer in, and to be able to spend more time over a target area. Unlike satellites, which require space launchers that cost hundreds of millions of dollars, balloons can be launched cheaply.</p>\n<p>Spy balloons are not new and have been in use since World War II. Just after the end of the war, the US military started exploring the use of high-altitude spy balloons, which led to a large-scale series of missions called Project Genetrix. The project flew photographic balloons over Soviet bloc territory in the 1950s, according to government documents. During World War 2, the Japanese military tried to loft incendiary bombs into U.S. territory using balloons designed to float in jet stream air currents. While it did not damage military targets, it did cause civilian causalities.</p><br><p><strong>Which of the following are advantages of balloons over satellites according to a 2009 report by US air force?</strong></p>", "options": ["<p>ability to scan wide swathes of territory from closer in</p>", "<p>ability to spend more time over a target area</p>", "<p>ability to spend less time over a target</p>", "<p>Both A &amp; B</p>", "<p>None of the above</p>"], "correctIndex": 3, "solution": "<p><strong>Answer: D</strong></p>\n<p>Here, as per the line, according to a 2009 report by the US Air Force's Air Command and Staff College, the advantages of balloons over satellites include the ability to scan wide swathes of territory from closer in, and to be able to spend more time over a target area, we can say that option D is the correct answer.</p>"}, {"question": "<p><strong>Given below are few questions based on the passage, you have to answer these questions as per the options given after carefully reading the passage.</strong></p>\n<p> Days ahead of a planned trip to Beijing by US Secretary of State Antony Blinken, a Chinese spy balloon has been reported flying over the United States. While the US Air Force readied fighter jets to shoot it out of the sky, President Joe Biden was advised against doing it for fear of debris. The United States took \"custody\" of the balloon when it entered U.S. airspace and had observed it with piloted U.S. military aircraft, one of the officials told reporters on condition of <strong>anonymity</strong>.</p>\n<p>The high-altitude balloons are the same as weather balloons deployed across the world to monitor changes in the local weather of the region. However, when it comes to spy balloons, their purpose is changed. <strong><u>These balloons operate 24,000-37,000 meters above the ground.</u></strong> The altitude that these balloons fly at is well above where commercial air traffic flies. Airliners almost never fly higher than 40,000 feet. The highest-performing fighter aircraft typically do not operate above 65,000 feet, although spy planes such as the U-2 have a service ceiling of 80,000 feet or more. According to a 2009 report by the US Air Force's Air Command and Staff College, the advantages of balloons over satellites include the ability to scan wide <strong>swathes</strong> of territory from closer in, and to be able to spend more time over a target area. Unlike satellites, which require space launchers that cost hundreds of millions of dollars, balloons can be launched cheaply.</p>\n<p>Spy balloons are not new and have been in use since World War II. Just after the end of the war, the US military started exploring the use of high-altitude spy balloons, which led to a large-scale series of missions called Project Genetrix. The project flew photographic balloons over Soviet bloc territory in the 1950s, according to government documents. During World War 2, the Japanese military tried to loft incendiary bombs into U.S. territory using balloons designed to float in jet stream air currents. While it did not damage military targets, it did cause civilian causalities.</p><br><p><strong>Which of the following is correct according to the information given in the passage?</strong></p>", "options": ["<p>During World War 2, the Japanese military tried to loft incendiary bombs into U.S. territory using balloons designed to float in jet stream air currents.</p>", "<p>The project flew photographic balloons over Soviet bloc territory in the 1950s, according to government documents.</p>", "<p>While the US Air Force readied fighter jets to shoot it out of the sky, President Joe Biden was advised against doing it for fear of debris.</p>", "<p>Airliners almost never fly higher than 40,000 feet.</p>", "<p>All of the above are correct</p>"], "correctIndex": 4, "solution": "<p><strong>Answer: E</strong></p>\n<p>Here, all of the given options are correct as per the given passage. So, option E is the correct answer.</p>"}, {"question": "<p><strong>Given below are few questions based on the passage, you have to answer these questions as per the options given after carefully reading the passage.</strong></p>\n<p> Days ahead of a planned trip to Beijing by US Secretary of State Antony Blinken, a Chinese spy balloon has been reported flying over the United States. While the US Air Force readied fighter jets to shoot it out of the sky, President Joe Biden was advised against doing it for fear of debris. The United States took \"custody\" of the balloon when it entered U.S. airspace and had observed it with piloted U.S. military aircraft, one of the officials told reporters on condition of <strong>anonymity</strong>.</p>\n<p>The high-altitude balloons are the same as weather balloons deployed across the world to monitor changes in the local weather of the region. However, when it comes to spy balloons, their purpose is changed. <strong><u>These balloons operate 24,000-37,000 meters above the ground.</u></strong> The altitude that these balloons fly at is well above where commercial air traffic flies. Airliners almost never fly higher than 40,000 feet. The highest-performing fighter aircraft typically do not operate above 65,000 feet, although spy planes such as the U-2 have a service ceiling of 80,000 feet or more. According to a 2009 report by the US Air Force's Air Command and Staff College, the advantages of balloons over satellites include the ability to scan wide <strong>swathes</strong> of territory from closer in, and to be able to spend more time over a target area. Unlike satellites, which require space launchers that cost hundreds of millions of dollars, balloons can be launched cheaply.</p>\n<p>Spy balloons are not new and have been in use since World War II. Just after the end of the war, the US military started exploring the use of high-altitude spy balloons, which led to a large-scale series of missions called Project Genetrix. The project flew photographic balloons over Soviet bloc territory in the 1950s, according to government documents. During World War 2, the Japanese military tried to loft incendiary bombs into U.S. territory using balloons designed to float in jet stream air currents. While it did not damage military targets, it did cause civilian causalities.</p><br><p><strong>Which of the following agency released a report giving information about advantages of balloons over satellites?</strong></p>", "options": ["<p>US air force&rsquo;s Air force&rsquo;s Air command and Staff college</p>", "<p>Genetrix</p>", "<p>Department of US army</p>", "<p>Both A &amp; B</p>", "<p>None of the above</p>"], "correctIndex": 0, "solution": "<p><strong>Answer: A</strong></p>\n<p>Here, as per line, according to a 2009 report by the US Air Force's Air Command and Staff College, the advantages of balloons over satellites include the ability to scan wide swathes of territory from closer in, and to be able to spend more time over a target area, we can conclude that option A is the correct answer.</p>"}, {"question": "<p><strong>Given below are few questions based on the passage, you have to answer these questions as per the options given after carefully reading the passage.</strong></p>\n<p> Days ahead of a planned trip to Beijing by US Secretary of State Antony Blinken, a Chinese spy balloon has been reported flying over the United States. While the US Air Force readied fighter jets to shoot it out of the sky, President Joe Biden was advised against doing it for fear of debris. The United States took \"custody\" of the balloon when it entered U.S. airspace and had observed it with piloted U.S. military aircraft, one of the officials told reporters on condition of <strong>anonymity</strong>.</p>\n<p>The high-altitude balloons are the same as weather balloons deployed across the world to monitor changes in the local weather of the region. However, when it comes to spy balloons, their purpose is changed. <strong><u>These balloons operate 24,000-37,000 meters above the ground.</u></strong> The altitude that these balloons fly at is well above where commercial air traffic flies. Airliners almost never fly higher than 40,000 feet. The highest-performing fighter aircraft typically do not operate above 65,000 feet, although spy planes such as the U-2 have a service ceiling of 80,000 feet or more. According to a 2009 report by the US Air Force's Air Command and Staff College, the advantages of balloons over satellites include the ability to scan wide <strong>swathes</strong> of territory from closer in, and to be able to spend more time over a target area. Unlike satellites, which require space launchers that cost hundreds of millions of dollars, balloons can be launched cheaply.</p>\n<p>Spy balloons are not new and have been in use since World War II. Just after the end of the war, the US military started exploring the use of high-altitude spy balloons, which led to a large-scale series of missions called Project Genetrix. The project flew photographic balloons over Soviet bloc territory in the 1950s, according to government documents. During World War 2, the Japanese military tried to loft incendiary bombs into U.S. territory using balloons designed to float in jet stream air currents. While it did not damage military targets, it did cause civilian causalities.</p><br><p><strong>Which of the following is the synonym of “SWATHES”?</strong></p>", "options": ["<p>unbind</p>", "<p>unlash</p>", "<p>untie</p>", "<p>All of the above</p>", "<p>None of the above</p>"], "correctIndex": 4, "solution": "<p><strong>Answer: E</strong></p>\n<p>Here, swathe means a large area of something to get wrap. Here, all options are antonyms of swathe and question is asking for synonym. So, option E is the correct answer.</p>"}, {"question": "<p><strong>Given below are few questions based on the passage, you have to answer these questions as per the options given after carefully reading the passage.</strong></p>\n<p> Days ahead of a planned trip to Beijing by US Secretary of State Antony Blinken, a Chinese spy balloon has been reported flying over the United States. While the US Air Force readied fighter jets to shoot it out of the sky, President Joe Biden was advised against doing it for fear of debris. The United States took \"custody\" of the balloon when it entered U.S. airspace and had observed it with piloted U.S. military aircraft, one of the officials told reporters on condition of <strong>anonymity</strong>.</p>\n<p>The high-altitude balloons are the same as weather balloons deployed across the world to monitor changes in the local weather of the region. However, when it comes to spy balloons, their purpose is changed. <strong><u>These balloons operate 24,000-37,000 meters above the ground.</u></strong> The altitude that these balloons fly at is well above where commercial air traffic flies. Airliners almost never fly higher than 40,000 feet. The highest-performing fighter aircraft typically do not operate above 65,000 feet, although spy planes such as the U-2 have a service ceiling of 80,000 feet or more. According to a 2009 report by the US Air Force's Air Command and Staff College, the advantages of balloons over satellites include the ability to scan wide <strong>swathes</strong> of territory from closer in, and to be able to spend more time over a target area. Unlike satellites, which require space launchers that cost hundreds of millions of dollars, balloons can be launched cheaply.</p>\n<p>Spy balloons are not new and have been in use since World War II. Just after the end of the war, the US military started exploring the use of high-altitude spy balloons, which led to a large-scale series of missions called Project Genetrix. The project flew photographic balloons over Soviet bloc territory in the 1950s, according to government documents. During World War 2, the Japanese military tried to loft incendiary bombs into U.S. territory using balloons designed to float in jet stream air currents. While it did not damage military targets, it did cause civilian causalities.</p><br><p><strong>Which of the following is the antonym of “ANONYMITY”?</strong></p>", "options": ["<p>innominateness</p>", "<p>namelessness</p>", "<p>incognito</p>", "<p>identified</p>", "<p>None of the above</p>"], "correctIndex": 3, "solution": "<p><strong>Answer: D</strong></p>\n<p>Here, anonymity means the situation where person name is not known. Identified is the antonym of anonymity and rest are synonyms. So, option D is the correct answer.</p>"}, {"question": "<p><strong>Given below are few questions based on the passage, you have to answer these questions as per the options given after carefully reading the passage.</strong></p>\n<p> Days ahead of a planned trip to Beijing by US Secretary of State Antony Blinken, a Chinese spy balloon has been reported flying over the United States. While the US Air Force readied fighter jets to shoot it out of the sky, President Joe Biden was advised against doing it for fear of debris. The United States took \"custody\" of the balloon when it entered U.S. airspace and had observed it with piloted U.S. military aircraft, one of the officials told reporters on condition of <strong>anonymity</strong>.</p>\n<p>The high-altitude balloons are the same as weather balloons deployed across the world to monitor changes in the local weather of the region. However, when it comes to spy balloons, their purpose is changed. <strong><u>These balloons operate 24,000-37,000 meters above the ground.</u></strong> The altitude that these balloons fly at is well above where commercial air traffic flies. Airliners almost never fly higher than 40,000 feet. The highest-performing fighter aircraft typically do not operate above 65,000 feet, although spy planes such as the U-2 have a service ceiling of 80,000 feet or more. According to a 2009 report by the US Air Force's Air Command and Staff College, the advantages of balloons over satellites include the ability to scan wide <strong>swathes</strong> of territory from closer in, and to be able to spend more time over a target area. Unlike satellites, which require space launchers that cost hundreds of millions of dollars, balloons can be launched cheaply.</p>\n<p>Spy balloons are not new and have been in use since World War II. Just after the end of the war, the US military started exploring the use of high-altitude spy balloons, which led to a large-scale series of missions called Project Genetrix. The project flew photographic balloons over Soviet bloc territory in the 1950s, according to government documents. During World War 2, the Japanese military tried to loft incendiary bombs into U.S. territory using balloons designed to float in jet stream air currents. While it did not damage military targets, it did cause civilian causalities.</p><br><p><strong>These balloon operate</strong> 24,000-37,000 meters above the ground. Find the correct replacement of the highlighted phrase.</p>", "options": ["<p>These balloons operates</p>", "<p>These balloons operate</p>", "<p>Those balloons operates</p>", "<p>Those balloons operate</p>", "<p>None of the above</p>"], "correctIndex": 1, "solution": "<p><strong>Answer: B</strong></p>\n<p>Here, balloons should be used in place of balloon. So, option B is the correct answer.</p>"}];
+
+// ===== STATE & DOM =====
+let currentIndex = 0;
+const totalQuestions = questions.length;
+const userAnswers = new Array(totalQuestions).fill(null); // selected option index or null
+const questionStates = new Array(totalQuestions).fill("notVisited"); // "notVisited", "notAnswered", "answered", "marked"
+
+// Timer
+const timerLabel = document.getElementById('timer-label');
+let timerInterval = null;
+let remainingSeconds = TEST_DURATION_SECONDS;
+
+// DOM elements
+const instructionHeader = document.getElementById('instruction-header');
+const quizHeader = document.getElementById('quiz-header');
+
+const instructionsContainer = document.getElementById('instructions-container');
+const quizContainer = document.getElementById('quiz-container');
+const solutionsContainer = document.getElementById('solutions-container');
+
+const qProgress = document.getElementById('q-progress');
+const questionText = document.getElementById('question-text');
+const optionsContainer = document.getElementById('options-container');
+
+const clearBtn = document.getElementById('clear-btn');
+const markBtn = document.getElementById('mark-btn');
+const nextBtn = document.getElementById('next-btn');
+const submitBtn = document.getElementById('submit-btn');
+
+const paletteContainer = document.getElementById('palette-container');
+const solutionsList = document.getElementById('solutions-list');
+const solutionsBackBtn = document.getElementById('solutions-back-btn');
+
+const resultOverlay = document.getElementById('result-overlay');
+const metricMarks = document.getElementById('metric-marks');
+const metricCorrect = document.getElementById('metric-correct');
+const metricWrong = document.getElementById('metric-wrong');
+const metricAttempted = document.getElementById('metric-attempted');
+const viewSolutionsBtn = document.getElementById('view-solutions-btn');
+const homeBtn = document.getElementById('home-btn');
+
+const instTotalQuestions = document.getElementById('inst-total-questions');
+const instSideTotal = document.getElementById('inst-side-total');
+const startTestBtn = document.getElementById('start-test-btn');
+
+let questionStartTime = null;
+let questionTimes = new Array(totalQuestions).fill(0);
+
+function formatTime(ms) {
+    const sec = Math.floor(ms / 1000);
+    return sec < 60 ? `${sec}s` : `${Math.floor(sec/60)}m ${sec % 60}s`;
+}
+
+// ===== TIMER FUNCTIONS =====
+function updateTimerLabel() {
+    const h = String(Math.floor(remainingSeconds / 3600)).padStart(2, '0');
+    const m = String(Math.floor((remainingSeconds % 3600) / 60)).padStart(2, '0');
+    const s = String(remainingSeconds % 60).padStart(2, '0');
+    timerLabel.textContent = `Time: ${h}:${m}:${s}`;
+}
+function startTimer() {
+    if (timerInterval) clearInterval(timerInterval);
+
+    updateTimerLabel();
+
+    timerInterval = setInterval(() => {
+        remainingSeconds--;
+
+        if (remainingSeconds <= 0) {
+            remainingSeconds = 0;
+            updateTimerLabel();
+            clearInterval(timerInterval);
+
+            // AUTO SUBMIT
+            if (questionStartTime !== null) {
+                questionTimes[currentIndex] +=
+                    (Date.now() - questionStartTime);
+            }
+            saveAnswerForCurrent();
+            showResultOverlay();
+            return;
+        }
+
+        updateTimerLabel();
+    }, 1000);
+}
+
+// ===== RENDERING =====
+function renderQuestion(index) {
+	if (questionStartTime !== null) {
+    questionTimes[currentIndex] += (Date.now() - questionStartTime);
+	}
+	questionStartTime = Date.now();
+
+    const q = questions[index];
+    qProgress.textContent = `Question ${index + 1} of ${totalQuestions}`;
+    questionText.innerHTML = q.question;
+    optionsContainer.innerHTML = '';
+
+    q.options.forEach((optHtml, optIndex) => {
+        const label = document.createElement('label');
+        label.className = 'option';
+
+        const input = document.createElement('input');
+        input.type = 'radio';
+        input.name = 'option';
+        input.value = optIndex;
+
+        if (userAnswers[index] === optIndex) {
+            input.checked = true;
+        }
+
+        const span = document.createElement('div');
+        span.className = 'option-text';
+        span.innerHTML = optHtml;
+
+        label.appendChild(input);
+        label.appendChild(span);
+
+        label.addEventListener('click', () => {
+            input.checked = true;
+        });
+
+        optionsContainer.appendChild(label);
+    });
+
+    // If first visit, mark as notAnswered for palette
+    if (questionStates[index] === "notVisited") {
+        questionStates[index] = (userAnswers[index] != null) ? "answered" : "notAnswered";
+    }
+
+    updatePalette();
+}
+
+function updatePalette() {
+    paletteContainer.innerHTML = '';
+
+    const drawerContainer =
+        document.getElementById('palette-drawer-container');
+    if (drawerContainer) drawerContainer.innerHTML = '';
+
+    for (let i = 0; i < totalQuestions; i++) {
+
+        function createBtn() {
+            const btn = document.createElement('div');
+            let cls = 'palette-item';
+
+            if (questionStates[i] === 'notVisited') cls += ' state-notVisited';
+            else if (questionStates[i] === 'notAnswered') cls += ' state-notAnswered';
+            else if (questionStates[i] === 'answered') cls += ' state-answered';
+            else if (questionStates[i] === 'marked') cls += ' state-marked';
+
+            if (i === currentIndex) cls += ' current';
+
+            btn.className = cls;
+            btn.textContent = i + 1;
+
+            btn.addEventListener('click', () => {
+                saveAnswerForCurrent();
+                currentIndex = i;
+                renderQuestion(currentIndex);
+                closeDrawer(); // safe on desktop
+            });
+
+            return btn;
+        }
+
+        paletteContainer.appendChild(createBtn());
+        if (drawerContainer) drawerContainer.appendChild(createBtn());
+    }
+}
+
+function getSelectedOptionIndex() {
+    const selected = document.querySelector('input[name="option"]:checked');
+    if (!selected) return null;
+    return parseInt(selected.value, 10);
+}
+
+function saveAnswerForCurrent() {
+    const selIndex = getSelectedOptionIndex();
+    if (selIndex !== null) {
+        userAnswers[currentIndex] = selIndex;
+        questionStates[currentIndex] = "answered";
+    } else {
+        // Only change to notAnswered if not marked
+        if (questionStates[currentIndex] !== "marked") {
+            questionStates[currentIndex] = "notAnswered";
+        }
+    }
+    updatePalette();
+}
+
+// ===== RESULT & SOLUTIONS =====
+function showResultOverlay() {
+    let correct = 0;
+    let attempted = 0;
+
+    const MARKS_PER_Q = 1;
+    const NEGATIVE_MARKS = 0.25;
+    const totalQuestions = questions.length;
+    const maxMarks = totalQuestions * MARKS_PER_Q;
+    let totalMarks = 0;
+
+    questions.forEach((q, i) => {
+        const ans = userAnswers[i];
+        if (ans !== null && ans !== undefined) {
+            attempted++;
+            if (ans === q.correctIndex) {
+                correct++;
+                totalMarks += MARKS_PER_Q;
+            } else {
+                totalMarks -= NEGATIVE_MARKS;
+            }
+        }
+    });
+
+    const wrong = attempted - correct;
+    const avgTime =
+        questionTimes.reduce((a, b) => a + b, 0) / totalQuestions;
+
+    metricMarks.textContent =
+        `${totalMarks.toFixed(2)} / ${maxMarks.toFixed(2)}`;
+    metricCorrect.textContent = correct;
+    metricWrong.textContent = wrong;
+    metricAttempted.textContent = attempted;
+    document.getElementById("metric-avgtime").textContent =
+        formatTime(avgTime);
+
+    resultOverlay.style.display = "flex";
+}
+
+function closeResultOverlay() {
+    resultOverlay.style.display = 'none';
+}
+
+function buildSolutionsView() {
+    solutionsList.innerHTML = '';
+    questions.forEach((q, index) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'solution-item';
+
+        const qDiv = document.createElement('div');
+        qDiv.className = 'solution-question';
+        qDiv.innerHTML = `<strong>Q${index + 1}.</strong> ${q.question}`;
+        wrapper.appendChild(qDiv);
+
+        const optsDiv = document.createElement('div');
+        optsDiv.className = 'solution-options';
+
+        q.options.forEach((optHtml, optIndex) => {
+            const optDiv = document.createElement('div');
+            let cls = 'solution-option';
+            if (optIndex === q.correctIndex) {
+                cls += ' correct';
+            } else if (userAnswers[index] === optIndex) {
+                cls += ' wrong';
+            }
+            optDiv.className = cls;
+
+            const labelSpan = document.createElement('div');
+            labelSpan.className = 'solution-label';
+            labelSpan.textContent = String.fromCharCode(65 + optIndex) + '.';
+
+            const textDiv = document.createElement('div');
+            textDiv.className = 'solution-text';
+            textDiv.innerHTML = optHtml;
+
+            optDiv.appendChild(labelSpan);
+            optDiv.appendChild(textDiv);
+            optsDiv.appendChild(optDiv);
+        });
+
+        wrapper.appendChild(optsDiv);
+
+        const solDiv = document.createElement('div');
+        solDiv.className = 'solution-explanation';
+        const solutionHtml = (q.solution || '')
+			.replace(/\\"/g, '"')      // unescape quotes
+			.replace(/\\n/g, '')       // remove escaped newlines
+			.replace(/\\t/g, '');      // remove escaped tabs
+
+		solDiv.innerHTML = `<strong>Solution:</strong><br>${solutionHtml}`;
+        wrapper.appendChild(solDiv);
+
+        solutionsList.appendChild(wrapper);
+    });
+}
+
+// ===== EVENT HANDLERS =====
+startTestBtn.addEventListener('click', () => {
+    // Hide instruction header + screen
+    instructionHeader.style.display = 'none';
+    instructionsContainer.style.display = 'none';
+
+    // Show quiz header + screen
+    quizHeader.style.display = 'flex';
+    quizContainer.style.display = 'block';
+    solutionsContainer.style.display = 'none';
+
+    currentIndex = 0;
+    renderQuestion(currentIndex);
+    startTimer();
+    questionStartTime = Date.now();
+});
+
+clearBtn.addEventListener('click', () => {
+    // Clear selection & mark as "notAnswered" (red)
+    userAnswers[currentIndex] = null;
+    questionStates[currentIndex] = "notAnswered";
+    renderQuestion(currentIndex);
+});
+
+markBtn.addEventListener('click', () => {
+    // Option 2: DO NOT save answer when marking for review
+    userAnswers[currentIndex] = null;
+    questionStates[currentIndex] = "marked";
+    if (currentIndex < totalQuestions - 1) {
+        currentIndex++;
+        renderQuestion(currentIndex);
+    } else {
+        // stay on last, just refresh colors
+        renderQuestion(currentIndex);
+    }
+});
+
+nextBtn.addEventListener('click', () => {
+    saveAnswerForCurrent();
+    if (currentIndex < totalQuestions - 1) {
+        currentIndex++;
+        renderQuestion(currentIndex);
+    } else {
+        // last question: nothing to move, but answer is saved
+        renderQuestion(currentIndex);
+    }
+});
+
+submitBtn.addEventListener('click', () => {
+	if (questionStartTime !== null) {
+    questionTimes[currentIndex] += (Date.now() - questionStartTime);
+    questionStartTime = null;
+	}
+    saveAnswerForCurrent();
+    clearInterval(timerInterval);
+    showResultOverlay();
+});
+
+viewSolutionsBtn.addEventListener('click', () => {
+    resultOverlay.style.display = 'none';
+    quizContainer.style.display = 'none';
+    solutionsContainer.style.display = 'block';
+    buildSolutionsView();
+});
+
+solutionsBackBtn.addEventListener('click', () => {
+    solutionsContainer.style.display = 'none';
+    quizContainer.style.display = 'none';
+    resultOverlay.style.display = 'flex';
+});
+
+homeBtn.addEventListener('click', () => {
+    resultOverlay.style.display = 'none';
+    solutionsContainer.style.display = 'none';
+    quizContainer.style.display = 'none';       // FIXED
+    instructionsContainer.style.display = 'block'; // FIXED
+
+    instructionHeader.style.display = 'block';
+    quizHeader.style.display = 'none';
+
+    currentIndex = 0;
+    userAnswers.fill(null);
+    questionStates.fill("notVisited");
+
+    window.scrollTo(0, 0);
+});
+
+
+// ===== INIT =====
+instTotalQuestions.textContent = totalQuestions;
+instSideTotal.textContent = totalQuestions;
+
+// ===== HAMBURGER MENU LOGIC =====
+const menuBtn = document.getElementById('menu-btn');
+const drawer = document.getElementById('palette-drawer');
+const drawerOverlay = document.getElementById('drawer-overlay');
+
+function openDrawer() {
+    if (!drawer || !drawerOverlay) return;
+    drawer.classList.add('open');
+    drawerOverlay.classList.add('show');
+    document.body.classList.add('drawer-open');
+}
+
+function closeDrawer() {
+    if (!drawer || !drawerOverlay) return;
+    drawer.classList.remove('open');
+    drawerOverlay.classList.remove('show');
+    document.body.classList.remove('drawer-open');
+}
+
+if (menuBtn) {
+    menuBtn.addEventListener('click', openDrawer);
+}
+
+if (drawerOverlay) {
+    drawerOverlay.addEventListener('click', closeDrawer);
+}
+</script>
+
+</body>
+</html>

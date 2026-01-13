@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Beginners Quiz Misspelt Words Set -1 Quiz | MockTest Buddy</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" /><script src="../home.js"></script>
+<style>
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --bg: #f3f4f6;
+    --card-bg: #ffffff;
+    --text: #111827;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --danger: #ef4444;
+    --success: #22c55e;
+    --marked: #7c3aed;
+    --correct-bg: #ecfdf3;
+    --wrong-bg: #fef2f2;
+    --marked-bg: #f3e8ff;
+}
+
+/* Reset-ish */
+* {
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: radial-gradient(circle at top left, #dbeafe, #eff6ff 40%, #f9fafb 80%);
+    color: var(--text);
+}
+
+/* Instruction header (brand only) */
+.brand-header {
+    background: linear-gradient(90deg, #0f172a, #111827);
+    color: #fff;
+    padding: 14px 16px;
+    text-align: center;
+}
+.brand-title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+.brand-sub {
+    font-size: 12px;
+    opacity: 0.8;
+    margin-top: 4px;
+}
+
+/* Test header (only after start) */
+.header-test {
+    display: none;
+    background: linear-gradient(90deg, var(--primary-dark), var(--primary));
+    color: #fff;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.header-left {
+    display: flex;
+    flex-direction: column;
+}
+.header-title {
+    font-size: 20px;
+    font-weight: 600;
+}
+.header-subtitle {
+    font-size: 12px;
+    opacity: 0.9;
+}
+.header-right {
+    font-size: 12px;
+    text-align: right;
+}
+.badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.12);
+    font-size: 11px;
+}
+
+/* Layout */
+.main {
+    max-width: 1000px;
+    margin: 16px auto 28px;
+    padding: 0 12px;
+}
+.card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
+    padding: 18px 16px 16px;
+}
+
+/* Instructions */
+#instructions-container {
+    display: block;
+}
+.instructions-layout {
+    display: flex;
+    gap: 16px;
+}
+.instructions-main {
+    flex: 1;
+}
+.instructions-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+.instructions-list {
+    font-size: 14px;
+    margin-left: 16px;
+    margin-bottom: 12px;
+}
+.instructions-list li {
+    margin-bottom: 4px;
+}
+.instructions-summary {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin: 10px 0 16px;
+}
+.instructions-summary-item {
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #f9fafb;
+    padding: 8px;
+    font-size: 13px;
+}
+.instructions-summary-label {
+    font-size: 11px;
+    color: var(--muted);
+}
+.instructions-summary-value {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* Instruction candidate box (right side) */
+.instructions-side {
+    width: 230px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #f1f5f9;
+    padding: 10px;
+    font-size: 13px;
+}
+.instructions-side-title {
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+.instructions-side-row {
+    margin-bottom: 4px;
+}
+.instructions-side-label {
+    color: var(--muted);
+    font-size: 12px;
+}
+.instructions-side-value {
+    font-weight: 500;
+}
+
+/* Test layout */
+#quiz-container {
+    display: none;
+}
+.header-test {
+    display: none;
+}
+.test-layout {
+    display: flex;
+    gap: 16px;
+}
+.test-main {
+    flex: 1;
+}
+.test-side {
+    width: 300px;
+}
+
+/* Question header */
+.question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 15px;
+    color: var(--muted);
+}
+.q-progress {
+    font-weight: 500;
+}
+.marks-info {
+    font-size: 12px;
+}
+.marks-info span {
+    margin-left: 8px;
+}
+.marks-pos {
+    color: var(--success);
+}
+.marks-neg {
+    color: var(--danger);
+}
+
+/* Question body */
+.question-body {
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    padding: 12px 10px;
+    background: #f9fafb;
+    margin-bottom: 12px;
+    font-size: 17px;
+	line-height: 1.5;
+}
+.question-body p {
+    margin: 4px 0;
+}
+
+/* Options */
+.options-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.option {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #fff;
+    cursor: pointer;
+    transition: background 0.12s ease, border-color 0.12s ease, transform 0.08s ease;
+}
+.option:hover {
+    background: #eff6ff;
+    border-color: var(--primary);
+    transform: translateY(-1px);
+}
+.option input {
+    margin-top: 3px;
+}
+.option-text {
+    font-size: 17px;
+	line-height: 1.4;
+}
+
+/* Nav buttons */
+.nav-bar {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.nav-left,
+.nav-right {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.btn {
+    border: none;
+    border-radius: 999px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.12s ease, transform 0.08s ease, box-shadow 0.12s ease;
+}
+.btn:active {
+    transform: translateY(1px);
+}
+.btn-primary {
+    background: var(--primary);
+    color: #fff;
+    box-shadow: 0 8px 16px rgba(37, 99, 235, 0.3);
+}
+.btn-primary:hover {
+    background: var(--primary-dark);
+}
+.btn-secondary {
+    background: #e5e7eb;
+    color: #111827;
+}
+.btn-secondary:hover {
+    background: #d1d5db;
+}
+.btn-danger {
+    background: var(--danger);
+    color: #fff;
+}
+.btn-danger:hover {
+    background: #b91c1c;
+}
+
+/* Side panel (palette only during test) */
+.sidebar-card {
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #f9fafb;
+    padding: 10px;
+    font-size: 12px;
+}
+
+/* Palette */
+.palette {
+    margin-top: 0;
+}
+.palette-title {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+.palette-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.palette-item {
+    min-width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 2px solid #d1d5db;
+    font-size: 18px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.15s;
+}
+.palette-item:hover {
+    transform: scale(1.08);
+    border-color: #3b82f6;
+}
+.palette-item.current {
+    outline: 2px solid var(--primary);
+}
+
+/* Palette colors per your request */
+.palette-item.state-notVisited {
+    background: #9ca3af;  /* darker grey */
+    color: #ffffff;
+}
+.palette-item.state-notAnswered {
+    background: #ef4444;  /* red */
+    color: #ffffff;
+}
+.palette-item.state-answered {
+    background: #22c55e;  /* green */
+    color: #ffffff;
+}
+.palette-item.state-marked {
+    background: #8b5cf6;  /* strong purple */
+    color: #ffffff;
+}
+
+/* Palette legend */
+.palette-legend {
+    margin-top: 8px;
+    font-size: 11px;
+    color: var(--muted);
+}
+.palette-legend-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 2px;
+}
+.legend-box {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+}
+.legend-notVisited { background: #e5e7eb; }
+.legend-notAnswered { background: #fee2e2; border-color:#fecaca; }
+.legend-answered { background: #dcfce7; border-color:#bbf7d0; }
+.legend-marked { background: #e9d5ff; border-color:#c4b5fd; }
+
+/* Solutions page */
+#solutions-container {
+    display: none;
+}
+.solutions-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+.solutions-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 10px;
+}
+.solution-item {
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+    margin-top: 10px;
+}
+.solution-item:first-child {
+    border-top: none;
+    padding-top: 0;
+    margin-top: 0;
+}
+.solution-question {
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+.solution-options {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+.solution-option {
+    display: flex;
+    gap: 6px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #fff;
+}
+.solution-option.correct {
+    background: var(--correct-bg);
+    border-color: var(--success);
+}
+.solution-option.wrong {
+    background: var(--wrong-bg);
+    border-color: var(--danger);
+}
+.solution-label {
+    font-size: 13px;
+    font-weight: 600;
+}
+.solution-text {
+    flex: 1;
+    font-size: 13px;
+}
+.solution-explanation {
+    font-size: 13px;
+    background: #eef2ff;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+/* Overlay */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15,23,42,0.55);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+}
+.overlay-content {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 16px 16px 14px;
+    width: 94%;
+    max-width: 430px;
+    box-shadow: 0 26px 50px rgba(15,23,42,0.4);
+}
+.overlay-header h2 {
+    margin: 0;
+    font-size: 20px;
+}
+.overlay-body {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 8px 0 10px;
+}
+.overlay-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-bottom: 10px;
+    font-size: 13px;
+}
+.metric-card {
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    padding: 8px;
+    background: #f9fafb;
+}
+.metric-label {
+    font-size: 11px;
+    color: var(--muted);
+}
+.metric-value {
+    font-size: 15px;
+    font-weight: 600;
+    margin-top: 2px;
+}
+.overlay-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+/* Utils */
+.hidden {
+    display: none !important;
+}
+
+/* Responsive: hide side panels & palette on phones */
+@media (max-width: 768px) {
+    .instructions-layout,
+    .test-layout {
+        flex-direction: column;
+    }
+    .instructions-side,
+    .test-side {
+        display: none;
+    }
+    .card {
+        padding: 16px 12px 14px;
+    }
+}
+
+/* >>> ADD NEW CODE BELOW <<< */
+
+/* Expand quiz layout width */
+.main {
+    max-width: 1400px !important;
+}
+
+/* Expand quiz card width */
+#quiz-container.card {
+    width: 100% !important;
+    padding: 20px !important;
+}
+
+/* Reduce left+right margin */
+.main {
+    margin: 10px auto !important;
+    padding: 0px 5px !important;
+}
+
+/* Ensure question+palette stay visible side by side */
+.test-layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 16px;
+}
+
+/* Reduce question padding */
+.question-body {
+    padding: 12px !important;
+}
+
+/* Keep buttons in one row */
+.nav-bar {
+    flex-wrap: nowrap !important;
+    justify-content: space-between !important;
+}
+
+.nav-left button,
+.nav-right button {
+    white-space: nowrap !important;
+}
+
+/* Medium screen adjustments */
+@media (max-width: 1100px) {
+    .test-layout {
+        display: block !important;
+    }
+    .test-side {
+        display: none !important;
+    }
+    #quiz-container.card {
+        padding: 10px !important;
+    }
+    .question-body {
+        font-size: 18px !important;
+    }
+    .btn {
+        font-size: 16px !important;
+    }
+}
+
+/* Small screen adjustments */
+@media (max-width: 600px) {
+    body {
+        font-size: 16px !important;
+    }
+    .btn {
+        padding: 10px 16px !important;
+        font-size: 15px !important;
+    }
+    .option-text {
+        font-size: 18px !important;
+    }
+}
+/* Buttons shown on desktop */
+.nav-right .btn-submit {
+    display: inline-flex;
+}
+
+/* Buttons shown on mobile */
+@media (max-width: 600px) {
+    .btn-submit {
+        display: none !important;
+    }
+
+    .btn-mark {
+        display: inline-flex !important;
+    }
+
+    .btn-clear {
+        display: inline-flex !important;
+    }
+
+    .btn-save {
+        display: inline-flex !important;
+    }
+
+    /* Change button labels visually */
+    .btn-mark::after {
+        content: "Mark";
+    }
+    .btn-clear::after {
+        content: "Clear";
+    }
+    .btn-save::after {
+        content: "Save & Next";
+    }
+
+    /* hide original text inside buttons */
+    .btn-mark span,
+    .btn-clear span,
+    .btn-save span {
+        display: none;
+    }
+
+    /* Make buttons larger and easier to tap */
+    .nav-left button,
+    .nav-right button {
+        padding: 14px 20px;
+        font-size: 18px;
+        border-radius: 8px;
+    }
+}
+
+@media (max-width: 600px) {
+    .header-test {
+        flex-wrap: wrap;
+        padding: 8px 10px;
+        gap: 6px;
+    }
+
+    .header-left {
+        flex: 1 1 100%;
+    }
+
+    .header-title {
+        font-size: 14px;
+        line-height: 1.2;
+    }
+
+    .header-subtitle {
+        font-size: 11px;
+    }
+
+    .header-right {
+        flex: 1 1 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 11px;
+    }
+
+    .badge {
+        font-size: 10px;
+        padding: 2px 6px;
+    }
+}
+/* ===== HAMBURGER MENU ===== */
+.menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .menu-btn {
+        display: block;
+    }
+}
+
+/* ===== PALETTE DRAWER ===== */
+.palette-drawer {
+    position: fixed;
+    top: 0;
+    left: -320px;
+    width: 300px;
+    height: 100dvh; /* mobile safe height */
+    background: #ffffff;
+    box-shadow: 2px 0 20px rgba(0,0,0,0.2);
+    z-index: 100;
+    padding: 12px;
+    transition: left 0.3s ease;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.palette-drawer.open {
+    left: 0;
+}
+
+.drawer-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    display: none;
+    z-index: 90;
+}
+
+.drawer-overlay.show {
+    display: block;
+}
+#palette-drawer-container {
+    flex: 0 0 auto;          
+    max-height: calc(100dvh - 170px); 
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+/* Improve scroll on mobile */
+#palette-drawer-container::-webkit-scrollbar {
+    width: 6px;
+}
+#palette-drawer-container::-webkit-scrollbar-thumb {
+    background: #c7d2fe;
+    border-radius: 6px;
+}
+/* Keep legend always visible */
+.palette-drawer .palette-legend {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid #e5e7eb;
+    flex-shrink: 0;
+}
+
+body.drawer-open {
+    overflow: hidden;
+}
+</style>
+</head>
+<body>
+
+<div id="drawer-overlay" class="drawer-overlay"></div>
+
+<div id="palette-drawer" class="palette-drawer">
+    <h3 style="margin:6px 0 10px;font-size:14px;">Question Palette</h3>
+
+    <div id="palette-drawer-container" class="palette-grid"></div>
+
+    <!-- LEGEND FOR MOBILE -->
+    <div class="palette-legend">
+        <div class="palette-legend-row">
+            <span class="legend-box legend-notVisited"></span> Not visited
+        </div>
+        <div class="palette-legend-row">
+            <span class="legend-box legend-notAnswered"></span> Not answered
+        </div>
+        <div class="palette-legend-row">
+            <span class="legend-box legend-answered"></span> Answered
+        </div>
+        <div class="palette-legend-row">
+            <span class="legend-box legend-marked"></span> Marked for review
+        </div>
+    </div>
+</div>
+
+<!-- INSTRUCTION HEADER (BRAND ONLY) -->
+<div id="instruction-header" class="brand-header">
+    <div class="brand-title">MockTest Buddy</div>
+    <div class="brand-sub">by Team LuciferBanker</div>
+</div>
+
+<!-- TEST HEADER (ONLY AFTER START) -->
+<div id="quiz-header" class="header-test">
+    <button id="menu-btn" class="menu-btn">☰</button>
+    <div class="header-left">
+        <span class="header-title">Beginners Quiz Misspelt Words Set -1</span>
+        <span class="header-subtitle">Single-correct MCQ • One question per screen</span>
+    </div>
+    <div class="header-right">
+        <span class="badge">Quiz Mode</span><br />
+        <span style="font-size: 11px;">Marks: +1 / −0.25</span><br />
+        <span id="timer-label" style="font-size: 11px;">Time: 00:00:00</span>
+    </div>
+</div>
+
+<div class="main">
+
+    <!-- INSTRUCTIONS SCREEN -->
+    <div class="card" id="instructions-container">
+        <div class="instructions-layout">
+            <div class="instructions-main">
+                <div class="instructions-title">Instructions</div>
+                <p style="font-size:14px;margin-bottom:6px;">
+                    Read the instructions carefully before starting. Once started, the timer will not stop.
+                </p>
+
+                <div class="instructions-summary">
+                    <div class="instructions-summary-item">
+                        <div class="instructions-summary-label">Total Questions</div>
+                        <div class="instructions-summary-value" id="inst-total-questions">10</div>
+                    </div>
+                    <div class="instructions-summary-item">
+                        <div class="instructions-summary-label">Marks / Q</div>
+                        <div class="instructions-summary-value">+1</div>
+                    </div>
+                    <div class="instructions-summary-item">
+                        <div class="instructions-summary-label">Negative</div>
+                        <div class="instructions-summary-value">−0.25</div>
+                    </div>
+                </div>
+
+                <ul class="instructions-list">
+                    <li>Each question has a single correct answer.</li>
+                    <li>Use the palette on the right to move between questions or sections.</li>
+                    <li>Use <strong>Mark for Review &amp; Next</strong> to mark questions you want to review later.</li>
+                    <li>You can submit the test anytime using the <strong>Submit</strong> button.</li>
+                </ul>
+
+                <button class="btn btn-primary" id="start-test-btn">Start Test</button>
+            </div>
+
+            <div class="instructions-side">
+                <div class="instructions-side-title">Details</div>
+                <div class="instructions-side-row">
+                    <div class="instructions-side-label">Canditate</div>
+                    <div class="instructions-side-value">Guest User</div>
+                </div>
+                <div class="instructions-side-row">
+                    <div class="instructions-side-label">Section</div>
+                    <div class="instructions-side-value" id="inst-section-name">Beginners Quiz Misspelt Words Set -1</div>
+                </div>
+                <div class="instructions-side-row">
+                    <div class="instructions-side-label">Questions</div>
+                    <div class="instructions-side-value" id="inst-side-total">10</div>
+                </div>
+                <div class="instructions-side-row">
+                    <div class="instructions-side-label">Marks</div>
+                    <div class="instructions-side-value">+1 / −0.25</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- QUIZ SCREEN -->
+    <div class="card" id="quiz-container">
+        <div class="test-layout">
+            <div class="test-main">
+                <div class="question-header">
+                    <div class="q-progress" id="q-progress">Question 1 of 10</div>
+                    <div class="marks-info">
+                        <span class="marks-pos">+1 mark</span>
+                        <span class="marks-neg">−0.25 negative</span>
+                    </div>
+                </div>
+                <div class="question-body" id="question-text"></div>
+                <div class="options-group" id="options-container"></div>
+
+                <div class="nav-bar">
+					<div class="nav-left">
+						<button class="btn btn-secondary" id="clear-btn">
+							<svg width="18" height="18" viewBox="0 0 24 24" class="btn-icon"><path d="M6 19L19 6" stroke="currentColor" stroke-width="2"/><path d="M6 6L19 19" stroke="currentColor" stroke-width="2"/></svg>
+							<span class="btn-text">Clear Response</span>
+						</button>
+						<button class="btn btn-secondary" id="mark-btn">
+							<svg width="18" height="18" viewBox="0 0 24 24" class="btn-icon"><path d="M6 3h12v18l-6-4-6 4V3z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+							<span class="btn-text">Mark for Review & Next</span>
+						</button>
+					</div>
+					<div class="nav-right">
+						<button class="btn btn-primary" id="next-btn">
+							<svg width="18" height="18" viewBox="0 0 24 24" class="btn-icon"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+							<span class="btn-text">Save & Next</span>
+						</button>
+						<button class="btn btn-danger" id="submit-btn">
+							<svg width="18" height="18" viewBox="0 0 24 24" class="btn-icon"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+							<span class="btn-text">Submit</span>
+						</button>
+					</div>
+				</div>
+
+            </div>
+
+            <aside class="test-side">
+                <div class="sidebar-card palette">
+                    <div class="palette-title">Question Palette</div>
+                    <div class="palette-grid" id="palette-container"></div>
+                    <div class="palette-legend">
+                        <div class="palette-legend-row">
+                            <span class="legend-box legend-notVisited"></span> Not visited
+                        </div>
+                        <div class="palette-legend-row">
+                            <span class="legend-box legend-notAnswered"></span> Not answered
+                        </div>
+                        <div class="palette-legend-row">
+                            <span class="legend-box legend-answered"></span> Answered
+                        </div>
+                        <div class="palette-legend-row">
+                            <span class="legend-box legend-marked"></span> Marked for review
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- SOLUTIONS SCREEN -->
+    <div class="card" id="solutions-container">
+        <div class="solutions-title">Solutions – Beginners Quiz Misspelt Words Set -1</div>
+        <div class="solutions-sub">
+            Correct options are highlighted in <span style="color:var(--success);font-weight:600;">green</span>.
+            Your wrong selections (if any) are highlighted in <span style="color:var(--danger);font-weight:600;">red</span>.
+        </div>
+        <div id="solutions-list"></div>
+        <div style="margin-top:12px; display:flex; justify-content:flex-end; gap:8px;">
+            <button class="btn btn-secondary" id="solutions-back-btn">&larr; Back to Result</button>
+        </div>
+    </div>
+</div>
+
+<!-- RESULT OVERLAY -->
+<div class="overlay" id="result-overlay">
+    <div class="overlay-content">
+        <div class="overlay-header">
+            <h2>Quiz Summary</h2>
+        </div>
+        <div class="overlay-body">
+            Here is your performance analytics for this test.
+        </div>
+        <div class="overlay-metrics">
+            <div class="metric-card">
+                <div class="metric-label">Total Marks</div>
+                <div class="metric-value" id="metric-marks">0</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Correct Answers</div>
+                <div class="metric-value" id="metric-correct">0</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Wrong Answers</div>
+                <div class="metric-value" id="metric-wrong">0</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Questions Attempted</div>
+                <div class="metric-value" id="metric-attempted">0</div>
+            </div>
+			<div class="metric-card">
+				<div class="metric-label">Avg Time / Question</div>
+				<div class="metric-value" id="metric-avgtime">0</div>
+			</div>
+        </div>
+        <div class="overlay-footer">
+            <button class="btn btn-secondary" id="home-btn">Home</button>
+            <button class="btn btn-primary" id="view-solutions-btn">View Solutions</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const TEST_DURATION_SECONDS = 480;
+
+const questions = [{"question": "<p><strong>In the given sentence some words are printed in bold one of which may be wrongly spelt or inappropriate in the context. Choose that word as the answer. If all the words printed in bold are correct, mark E, i.e. ‘all are correct’ as the answer.</strong></p><br><p>She'd thought his wall of swords, <strong>daggers (A)/,</strong> axes, and other <strong>medival(B)/,</strong>  <strong>weapons</strong> <strong>(C)/ </strong>were for <strong>ceremony(D)/ (E)</strong> No Error.</p>", "options": ["<p>(A)</p>", "<p>(B)</p>", "<p>(C)</p>", "<p>(D)</p>", "<p>(E)No Error</p>"], "correctIndex": 1, "solution": "<p><strong>Answer: B</strong></p>\n<p><strong>Replace ‘medival</strong> <strong>‘with ‘medieval</strong> <strong>‘</strong></p>"}, {"question": "<p><strong>In the given sentence some words are printed in bold one of which may be wrongly spelt or inappropriate in the context. Choose that word as the answer. If all the words printed in bold are correct, mark E, i.e. ‘all are correct’ as the answer.</strong></p><br><p>He was <strong>buried</strong> <strong>(A)/ </strong>in the great Armenian <strong>cementery</strong> <strong>(B)/</strong> at Nicomedia, but in the course of his <strong>relics(C)/</strong> were <strong>transferred(D)</strong> to Hungary. <strong>/(E)</strong> No Error</p>", "options": ["<p>(A)</p>", "<p>(B)</p>", "<p>(C)</p>", "<p>(D)</p>", "<p>(E)No Error</p>"], "correctIndex": 1, "solution": "<p><strong>Answer: B</strong></p>\n<p><strong>Replace ‘cementery ‘with ‘cemetery ‘</strong></p>"}, {"question": "<p><strong>In the given sentence some words are printed in bold one of which may be wrongly spelt or inappropriate in the context. Choose that word as the answer. If all the words printed in bold are correct, mark E, i.e. ‘all are correct’ as the answer.</strong></p><br><p>When mushrooms are <strong>gathered (A)/</strong> for sale by persons <strong>unacqainted(B)/</strong>  with the different species <strong>mistakes(C)/</strong> are of frequent <strong>occurrence(D). /(E)</strong> No Error</p>", "options": ["<p>(A)</p>", "<p>(B)</p>", "<p>(C)</p>", "<p>(D)</p>", "<p>(E)No Error</p>"], "correctIndex": 1, "solution": "<p><strong>Answer: B</strong></p>\n<p><strong>Replace ‘unacqainted ‘with ‘unacquainted ‘</strong></p>"}, {"question": "<p><strong>In the given sentence some words are printed in bold one of which may be wrongly spelt or inappropriate in the context. Choose that word as the answer. If all the words printed in bold are correct, mark E, i.e. ‘all are correct’ as the answer.</strong></p><br><p>She <strong>stopped</strong> <strong>(A)/</strong> to wait for him, <strong>unsure(B)/</strong>  whether to be happy about his <strong>presence</strong> <strong>(C)/</strong> or <strong>anoyed(D). /(E)</strong> No Error</p>", "options": ["<p>(A)</p>", "<p>(B)</p>", "<p>(C)</p>", "<p>(D)</p>", "<p>(E)No Error</p>"], "correctIndex": 3, "solution": "<p><strong>Answer: D</strong></p>\n<p><strong>Replace ‘anoyed ‘with ‘annoyed ‘</strong></p>"}, {"question": "<p><strong>In the given sentence some words are printed in bold one of which may be wrongly spelt or inappropriate in the context. Choose that word as the answer. If all the words printed in bold are correct, mark E, i.e. ‘all are correct’ as the answer.</strong></p><br><p>Many <strong>influnces</strong> <strong>(A)/</strong> operating for a long period of time on the <strong>character(B)/</strong>  and the <strong>environment(C)/</strong> of a class go to <strong>determine(D)</strong> its standard of life. <strong>/(E)</strong> No Error</p>", "options": ["<p>(A)</p>", "<p>(B)</p>", "<p>(C)</p>", "<p>(D)</p>", "<p>(E)No Error</p>"], "correctIndex": 0, "solution": "<p><strong>Answer: A</strong></p>\n<p><strong>Replace ‘influnces</strong> <strong>‘with ‘influences</strong> <strong>‘</strong></p>"}, {"question": "<p><strong>In the given sentence some words are printed in bold one of which may be wrongly spelt or inappropriate in the context. Choose that word as the answer. If all the words printed in bold are correct, mark E, i.e. ‘all are correct’ as the answer.</strong></p><br><p>Both maps <strong>abound</strong> <strong>(A)/</strong> in <strong>miniture(B)/</strong>  pictures of towns, animals, <strong>fabulous(C)/</strong> <strong>beings</strong> and other subjects<strong>(D). /(E)</strong> No Error</p>", "options": ["<p>(A)</p>", "<p>(B)</p>", "<p>(C)</p>", "<p>(D)</p>", "<p>(E)No Error</p>"], "correctIndex": 1, "solution": "<p><strong>Answer: B</strong></p>\n<p><strong>Replace ‘miniture ‘with ‘miniature ‘</strong></p>"}, {"question": "<p><strong>In the given sentence some words are printed in bold one of which may be wrongly spelt or inappropriate in the context. Choose that word as the answer. If all the words printed in bold are correct, mark E, i.e. ‘all are correct’ as the answer.</strong></p><br><p>Personally, there's nothing that dents my <strong>confidance</strong> <strong>(A)/ </strong>more in an online <strong>business</strong> <strong>(B)/</strong> than poorly written, <strong>grammatically(C)/</strong> incorrect, <strong>misspelt(D)</strong> copy<strong>. /(E)</strong> No Error</p>", "options": ["<p>(A)</p>", "<p>(B)</p>", "<p>(C)</p>", "<p>(D)</p>", "<p>(E)No Error</p>"], "correctIndex": 0, "solution": "<p><strong>Answer: A</strong></p>\n<p><strong>Replace ‘confidance</strong> <strong>‘with ‘confidence</strong> <strong>‘</strong></p>"}, {"question": "<p><strong>In the given sentence some words are printed in bold one of which may be wrongly spelt or inappropriate in the context. Choose that word as the answer. If all the words printed in bold are correct, mark E, i.e. ‘all are correct’ as the answer.</strong></p><br><p>I <strong>remember(A)/,</strong> Joseph a man I love and <strong>respect</strong> <strong>(B)/</strong> like a father, telling me don't be a <strong>hypocrit</strong> <strong>(C)/ </strong>and admit that I <strong>smoke(D). /(E)</strong> No Error</p>", "options": ["<p>(A)</p>", "<p>(B)</p>", "<p>(C)</p>", "<p>(D)</p>", "<p>(E)No Error</p>"], "correctIndex": 2, "solution": "<p><strong>Answer: C</strong></p>\n<p><strong>Replace ‘hypocrit ‘with ‘hypocrite ‘</strong></p>"}, {"question": "<p><strong>In the given sentence some words are printed in bold one of which may be wrongly spelt or inappropriate in the context. Choose that word as the answer. If all the words printed in bold are correct, mark E, i.e. ‘all are correct’ as the answer.</strong></p><br><p>He was also the most <strong>fasinating</strong> <strong>(A)/ </strong>person she'd ever <strong>spoken (B)/</strong> to, in a <strong>terrifying</strong>, <strong>(C)/</strong> <strong>otherworldly(D)</strong> way. <strong>/(E)</strong> No Error</p>", "options": ["<p>(A)</p>", "<p>(B)</p>", "<p>(C)</p>", "<p>(D)</p>", "<p>(E)No Error</p>"], "correctIndex": 0, "solution": "<p><strong>Answer: A</strong></p>\n<p><strong>Replace ‘fasinating</strong> <strong>‘with ‘fascinating</strong> <strong>‘</strong></p>"}, {"question": "<p><strong>In the given sentence some words are printed in bold one of which may be wrongly spelt or inappropriate in the context. Choose that word as the answer. If all the words printed in bold are correct, mark E, i.e. ‘all are correct’ as the answer.</strong></p><br><p>He was <strong>sincerely</strong> <strong>(A)/ </strong>religious, <strong>self-restrained</strong> <strong>(B)/</strong> and <strong>courtous(C)/,</strong> though occasionally, under <strong>provocation(D),</strong> he could burst out into a royal rage. <strong>/(E)</strong> No Error</p>", "options": ["<p>(A)</p>", "<p>(B)</p>", "<p>(C)</p>", "<p>(D)</p>", "<p>(E)No Error</p>"], "correctIndex": 2, "solution": "<p><strong>Answer: C</strong></p>\n<p><strong>Replace ‘courtous ‘with ‘courteous ‘</strong></p>"}];
+
+// ===== STATE & DOM =====
+let currentIndex = 0;
+const totalQuestions = questions.length;
+const userAnswers = new Array(totalQuestions).fill(null); // selected option index or null
+const questionStates = new Array(totalQuestions).fill("notVisited"); // "notVisited", "notAnswered", "answered", "marked"
+
+// Timer
+const timerLabel = document.getElementById('timer-label');
+let timerInterval = null;
+let remainingSeconds = TEST_DURATION_SECONDS;
+
+// DOM elements
+const instructionHeader = document.getElementById('instruction-header');
+const quizHeader = document.getElementById('quiz-header');
+
+const instructionsContainer = document.getElementById('instructions-container');
+const quizContainer = document.getElementById('quiz-container');
+const solutionsContainer = document.getElementById('solutions-container');
+
+const qProgress = document.getElementById('q-progress');
+const questionText = document.getElementById('question-text');
+const optionsContainer = document.getElementById('options-container');
+
+const clearBtn = document.getElementById('clear-btn');
+const markBtn = document.getElementById('mark-btn');
+const nextBtn = document.getElementById('next-btn');
+const submitBtn = document.getElementById('submit-btn');
+
+const paletteContainer = document.getElementById('palette-container');
+const solutionsList = document.getElementById('solutions-list');
+const solutionsBackBtn = document.getElementById('solutions-back-btn');
+
+const resultOverlay = document.getElementById('result-overlay');
+const metricMarks = document.getElementById('metric-marks');
+const metricCorrect = document.getElementById('metric-correct');
+const metricWrong = document.getElementById('metric-wrong');
+const metricAttempted = document.getElementById('metric-attempted');
+const viewSolutionsBtn = document.getElementById('view-solutions-btn');
+const homeBtn = document.getElementById('home-btn');
+
+const instTotalQuestions = document.getElementById('inst-total-questions');
+const instSideTotal = document.getElementById('inst-side-total');
+const startTestBtn = document.getElementById('start-test-btn');
+
+let questionStartTime = null;
+let questionTimes = new Array(totalQuestions).fill(0);
+
+function formatTime(ms) {
+    const sec = Math.floor(ms / 1000);
+    return sec < 60 ? `${sec}s` : `${Math.floor(sec/60)}m ${sec % 60}s`;
+}
+
+// ===== TIMER FUNCTIONS =====
+function updateTimerLabel() {
+    const h = String(Math.floor(remainingSeconds / 3600)).padStart(2, '0');
+    const m = String(Math.floor((remainingSeconds % 3600) / 60)).padStart(2, '0');
+    const s = String(remainingSeconds % 60).padStart(2, '0');
+    timerLabel.textContent = `Time: ${h}:${m}:${s}`;
+}
+function startTimer() {
+    if (timerInterval) clearInterval(timerInterval);
+
+    updateTimerLabel();
+
+    timerInterval = setInterval(() => {
+        remainingSeconds--;
+
+        if (remainingSeconds <= 0) {
+            remainingSeconds = 0;
+            updateTimerLabel();
+            clearInterval(timerInterval);
+
+            // AUTO SUBMIT
+            if (questionStartTime !== null) {
+                questionTimes[currentIndex] +=
+                    (Date.now() - questionStartTime);
+            }
+            saveAnswerForCurrent();
+            showResultOverlay();
+            return;
+        }
+
+        updateTimerLabel();
+    }, 1000);
+}
+
+// ===== RENDERING =====
+function renderQuestion(index) {
+	if (questionStartTime !== null) {
+    questionTimes[currentIndex] += (Date.now() - questionStartTime);
+	}
+	questionStartTime = Date.now();
+
+    const q = questions[index];
+    qProgress.textContent = `Question ${index + 1} of ${totalQuestions}`;
+    questionText.innerHTML = q.question;
+    optionsContainer.innerHTML = '';
+
+    q.options.forEach((optHtml, optIndex) => {
+        const label = document.createElement('label');
+        label.className = 'option';
+
+        const input = document.createElement('input');
+        input.type = 'radio';
+        input.name = 'option';
+        input.value = optIndex;
+
+        if (userAnswers[index] === optIndex) {
+            input.checked = true;
+        }
+
+        const span = document.createElement('div');
+        span.className = 'option-text';
+        span.innerHTML = optHtml;
+
+        label.appendChild(input);
+        label.appendChild(span);
+
+        label.addEventListener('click', () => {
+            input.checked = true;
+        });
+
+        optionsContainer.appendChild(label);
+    });
+
+    // If first visit, mark as notAnswered for palette
+    if (questionStates[index] === "notVisited") {
+        questionStates[index] = (userAnswers[index] != null) ? "answered" : "notAnswered";
+    }
+
+    updatePalette();
+}
+
+function updatePalette() {
+    paletteContainer.innerHTML = '';
+
+    const drawerContainer =
+        document.getElementById('palette-drawer-container');
+    if (drawerContainer) drawerContainer.innerHTML = '';
+
+    for (let i = 0; i < totalQuestions; i++) {
+
+        function createBtn() {
+            const btn = document.createElement('div');
+            let cls = 'palette-item';
+
+            if (questionStates[i] === 'notVisited') cls += ' state-notVisited';
+            else if (questionStates[i] === 'notAnswered') cls += ' state-notAnswered';
+            else if (questionStates[i] === 'answered') cls += ' state-answered';
+            else if (questionStates[i] === 'marked') cls += ' state-marked';
+
+            if (i === currentIndex) cls += ' current';
+
+            btn.className = cls;
+            btn.textContent = i + 1;
+
+            btn.addEventListener('click', () => {
+                saveAnswerForCurrent();
+                currentIndex = i;
+                renderQuestion(currentIndex);
+                closeDrawer(); // safe on desktop
+            });
+
+            return btn;
+        }
+
+        paletteContainer.appendChild(createBtn());
+        if (drawerContainer) drawerContainer.appendChild(createBtn());
+    }
+}
+
+function getSelectedOptionIndex() {
+    const selected = document.querySelector('input[name="option"]:checked');
+    if (!selected) return null;
+    return parseInt(selected.value, 10);
+}
+
+function saveAnswerForCurrent() {
+    const selIndex = getSelectedOptionIndex();
+    if (selIndex !== null) {
+        userAnswers[currentIndex] = selIndex;
+        questionStates[currentIndex] = "answered";
+    } else {
+        // Only change to notAnswered if not marked
+        if (questionStates[currentIndex] !== "marked") {
+            questionStates[currentIndex] = "notAnswered";
+        }
+    }
+    updatePalette();
+}
+
+// ===== RESULT & SOLUTIONS =====
+function showResultOverlay() {
+    let correct = 0;
+    let attempted = 0;
+
+    const MARKS_PER_Q = 1;
+    const NEGATIVE_MARKS = 0.25;
+    const totalQuestions = questions.length;
+    const maxMarks = totalQuestions * MARKS_PER_Q;
+    let totalMarks = 0;
+
+    questions.forEach((q, i) => {
+        const ans = userAnswers[i];
+        if (ans !== null && ans !== undefined) {
+            attempted++;
+            if (ans === q.correctIndex) {
+                correct++;
+                totalMarks += MARKS_PER_Q;
+            } else {
+                totalMarks -= NEGATIVE_MARKS;
+            }
+        }
+    });
+
+    const wrong = attempted - correct;
+    const avgTime =
+        questionTimes.reduce((a, b) => a + b, 0) / totalQuestions;
+
+    metricMarks.textContent =
+        `${totalMarks.toFixed(2)} / ${maxMarks.toFixed(2)}`;
+    metricCorrect.textContent = correct;
+    metricWrong.textContent = wrong;
+    metricAttempted.textContent = attempted;
+    document.getElementById("metric-avgtime").textContent =
+        formatTime(avgTime);
+
+    resultOverlay.style.display = "flex";
+}
+
+function closeResultOverlay() {
+    resultOverlay.style.display = 'none';
+}
+
+function buildSolutionsView() {
+    solutionsList.innerHTML = '';
+    questions.forEach((q, index) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'solution-item';
+
+        const qDiv = document.createElement('div');
+        qDiv.className = 'solution-question';
+        qDiv.innerHTML = `<strong>Q${index + 1}.</strong> ${q.question}`;
+        wrapper.appendChild(qDiv);
+
+        const optsDiv = document.createElement('div');
+        optsDiv.className = 'solution-options';
+
+        q.options.forEach((optHtml, optIndex) => {
+            const optDiv = document.createElement('div');
+            let cls = 'solution-option';
+            if (optIndex === q.correctIndex) {
+                cls += ' correct';
+            } else if (userAnswers[index] === optIndex) {
+                cls += ' wrong';
+            }
+            optDiv.className = cls;
+
+            const labelSpan = document.createElement('div');
+            labelSpan.className = 'solution-label';
+            labelSpan.textContent = String.fromCharCode(65 + optIndex) + '.';
+
+            const textDiv = document.createElement('div');
+            textDiv.className = 'solution-text';
+            textDiv.innerHTML = optHtml;
+
+            optDiv.appendChild(labelSpan);
+            optDiv.appendChild(textDiv);
+            optsDiv.appendChild(optDiv);
+        });
+
+        wrapper.appendChild(optsDiv);
+
+        const solDiv = document.createElement('div');
+        solDiv.className = 'solution-explanation';
+        const solutionHtml = (q.solution || '')
+			.replace(/\\"/g, '"')      // unescape quotes
+			.replace(/\\n/g, '')       // remove escaped newlines
+			.replace(/\\t/g, '');      // remove escaped tabs
+
+		solDiv.innerHTML = `<strong>Solution:</strong><br>${solutionHtml}`;
+        wrapper.appendChild(solDiv);
+
+        solutionsList.appendChild(wrapper);
+    });
+}
+
+// ===== EVENT HANDLERS =====
+startTestBtn.addEventListener('click', () => {
+    // Hide instruction header + screen
+    instructionHeader.style.display = 'none';
+    instructionsContainer.style.display = 'none';
+
+    // Show quiz header + screen
+    quizHeader.style.display = 'flex';
+    quizContainer.style.display = 'block';
+    solutionsContainer.style.display = 'none';
+
+    currentIndex = 0;
+    renderQuestion(currentIndex);
+    startTimer();
+    questionStartTime = Date.now();
+});
+
+clearBtn.addEventListener('click', () => {
+    // Clear selection & mark as "notAnswered" (red)
+    userAnswers[currentIndex] = null;
+    questionStates[currentIndex] = "notAnswered";
+    renderQuestion(currentIndex);
+});
+
+markBtn.addEventListener('click', () => {
+    // Option 2: DO NOT save answer when marking for review
+    userAnswers[currentIndex] = null;
+    questionStates[currentIndex] = "marked";
+    if (currentIndex < totalQuestions - 1) {
+        currentIndex++;
+        renderQuestion(currentIndex);
+    } else {
+        // stay on last, just refresh colors
+        renderQuestion(currentIndex);
+    }
+});
+
+nextBtn.addEventListener('click', () => {
+    saveAnswerForCurrent();
+    if (currentIndex < totalQuestions - 1) {
+        currentIndex++;
+        renderQuestion(currentIndex);
+    } else {
+        // last question: nothing to move, but answer is saved
+        renderQuestion(currentIndex);
+    }
+});
+
+submitBtn.addEventListener('click', () => {
+	if (questionStartTime !== null) {
+    questionTimes[currentIndex] += (Date.now() - questionStartTime);
+    questionStartTime = null;
+	}
+    saveAnswerForCurrent();
+    clearInterval(timerInterval);
+    showResultOverlay();
+});
+
+viewSolutionsBtn.addEventListener('click', () => {
+    resultOverlay.style.display = 'none';
+    quizContainer.style.display = 'none';
+    solutionsContainer.style.display = 'block';
+    buildSolutionsView();
+});
+
+solutionsBackBtn.addEventListener('click', () => {
+    solutionsContainer.style.display = 'none';
+    quizContainer.style.display = 'none';
+    resultOverlay.style.display = 'flex';
+});
+
+homeBtn.addEventListener('click', () => {
+    resultOverlay.style.display = 'none';
+    solutionsContainer.style.display = 'none';
+    quizContainer.style.display = 'none';       // FIXED
+    instructionsContainer.style.display = 'block'; // FIXED
+
+    instructionHeader.style.display = 'block';
+    quizHeader.style.display = 'none';
+
+    currentIndex = 0;
+    userAnswers.fill(null);
+    questionStates.fill("notVisited");
+
+    window.scrollTo(0, 0);
+});
+
+
+// ===== INIT =====
+instTotalQuestions.textContent = totalQuestions;
+instSideTotal.textContent = totalQuestions;
+
+// ===== HAMBURGER MENU LOGIC =====
+const menuBtn = document.getElementById('menu-btn');
+const drawer = document.getElementById('palette-drawer');
+const drawerOverlay = document.getElementById('drawer-overlay');
+
+function openDrawer() {
+    if (!drawer || !drawerOverlay) return;
+    drawer.classList.add('open');
+    drawerOverlay.classList.add('show');
+    document.body.classList.add('drawer-open');
+}
+
+function closeDrawer() {
+    if (!drawer || !drawerOverlay) return;
+    drawer.classList.remove('open');
+    drawerOverlay.classList.remove('show');
+    document.body.classList.remove('drawer-open');
+}
+
+if (menuBtn) {
+    menuBtn.addEventListener('click', openDrawer);
+}
+
+if (drawerOverlay) {
+    drawerOverlay.addEventListener('click', closeDrawer);
+}
+</script>
+
+</body>
+</html>

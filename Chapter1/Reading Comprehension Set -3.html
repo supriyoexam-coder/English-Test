@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Beginners Quiz Reading Comprehension Set -3 Quiz | MockTest Buddy</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<script src="../home.js"></script>
+
+<style>
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --bg: #f3f4f6;
+    --card-bg: #ffffff;
+    --text: #111827;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --danger: #ef4444;
+    --success: #22c55e;
+    --marked: #7c3aed;
+    --correct-bg: #ecfdf3;
+    --wrong-bg: #fef2f2;
+    --marked-bg: #f3e8ff;
+}
+
+/* Reset-ish */
+* {
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: radial-gradient(circle at top left, #dbeafe, #eff6ff 40%, #f9fafb 80%);
+    color: var(--text);
+}
+
+/* Instruction header (brand only) */
+.brand-header {
+    background: linear-gradient(90deg, #0f172a, #111827);
+    color: #fff;
+    padding: 14px 16px;
+    text-align: center;
+}
+.brand-title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+.brand-sub {
+    font-size: 12px;
+    opacity: 0.8;
+    margin-top: 4px;
+}
+
+/* Test header (only after start) */
+.header-test {
+    display: none;
+    background: linear-gradient(90deg, var(--primary-dark), var(--primary));
+    color: #fff;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.header-left {
+    display: flex;
+    flex-direction: column;
+}
+.header-title {
+    font-size: 20px;
+    font-weight: 600;
+}
+.header-subtitle {
+    font-size: 12px;
+    opacity: 0.9;
+}
+.header-right {
+    font-size: 12px;
+    text-align: right;
+}
+.badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.12);
+    font-size: 11px;
+}
+
+/* Layout */
+.main {
+    max-width: 1000px;
+    margin: 16px auto 28px;
+    padding: 0 12px;
+}
+.card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
+    padding: 18px 16px 16px;
+}
+
+/* Instructions */
+#instructions-container {
+    display: block;
+}
+.instructions-layout {
+    display: flex;
+    gap: 16px;
+}
+.instructions-main {
+    flex: 1;
+}
+.instructions-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+.instructions-list {
+    font-size: 14px;
+    margin-left: 16px;
+    margin-bottom: 12px;
+}
+.instructions-list li {
+    margin-bottom: 4px;
+}
+.instructions-summary {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin: 10px 0 16px;
+}
+.instructions-summary-item {
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #f9fafb;
+    padding: 8px;
+    font-size: 13px;
+}
+.instructions-summary-label {
+    font-size: 11px;
+    color: var(--muted);
+}
+.instructions-summary-value {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* Instruction candidate box (right side) */
+.instructions-side {
+    width: 230px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #f1f5f9;
+    padding: 10px;
+    font-size: 13px;
+}
+.instructions-side-title {
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+.instructions-side-row {
+    margin-bottom: 4px;
+}
+.instructions-side-label {
+    color: var(--muted);
+    font-size: 12px;
+}
+.instructions-side-value {
+    font-weight: 500;
+}
+
+/* Test layout */
+#quiz-container {
+    display: none;
+}
+.header-test {
+    display: none;
+}
+.test-layout {
+    display: flex;
+    gap: 16px;
+}
+.test-main {
+    flex: 1;
+}
+.test-side {
+    width: 300px;
+}
+
+/* Question header */
+.question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 15px;
+    color: var(--muted);
+}
+.q-progress {
+    font-weight: 500;
+}
+.marks-info {
+    font-size: 12px;
+}
+.marks-info span {
+    margin-left: 8px;
+}
+.marks-pos {
+    color: var(--success);
+}
+.marks-neg {
+    color: var(--danger);
+}
+
+/* Question body */
+.question-body {
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    padding: 12px 10px;
+    background: #f9fafb;
+    margin-bottom: 12px;
+    font-size: 17px;
+	line-height: 1.5;
+}
+.question-body p {
+    margin: 4px 0;
+}
+
+/* Options */
+.options-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.option {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #fff;
+    cursor: pointer;
+    transition: background 0.12s ease, border-color 0.12s ease, transform 0.08s ease;
+}
+.option:hover {
+    background: #eff6ff;
+    border-color: var(--primary);
+    transform: translateY(-1px);
+}
+.option input {
+    margin-top: 3px;
+}
+.option-text {
+    font-size: 17px;
+	line-height: 1.4;
+}
+
+/* Nav buttons */
+.nav-bar {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.nav-left,
+.nav-right {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.btn {
+    border: none;
+    border-radius: 999px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.12s ease, transform 0.08s ease, box-shadow 0.12s ease;
+}
+.btn:active {
+    transform: translateY(1px);
+}
+.btn-primary {
+    background: var(--primary);
+    color: #fff;
+    box-shadow: 0 8px 16px rgba(37, 99, 235, 0.3);
+}
+.btn-primary:hover {
+    background: var(--primary-dark);
+}
+.btn-secondary {
+    background: #e5e7eb;
+    color: #111827;
+}
+.btn-secondary:hover {
+    background: #d1d5db;
+}
+.btn-danger {
+    background: var(--danger);
+    color: #fff;
+}
+.btn-danger:hover {
+    background: #b91c1c;
+}
+
+/* Side panel (palette only during test) */
+.sidebar-card {
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #f9fafb;
+    padding: 10px;
+    font-size: 12px;
+}
+
+/* Palette */
+.palette {
+    margin-top: 0;
+}
+.palette-title {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+.palette-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.palette-item {
+    min-width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 2px solid #d1d5db;
+    font-size: 18px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.15s;
+}
+.palette-item:hover {
+    transform: scale(1.08);
+    border-color: #3b82f6;
+}
+.palette-item.current {
+    outline: 2px solid var(--primary);
+}
+
+/* Palette colors per your request */
+.palette-item.state-notVisited {
+    background: #9ca3af;  /* darker grey */
+    color: #ffffff;
+}
+.palette-item.state-notAnswered {
+    background: #ef4444;  /* red */
+    color: #ffffff;
+}
+.palette-item.state-answered {
+    background: #22c55e;  /* green */
+    color: #ffffff;
+}
+.palette-item.state-marked {
+    background: #8b5cf6;  /* strong purple */
+    color: #ffffff;
+}
+
+/* Palette legend */
+.palette-legend {
+    margin-top: 8px;
+    font-size: 11px;
+    color: var(--muted);
+}
+.palette-legend-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 2px;
+}
+.legend-box {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+}
+.legend-notVisited { background: #e5e7eb; }
+.legend-notAnswered { background: #fee2e2; border-color:#fecaca; }
+.legend-answered { background: #dcfce7; border-color:#bbf7d0; }
+.legend-marked { background: #e9d5ff; border-color:#c4b5fd; }
+
+/* Solutions page */
+#solutions-container {
+    display: none;
+}
+.solutions-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+.solutions-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 10px;
+}
+.solution-item {
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+    margin-top: 10px;
+}
+.solution-item:first-child {
+    border-top: none;
+    padding-top: 0;
+    margin-top: 0;
+}
+.solution-question {
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+.solution-options {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+.solution-option {
+    display: flex;
+    gap: 6px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #fff;
+}
+.solution-option.correct {
+    background: var(--correct-bg);
+    border-color: var(--success);
+}
+.solution-option.wrong {
+    background: var(--wrong-bg);
+    border-color: var(--danger);
+}
+.solution-label {
+    font-size: 13px;
+    font-weight: 600;
+}
+.solution-text {
+    flex: 1;
+    font-size: 13px;
+}
+.solution-explanation {
+    font-size: 13px;
+    background: #eef2ff;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+/* Overlay */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15,23,42,0.55);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+}
+.overlay-content {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 16px 16px 14px;
+    width: 94%;
+    max-width: 430px;
+    box-shadow: 0 26px 50px rgba(15,23,42,0.4);
+}
+.overlay-header h2 {
+    margin: 0;
+    font-size: 20px;
+}
+.overlay-body {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 8px 0 10px;
+}
+.overlay-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-bottom: 10px;
+    font-size: 13px;
+}
+.metric-card {
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    padding: 8px;
+    background: #f9fafb;
+}
+.metric-label {
+    font-size: 11px;
+    color: var(--muted);
+}
+.metric-value {
+    font-size: 15px;
+    font-weight: 600;
+    margin-top: 2px;
+}
+.overlay-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+/* Utils */
+.hidden {
+    display: none !important;
+}
+
+/* Responsive: hide side panels & palette on phones */
+@media (max-width: 768px) {
+    .instructions-layout,
+    .test-layout {
+        flex-direction: column;
+    }
+    .instructions-side,
+    .test-side {
+        display: none;
+    }
+    .card {
+        padding: 16px 12px 14px;
+    }
+}
+
+/* >>> ADD NEW CODE BELOW <<< */
+
+/* Expand quiz layout width */
+.main {
+    max-width: 1400px !important;
+}
+
+/* Expand quiz card width */
+#quiz-container.card {
+    width: 100% !important;
+    padding: 20px !important;
+}
+
+/* Reduce left+right margin */
+.main {
+    margin: 10px auto !important;
+    padding: 0px 5px !important;
+}
+
+/* Ensure question+palette stay visible side by side */
+.test-layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 16px;
+}
+
+/* Reduce question padding */
+.question-body {
+    padding: 12px !important;
+}
+
+/* Keep buttons in one row */
+.nav-bar {
+    flex-wrap: nowrap !important;
+    justify-content: space-between !important;
+}
+
+.nav-left button,
+.nav-right button {
+    white-space: nowrap !important;
+}
+
+/* Medium screen adjustments */
+@media (max-width: 1100px) {
+    .test-layout {
+        display: block !important;
+    }
+    .test-side {
+        display: none !important;
+    }
+    #quiz-container.card {
+        padding: 10px !important;
+    }
+    .question-body {
+        font-size: 18px !important;
+    }
+    .btn {
+        font-size: 16px !important;
+    }
+}
+
+/* Small screen adjustments */
+@media (max-width: 600px) {
+    body {
+        font-size: 16px !important;
+    }
+    .btn {
+        padding: 10px 16px !important;
+        font-size: 15px !important;
+    }
+    .option-text {
+        font-size: 18px !important;
+    }
+}
+/* Buttons shown on desktop */
+.nav-right .btn-submit {
+    display: inline-flex;
+}
+
+/* Buttons shown on mobile */
+@media (max-width: 600px) {
+    .btn-submit {
+        display: none !important;
+    }
+
+    .btn-mark {
+        display: inline-flex !important;
+    }
+
+    .btn-clear {
+        display: inline-flex !important;
+    }
+
+    .btn-save {
+        display: inline-flex !important;
+    }
+
+    /* Change button labels visually */
+    .btn-mark::after {
+        content: "Mark";
+    }
+    .btn-clear::after {
+        content: "Clear";
+    }
+    .btn-save::after {
+        content: "Save & Next";
+    }
+
+    /* hide original text inside buttons */
+    .btn-mark span,
+    .btn-clear span,
+    .btn-save span {
+        display: none;
+    }
+
+    /* Make buttons larger and easier to tap */
+    .nav-left button,
+    .nav-right button {
+        padding: 14px 20px;
+        font-size: 18px;
+        border-radius: 8px;
+    }
+}
+
+@media (max-width: 600px) {
+    .header-test {
+        flex-wrap: wrap;
+        padding: 8px 10px;
+        gap: 6px;
+    }
+
+    .header-left {
+        flex: 1 1 100%;
+    }
+
+    .header-title {
+        font-size: 14px;
+        line-height: 1.2;
+    }
+
+    .header-subtitle {
+        font-size: 11px;
+    }
+
+    .header-right {
+        flex: 1 1 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 11px;
+    }
+
+    .badge {
+        font-size: 10px;
+        padding: 2px 6px;
+    }
+}
+/* ===== HAMBURGER MENU ===== */
+.menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .menu-btn {
+        display: block;
+    }
+}
+
+/* ===== PALETTE DRAWER ===== */
+.palette-drawer {
+    position: fixed;
+    top: 0;
+    left: -320px;
+    width: 300px;
+    height: 100dvh; /* mobile safe height */
+    background: #ffffff;
+    box-shadow: 2px 0 20px rgba(0,0,0,0.2);
+    z-index: 100;
+    padding: 12px;
+    transition: left 0.3s ease;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.palette-drawer.open {
+    left: 0;
+}
+
+.drawer-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    display: none;
+    z-index: 90;
+}
+
+.drawer-overlay.show {
+    display: block;
+}
+#palette-drawer-container {
+    flex: 0 0 auto;          
+    max-height: calc(100dvh - 170px); 
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+/* Improve scroll on mobile */
+#palette-drawer-container::-webkit-scrollbar {
+    width: 6px;
+}
+#palette-drawer-container::-webkit-scrollbar-thumb {
+    background: #c7d2fe;
+    border-radius: 6px;
+}
+/* Keep legend always visible */
+.palette-drawer .palette-legend {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid #e5e7eb;
+    flex-shrink: 0;
+}
+
+body.drawer-open {
+    overflow: hidden;
+}
+</style>
+</head>
+<body>
+
+<div id="drawer-overlay" class="drawer-overlay"></div>
+
+<div id="palette-drawer" class="palette-drawer">
+    <h3 style="margin:6px 0 10px;font-size:14px;">Question Palette</h3>
+
+    <div id="palette-drawer-container" class="palette-grid"></div>
+
+    <!-- LEGEND FOR MOBILE -->
+    <div class="palette-legend">
+        <div class="palette-legend-row">
+            <span class="legend-box legend-notVisited"></span> Not visited
+        </div>
+        <div class="palette-legend-row">
+            <span class="legend-box legend-notAnswered"></span> Not answered
+        </div>
+        <div class="palette-legend-row">
+            <span class="legend-box legend-answered"></span> Answered
+        </div>
+        <div class="palette-legend-row">
+            <span class="legend-box legend-marked"></span> Marked for review
+        </div>
+    </div>
+</div>
+
+<!-- INSTRUCTION HEADER (BRAND ONLY) -->
+<div id="instruction-header" class="brand-header">
+    <div class="brand-title">MockTest Buddy</div>
+    <div class="brand-sub">by Team LuciferBanker</div>
+</div>
+
+<!-- TEST HEADER (ONLY AFTER START) -->
+<div id="quiz-header" class="header-test">
+    <button id="menu-btn" class="menu-btn">☰</button>
+    <div class="header-left">
+        <span class="header-title">Beginners Quiz Reading Comprehension Set -3</span>
+        <span class="header-subtitle">Single-correct MCQ • One question per screen</span>
+    </div>
+    <div class="header-right">
+        <span class="badge">Quiz Mode</span><br />
+        <span style="font-size: 11px;">Marks: +1 / −0.25</span><br />
+        <span id="timer-label" style="font-size: 11px;">Time: 00:00:00</span>
+    </div>
+</div>
+
+<div class="main">
+
+    <!-- INSTRUCTIONS SCREEN -->
+    <div class="card" id="instructions-container">
+        <div class="instructions-layout">
+            <div class="instructions-main">
+                <div class="instructions-title">Instructions</div>
+                <p style="font-size:14px;margin-bottom:6px;">
+                    Read the instructions carefully before starting. Once started, the timer will not stop.
+                </p>
+
+                <div class="instructions-summary">
+                    <div class="instructions-summary-item">
+                        <div class="instructions-summary-label">Total Questions</div>
+                        <div class="instructions-summary-value" id="inst-total-questions">14</div>
+                    </div>
+                    <div class="instructions-summary-item">
+                        <div class="instructions-summary-label">Marks / Q</div>
+                        <div class="instructions-summary-value">+1</div>
+                    </div>
+                    <div class="instructions-summary-item">
+                        <div class="instructions-summary-label">Negative</div>
+                        <div class="instructions-summary-value">−0.25</div>
+                    </div>
+                </div>
+
+                <ul class="instructions-list">
+                    <li>Each question has a single correct answer.</li>
+                    <li>Use the palette on the right to move between questions or sections.</li>
+                    <li>Use <strong>Mark for Review &amp; Next</strong> to mark questions you want to review later.</li>
+                    <li>You can submit the test anytime using the <strong>Submit</strong> button.</li>
+                </ul>
+
+                <button class="btn btn-primary" id="start-test-btn">Start Test</button>
+            </div>
+
+            <div class="instructions-side">
+                <div class="instructions-side-title">Details</div>
+                <div class="instructions-side-row">
+                    <div class="instructions-side-label">Canditate</div>
+                    <div class="instructions-side-value">Guest User</div>
+                </div>
+                <div class="instructions-side-row">
+                    <div class="instructions-side-label">Section</div>
+                    <div class="instructions-side-value" id="inst-section-name">Beginners Quiz Reading Comprehension Set -3</div>
+                </div>
+                <div class="instructions-side-row">
+                    <div class="instructions-side-label">Questions</div>
+                    <div class="instructions-side-value" id="inst-side-total">14</div>
+                </div>
+                <div class="instructions-side-row">
+                    <div class="instructions-side-label">Marks</div>
+                    <div class="instructions-side-value">+1 / −0.25</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- QUIZ SCREEN -->
+    <div class="card" id="quiz-container">
+        <div class="test-layout">
+            <div class="test-main">
+                <div class="question-header">
+                    <div class="q-progress" id="q-progress">Question 1 of 14</div>
+                    <div class="marks-info">
+                        <span class="marks-pos">+1 mark</span>
+                        <span class="marks-neg">−0.25 negative</span>
+                    </div>
+                </div>
+                <div class="question-body" id="question-text"></div>
+                <div class="options-group" id="options-container"></div>
+
+                <div class="nav-bar">
+					<div class="nav-left">
+						<button class="btn btn-secondary" id="clear-btn">
+							<svg width="18" height="18" viewBox="0 0 24 24" class="btn-icon"><path d="M6 19L19 6" stroke="currentColor" stroke-width="2"/><path d="M6 6L19 19" stroke="currentColor" stroke-width="2"/></svg>
+							<span class="btn-text">Clear Response</span>
+						</button>
+						<button class="btn btn-secondary" id="mark-btn">
+							<svg width="18" height="18" viewBox="0 0 24 24" class="btn-icon"><path d="M6 3h12v18l-6-4-6 4V3z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+							<span class="btn-text">Mark for Review & Next</span>
+						</button>
+					</div>
+					<div class="nav-right">
+						<button class="btn btn-primary" id="next-btn">
+							<svg width="18" height="18" viewBox="0 0 24 24" class="btn-icon"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+							<span class="btn-text">Save & Next</span>
+						</button>
+						<button class="btn btn-danger" id="submit-btn">
+							<svg width="18" height="18" viewBox="0 0 24 24" class="btn-icon"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+							<span class="btn-text">Submit</span>
+						</button>
+					</div>
+				</div>
+
+            </div>
+
+            <aside class="test-side">
+                <div class="sidebar-card palette">
+                    <div class="palette-title">Question Palette</div>
+                    <div class="palette-grid" id="palette-container"></div>
+                    <div class="palette-legend">
+                        <div class="palette-legend-row">
+                            <span class="legend-box legend-notVisited"></span> Not visited
+                        </div>
+                        <div class="palette-legend-row">
+                            <span class="legend-box legend-notAnswered"></span> Not answered
+                        </div>
+                        <div class="palette-legend-row">
+                            <span class="legend-box legend-answered"></span> Answered
+                        </div>
+                        <div class="palette-legend-row">
+                            <span class="legend-box legend-marked"></span> Marked for review
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- SOLUTIONS SCREEN -->
+    <div class="card" id="solutions-container">
+        <div class="solutions-title">Solutions – Beginners Quiz Reading Comprehension Set -3</div>
+        <div class="solutions-sub">
+            Correct options are highlighted in <span style="color:var(--success);font-weight:600;">green</span>.
+            Your wrong selections (if any) are highlighted in <span style="color:var(--danger);font-weight:600;">red</span>.
+        </div>
+        <div id="solutions-list"></div>
+        <div style="margin-top:12px; display:flex; justify-content:flex-end; gap:8px;">
+            <button class="btn btn-secondary" id="solutions-back-btn">&larr; Back to Result</button>
+        </div>
+    </div>
+</div>
+
+<!-- RESULT OVERLAY -->
+<div class="overlay" id="result-overlay">
+    <div class="overlay-content">
+        <div class="overlay-header">
+            <h2>Quiz Summary</h2>
+        </div>
+        <div class="overlay-body">
+            Here is your performance analytics for this test.
+        </div>
+        <div class="overlay-metrics">
+            <div class="metric-card">
+                <div class="metric-label">Total Marks</div>
+                <div class="metric-value" id="metric-marks">0</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Correct Answers</div>
+                <div class="metric-value" id="metric-correct">0</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Wrong Answers</div>
+                <div class="metric-value" id="metric-wrong">0</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Questions Attempted</div>
+                <div class="metric-value" id="metric-attempted">0</div>
+            </div>
+			<div class="metric-card">
+				<div class="metric-label">Avg Time / Question</div>
+				<div class="metric-value" id="metric-avgtime">0</div>
+			</div>
+        </div>
+        <div class="overlay-footer">
+            <button class="btn btn-secondary" id="home-btn">Home</button>
+            <button class="btn btn-primary" id="view-solutions-btn">View Solutions</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const TEST_DURATION_SECONDS = 600;
+
+const questions = [{"question": "<p><strong>Read the passage carefully and answer the following questions</strong></p>\n<p>CN R Rao, former head of the Scientific Advisory Council to the Prime Minister of India had famously remarked in 2011 that, “India has no system of education; it only has a system of examination.”</p>\n<p>In a developing country like ours, education is not just a phase of life. It is the key to a golden future, the hard-earned ladder that a poor person wants his/her children to climb, to get up the social order. The <strong>privileged</strong> amongst us get to go to a school, learn, and envision a world created by geniuses like Tagore, Einstein or Newton, only to realize by the end of it that we can never exist in such utopia or with the sense of liberty that they could probably experience. The existing system slaps us in the face through the doors of numerous entrance exams.</p>\n<p>Come April-May each year, front pages of newspapers display toppers’ photographs of various competitive exams, making every kid unlike them feel worthless. The seats for most exams and courses are small compared to the huge population of this nation, and the battle for each seat is fought with blood, sweat, heavy words like ‘dedication’, ‘hard work’, ‘killer instinct’ and of course, pocket-emptying coaching classes. The selected few get famous in their respective localities, glorified in the news, and advertised by every institute.</p>\n<p>The same story of numerous coaching institutes and ‘toppers’ and ‘losers’ continues. A few succeed, the rest spend precious years of their youth to gear up again. And yet, the hard and harsh truth is pretty logical and simple. Even if all the aspirants put in their cent percent effort and perform in the best manner possible with the best possible luck, it is impossible for everyone to qualify. Yet, students toil day and night, panic shared with their parents, and the enormously shattered ones even decide not to live. India ranks among the top few of those unfortunate countries where student suicides stand at a high rate of around 26,000 in three years. This roughly translates to one student dying every hour each day. The recent student suicides in Kota, a prime hub of coaching classes, are a grim reminder of the same.</p>\n<p>The question here is not just about letting the youth breathe, but also to ponder upon what we are running towards? Where do we stop and what are we achieving out of it? The statistics put up indeed a sad picture for India. India leads the group of nations that suffers the worst from everyday stress.</p>\n<p>According to the recently released World Happiness Report by United Nations Sustainable Development Solutions Network, India ranks 136 out of 146 countries ~ which surprisingly makes her stand far behind neighbours like Nepal and Bangladesh. <strong>(</strong>This may not be completely (A)/ attributed to the system of examinations, (B)/ but it cannot be denied that in a (C)/ struggling country like ours, (D)/ education is a major pathways to enter the workforce (E)<strong>)</strong>. The adult population consists of people who have either formal or informal employment, and while formal employment gives better job security and financial stability, entering it has its own set of struggles.</p>\n<p>Indian research has been reported to be weak, due to the lack of patent culture and funding. Academia has become more of a degree-churning field, where rigidities suffocate the interest and enthusiasm of bright students. <strong>(</strong>which includes labs under DRDO, IISc, IITs and six research facilities under ISRO (P)/ filed by a single US firm in India in 2016- 17 was more than (Q)/ This stagnancy is evident as the number of patents (R)/ double of all applications filed by the best laboratories in the country, (S)<strong>)</strong>.</p><br><p><strong>In context to the passage, how education is seen in India?</strong></p>\n<p><strong>a) </strong>Education is seen as a stepping stone to make lives better</p>\n<p><strong>b) </strong>Education is seen as a channel through which one makes his/her life better</p>\n<p><strong>c) </strong>Education is seen as a way to make the earnings better</p>", "options": ["<p>Only (a)</p>", "<p>Only (b)</p>", "<p>Only (c)</p>", "<p>Both (a) and (b)</p>", "<p>Both (b) and (c)</p>"], "correctIndex": 3, "solution": "<p><strong>Answer: D</strong></p>\n<p>Option (c) - the option is out of context, it is not mentioned in the passage that education is a way to make money. So, the option is eliminated</p>\n<p>Options (a) and (b) - both the options are correct. It is mentioned in the passage (It is the key to a golden future, the hard-earned ladder that a poor person wants his/her children to climb, to get up the social order)</p>"}, {"question": "<p><strong>Read the passage carefully and answer the following questions</strong></p>\n<p>CN R Rao, former head of the Scientific Advisory Council to the Prime Minister of India had famously remarked in 2011 that, “India has no system of education; it only has a system of examination.”</p>\n<p>In a developing country like ours, education is not just a phase of life. It is the key to a golden future, the hard-earned ladder that a poor person wants his/her children to climb, to get up the social order. The <strong>privileged</strong> amongst us get to go to a school, learn, and envision a world created by geniuses like Tagore, Einstein or Newton, only to realize by the end of it that we can never exist in such utopia or with the sense of liberty that they could probably experience. The existing system slaps us in the face through the doors of numerous entrance exams.</p>\n<p>Come April-May each year, front pages of newspapers display toppers’ photographs of various competitive exams, making every kid unlike them feel worthless. The seats for most exams and courses are small compared to the huge population of this nation, and the battle for each seat is fought with blood, sweat, heavy words like ‘dedication’, ‘hard work’, ‘killer instinct’ and of course, pocket-emptying coaching classes. The selected few get famous in their respective localities, glorified in the news, and advertised by every institute.</p>\n<p>The same story of numerous coaching institutes and ‘toppers’ and ‘losers’ continues. A few succeed, the rest spend precious years of their youth to gear up again. And yet, the hard and harsh truth is pretty logical and simple. Even if all the aspirants put in their cent percent effort and perform in the best manner possible with the best possible luck, it is impossible for everyone to qualify. Yet, students toil day and night, panic shared with their parents, and the enormously shattered ones even decide not to live. India ranks among the top few of those unfortunate countries where student suicides stand at a high rate of around 26,000 in three years. This roughly translates to one student dying every hour each day. The recent student suicides in Kota, a prime hub of coaching classes, are a grim reminder of the same.</p>\n<p>The question here is not just about letting the youth breathe, but also to ponder upon what we are running towards? Where do we stop and what are we achieving out of it? The statistics put up indeed a sad picture for India. India leads the group of nations that suffers the worst from everyday stress.</p>\n<p>According to the recently released World Happiness Report by United Nations Sustainable Development Solutions Network, India ranks 136 out of 146 countries ~ which surprisingly makes her stand far behind neighbours like Nepal and Bangladesh. <strong>(</strong>This may not be completely (A)/ attributed to the system of examinations, (B)/ but it cannot be denied that in a (C)/ struggling country like ours, (D)/ education is a major pathways to enter the workforce (E)<strong>)</strong>. The adult population consists of people who have either formal or informal employment, and while formal employment gives better job security and financial stability, entering it has its own set of struggles.</p>\n<p>Indian research has been reported to be weak, due to the lack of patent culture and funding. Academia has become more of a degree-churning field, where rigidities suffocate the interest and enthusiasm of bright students. <strong>(</strong>which includes labs under DRDO, IISc, IITs and six research facilities under ISRO (P)/ filed by a single US firm in India in 2016- 17 was more than (Q)/ This stagnancy is evident as the number of patents (R)/ double of all applications filed by the best laboratories in the country, (S)<strong>)</strong>.</p><br><p>Which of the following options is/are correct, in context to the competitive exams?</p>\n<p><strong>a) </strong>One cracks the exam with the motive to make others feel worthless</p>\n<p><strong>b) </strong>The one who cracks the exam adored by everyone in his/her locality</p>\n<p><strong>c)</strong> To get one seat by cracking the exam one needs to put dedication and hard work</p>", "options": ["<p>Only (a)</p>", "<p>Only (c)</p>", "<p>Both (a) and (b)</p>", "<p>Both (b) and (c)</p>", "<p>All of the above</p>"], "correctIndex": 3, "solution": "<p><strong>Answer: D</strong></p>\n<p>Option (a) - the option twisted the context of the passage, it is said in the passage that the display of toppers' photographs make the others feel worthless, it is not the motive of the toppers. So, the option is eliminated (Come April-May each year, front pages of newspapers display toppers’ photographs of various competitive exams, making every kid unlike them feel worthless)</p>\n<p>Option (b) - it is mentioned in the passage. So, this is the correct option (The selected few get famous in their respective localities, glorified in the news, and advertised by every institute)</p>\n<p>Option (c) - it is mentioned in the passage. So, this is the correct option (The seats for most exams and courses are small compared to the huge population of this nation, and the battle for each seat is fought with blood, sweat, heavy words like ‘dedication’, ‘hard work’, ‘killer instinct’ and of course, pocket-emptying coaching classes)</p>"}, {"question": "<p><strong>Read the passage carefully and answer the following questions</strong></p>\n<p>CN R Rao, former head of the Scientific Advisory Council to the Prime Minister of India had famously remarked in 2011 that, “India has no system of education; it only has a system of examination.”</p>\n<p>In a developing country like ours, education is not just a phase of life. It is the key to a golden future, the hard-earned ladder that a poor person wants his/her children to climb, to get up the social order. The <strong>privileged</strong> amongst us get to go to a school, learn, and envision a world created by geniuses like Tagore, Einstein or Newton, only to realize by the end of it that we can never exist in such utopia or with the sense of liberty that they could probably experience. The existing system slaps us in the face through the doors of numerous entrance exams.</p>\n<p>Come April-May each year, front pages of newspapers display toppers’ photographs of various competitive exams, making every kid unlike them feel worthless. The seats for most exams and courses are small compared to the huge population of this nation, and the battle for each seat is fought with blood, sweat, heavy words like ‘dedication’, ‘hard work’, ‘killer instinct’ and of course, pocket-emptying coaching classes. The selected few get famous in their respective localities, glorified in the news, and advertised by every institute.</p>\n<p>The same story of numerous coaching institutes and ‘toppers’ and ‘losers’ continues. A few succeed, the rest spend precious years of their youth to gear up again. And yet, the hard and harsh truth is pretty logical and simple. Even if all the aspirants put in their cent percent effort and perform in the best manner possible with the best possible luck, it is impossible for everyone to qualify. Yet, students toil day and night, panic shared with their parents, and the enormously shattered ones even decide not to live. India ranks among the top few of those unfortunate countries where student suicides stand at a high rate of around 26,000 in three years. This roughly translates to one student dying every hour each day. The recent student suicides in Kota, a prime hub of coaching classes, are a grim reminder of the same.</p>\n<p>The question here is not just about letting the youth breathe, but also to ponder upon what we are running towards? Where do we stop and what are we achieving out of it? The statistics put up indeed a sad picture for India. India leads the group of nations that suffers the worst from everyday stress.</p>\n<p>According to the recently released World Happiness Report by United Nations Sustainable Development Solutions Network, India ranks 136 out of 146 countries ~ which surprisingly makes her stand far behind neighbours like Nepal and Bangladesh. <strong>(</strong>This may not be completely (A)/ attributed to the system of examinations, (B)/ but it cannot be denied that in a (C)/ struggling country like ours, (D)/ education is a major pathways to enter the workforce (E)<strong>)</strong>. The adult population consists of people who have either formal or informal employment, and while formal employment gives better job security and financial stability, entering it has its own set of struggles.</p>\n<p>Indian research has been reported to be weak, due to the lack of patent culture and funding. Academia has become more of a degree-churning field, where rigidities suffocate the interest and enthusiasm of bright students. <strong>(</strong>which includes labs under DRDO, IISc, IITs and six research facilities under ISRO (P)/ filed by a single US firm in India in 2016- 17 was more than (Q)/ This stagnancy is evident as the number of patents (R)/ double of all applications filed by the best laboratories in the country, (S)<strong>)</strong>.</p><br><p><strong>In context to the passage, what happened to those students who do not succeed in competitive exams?</strong></p>\n<p><strong>a)</strong> Student pursue for better career options in other fields</p>\n<p><strong>b)</strong> Students never give up, they try until they succeed</p>\n<p><strong>c) </strong>Students share their heartbreak with their parents</p>", "options": ["<p>Only (a)</p>", "<p>Only (b)</p>", "<p>Only (c)</p>", "<p>Both (b) and (c)</p>", "<p>All of the abov</p>"], "correctIndex": 2, "solution": "<p><strong>Answer: C</strong></p>\n<p>Options (a) and (b) - both the options are out of context. No such information is mentioned in the passage. So, both the options are eliminated</p>\n<p>Option (c) - it is mentioned in the passage. So, this is the correct option (Yet, students toil day and night, panic shared with their parents, and the enormously shattered ones even decide not to live)</p>"}, {"question": "<p><strong>Read the passage carefully and answer the following questions</strong></p>\n<p>CN R Rao, former head of the Scientific Advisory Council to the Prime Minister of India had famously remarked in 2011 that, “India has no system of education; it only has a system of examination.”</p>\n<p>In a developing country like ours, education is not just a phase of life. It is the key to a golden future, the hard-earned ladder that a poor person wants his/her children to climb, to get up the social order. The <strong>privileged</strong> amongst us get to go to a school, learn, and envision a world created by geniuses like Tagore, Einstein or Newton, only to realize by the end of it that we can never exist in such utopia or with the sense of liberty that they could probably experience. The existing system slaps us in the face through the doors of numerous entrance exams.</p>\n<p>Come April-May each year, front pages of newspapers display toppers’ photographs of various competitive exams, making every kid unlike them feel worthless. The seats for most exams and courses are small compared to the huge population of this nation, and the battle for each seat is fought with blood, sweat, heavy words like ‘dedication’, ‘hard work’, ‘killer instinct’ and of course, pocket-emptying coaching classes. The selected few get famous in their respective localities, glorified in the news, and advertised by every institute.</p>\n<p>The same story of numerous coaching institutes and ‘toppers’ and ‘losers’ continues. A few succeed, the rest spend precious years of their youth to gear up again. And yet, the hard and harsh truth is pretty logical and simple. Even if all the aspirants put in their cent percent effort and perform in the best manner possible with the best possible luck, it is impossible for everyone to qualify. Yet, students toil day and night, panic shared with their parents, and the enormously shattered ones even decide not to live. India ranks among the top few of those unfortunate countries where student suicides stand at a high rate of around 26,000 in three years. This roughly translates to one student dying every hour each day. The recent student suicides in Kota, a prime hub of coaching classes, are a grim reminder of the same.</p>\n<p>The question here is not just about letting the youth breathe, but also to ponder upon what we are running towards? Where do we stop and what are we achieving out of it? The statistics put up indeed a sad picture for India. India leads the group of nations that suffers the worst from everyday stress.</p>\n<p>According to the recently released World Happiness Report by United Nations Sustainable Development Solutions Network, India ranks 136 out of 146 countries ~ which surprisingly makes her stand far behind neighbours like Nepal and Bangladesh. <strong>(</strong>This may not be completely (A)/ attributed to the system of examinations, (B)/ but it cannot be denied that in a (C)/ struggling country like ours, (D)/ education is a major pathways to enter the workforce (E)<strong>)</strong>. The adult population consists of people who have either formal or informal employment, and while formal employment gives better job security and financial stability, entering it has its own set of struggles.</p>\n<p>Indian research has been reported to be weak, due to the lack of patent culture and funding. Academia has become more of a degree-churning field, where rigidities suffocate the interest and enthusiasm of bright students. <strong>(</strong>which includes labs under DRDO, IISc, IITs and six research facilities under ISRO (P)/ filed by a single US firm in India in 2016- 17 was more than (Q)/ This stagnancy is evident as the number of patents (R)/ double of all applications filed by the best laboratories in the country, (S)<strong>)</strong>.</p><br><p><strong>In the passage, a sentence is divided into four parts (P), (Q), (R) and (S), the divided parts of the sentence is jumbled into a random order. You have to rearrange the parts of the sentence so that a meaningful sentence can be formed</strong></p>", "options": ["<p>PQRS</p>", "<p>RQSP</p>", "<p>SPRQ</p>", "<p>RSQP</p>", "<p>QPSR</p>"], "correctIndex": 1, "solution": "<p><strong>Answer: B</strong></p>\n<p>After rearrangement - This stagnancy is evident as the number of patents filed by a single US firm in India in 2016- 17 was more than double of all applications filed by the best laboratories in the country, which includes labs under DRDO, IISc, IITs and six research facilities under ISRO</p>"}, {"question": "<p><strong>Read the passage carefully and answer the following questions</strong></p>\n<p>CN R Rao, former head of the Scientific Advisory Council to the Prime Minister of India had famously remarked in 2011 that, “India has no system of education; it only has a system of examination.”</p>\n<p>In a developing country like ours, education is not just a phase of life. It is the key to a golden future, the hard-earned ladder that a poor person wants his/her children to climb, to get up the social order. The <strong>privileged</strong> amongst us get to go to a school, learn, and envision a world created by geniuses like Tagore, Einstein or Newton, only to realize by the end of it that we can never exist in such utopia or with the sense of liberty that they could probably experience. The existing system slaps us in the face through the doors of numerous entrance exams.</p>\n<p>Come April-May each year, front pages of newspapers display toppers’ photographs of various competitive exams, making every kid unlike them feel worthless. The seats for most exams and courses are small compared to the huge population of this nation, and the battle for each seat is fought with blood, sweat, heavy words like ‘dedication’, ‘hard work’, ‘killer instinct’ and of course, pocket-emptying coaching classes. The selected few get famous in their respective localities, glorified in the news, and advertised by every institute.</p>\n<p>The same story of numerous coaching institutes and ‘toppers’ and ‘losers’ continues. A few succeed, the rest spend precious years of their youth to gear up again. And yet, the hard and harsh truth is pretty logical and simple. Even if all the aspirants put in their cent percent effort and perform in the best manner possible with the best possible luck, it is impossible for everyone to qualify. Yet, students toil day and night, panic shared with their parents, and the enormously shattered ones even decide not to live. India ranks among the top few of those unfortunate countries where student suicides stand at a high rate of around 26,000 in three years. This roughly translates to one student dying every hour each day. The recent student suicides in Kota, a prime hub of coaching classes, are a grim reminder of the same.</p>\n<p>The question here is not just about letting the youth breathe, but also to ponder upon what we are running towards? Where do we stop and what are we achieving out of it? The statistics put up indeed a sad picture for India. India leads the group of nations that suffers the worst from everyday stress.</p>\n<p>According to the recently released World Happiness Report by United Nations Sustainable Development Solutions Network, India ranks 136 out of 146 countries ~ which surprisingly makes her stand far behind neighbours like Nepal and Bangladesh. <strong>(</strong>This may not be completely (A)/ attributed to the system of examinations, (B)/ but it cannot be denied that in a (C)/ struggling country like ours, (D)/ education is a major pathways to enter the workforce (E)<strong>)</strong>. The adult population consists of people who have either formal or informal employment, and while formal employment gives better job security and financial stability, entering it has its own set of struggles.</p>\n<p>Indian research has been reported to be weak, due to the lack of patent culture and funding. Academia has become more of a degree-churning field, where rigidities suffocate the interest and enthusiasm of bright students. <strong>(</strong>which includes labs under DRDO, IISc, IITs and six research facilities under ISRO (P)/ filed by a single US firm in India in 2016- 17 was more than (Q)/ This stagnancy is evident as the number of patents (R)/ double of all applications filed by the best laboratories in the country, (S)<strong>)</strong>.</p><br><p><strong>While formal employment gives better job security and financial stability, entering it has its own set of struggles</strong></p>\n<p><strong>What do you understand by the above highlighted statement?</strong></p>\n<p><strong>a) </strong>Formal employment has lots of benefits but to enter this Sector one has to face great difficulties</p>\n<p><strong>b) </strong>Formal employment has lots of benefits but on the other side one has to face struggle</p>\n<p><strong>c) </strong>Formal employment not only known for its benefits but also known for its struggle to be in it</p>", "options": ["<p>Only (a)</p>", "<p>Only (b)</p>", "<p>Only (c)</p>", "<p>Both (a) and (b)</p>", "<p>Both (b) and (c)</p>"], "correctIndex": 0, "solution": "<p><strong>Answer: A</strong></p>\n<p>The context of the sentence says that formal employment gives great benefits, but in order to get these benefits one has to face difficulties</p>\n<p>Options (b) and (c) - both are options twisted the context of the sentence. The context of the sentence not talking about the difficulties of formal employment, but it talks about the difficulties to enter the formal employment jobs. So, both the options are eliminated</p>\n<p>Option (a) - it supports the context of the sentence. So, this is the correct option</p>"}, {"question": "<p><strong>Read the passage carefully and answer the following questions</strong></p>\n<p>CN R Rao, former head of the Scientific Advisory Council to the Prime Minister of India had famously remarked in 2011 that, “India has no system of education; it only has a system of examination.”</p>\n<p>In a developing country like ours, education is not just a phase of life. It is the key to a golden future, the hard-earned ladder that a poor person wants his/her children to climb, to get up the social order. The <strong>privileged</strong> amongst us get to go to a school, learn, and envision a world created by geniuses like Tagore, Einstein or Newton, only to realize by the end of it that we can never exist in such utopia or with the sense of liberty that they could probably experience. The existing system slaps us in the face through the doors of numerous entrance exams.</p>\n<p>Come April-May each year, front pages of newspapers display toppers’ photographs of various competitive exams, making every kid unlike them feel worthless. The seats for most exams and courses are small compared to the huge population of this nation, and the battle for each seat is fought with blood, sweat, heavy words like ‘dedication’, ‘hard work’, ‘killer instinct’ and of course, pocket-emptying coaching classes. The selected few get famous in their respective localities, glorified in the news, and advertised by every institute.</p>\n<p>The same story of numerous coaching institutes and ‘toppers’ and ‘losers’ continues. A few succeed, the rest spend precious years of their youth to gear up again. And yet, the hard and harsh truth is pretty logical and simple. Even if all the aspirants put in their cent percent effort and perform in the best manner possible with the best possible luck, it is impossible for everyone to qualify. Yet, students toil day and night, panic shared with their parents, and the enormously shattered ones even decide not to live. India ranks among the top few of those unfortunate countries where student suicides stand at a high rate of around 26,000 in three years. This roughly translates to one student dying every hour each day. The recent student suicides in Kota, a prime hub of coaching classes, are a grim reminder of the same.</p>\n<p>The question here is not just about letting the youth breathe, but also to ponder upon what we are running towards? Where do we stop and what are we achieving out of it? The statistics put up indeed a sad picture for India. India leads the group of nations that suffers the worst from everyday stress.</p>\n<p>According to the recently released World Happiness Report by United Nations Sustainable Development Solutions Network, India ranks 136 out of 146 countries ~ which surprisingly makes her stand far behind neighbours like Nepal and Bangladesh. <strong>(</strong>This may not be completely (A)/ attributed to the system of examinations, (B)/ but it cannot be denied that in a (C)/ struggling country like ours, (D)/ education is a major pathways to enter the workforce (E)<strong>)</strong>. The adult population consists of people who have either formal or informal employment, and while formal employment gives better job security and financial stability, entering it has its own set of struggles.</p>\n<p>Indian research has been reported to be weak, due to the lack of patent culture and funding. Academia has become more of a degree-churning field, where rigidities suffocate the interest and enthusiasm of bright students. <strong>(</strong>which includes labs under DRDO, IISc, IITs and six research facilities under ISRO (P)/ filed by a single US firm in India in 2016- 17 was more than (Q)/ This stagnancy is evident as the number of patents (R)/ double of all applications filed by the best laboratories in the country, (S)<strong>)</strong>.</p><br><p><strong>In the passage, a sentence is divided into five parts, only one part of the sentence contains error, you have to mark that part of the sentence which contains error</strong></p>", "options": ["<p>A</p>", "<p>B</p>", "<p>C</p>", "<p>D</p>", "<p>E</p>"], "correctIndex": 4, "solution": "<p><strong>Answer: E</strong></p>\n<p>‘Pathways’ will be replaced by ‘pathway’, the article of the noun is ‘a’, which is singular, so the noun should qualify its article, and the noun should be used in its singular form. So, ‘pathways’ is incorrect here</p>"}, {"question": "<p><strong>Read the passage carefully and answer the following questions</strong></p>\n<p>CN R Rao, former head of the Scientific Advisory Council to the Prime Minister of India had famously remarked in 2011 that, “India has no system of education; it only has a system of examination.”</p>\n<p>In a developing country like ours, education is not just a phase of life. It is the key to a golden future, the hard-earned ladder that a poor person wants his/her children to climb, to get up the social order. The <strong>privileged</strong> amongst us get to go to a school, learn, and envision a world created by geniuses like Tagore, Einstein or Newton, only to realize by the end of it that we can never exist in such utopia or with the sense of liberty that they could probably experience. The existing system slaps us in the face through the doors of numerous entrance exams.</p>\n<p>Come April-May each year, front pages of newspapers display toppers’ photographs of various competitive exams, making every kid unlike them feel worthless. The seats for most exams and courses are small compared to the huge population of this nation, and the battle for each seat is fought with blood, sweat, heavy words like ‘dedication’, ‘hard work’, ‘killer instinct’ and of course, pocket-emptying coaching classes. The selected few get famous in their respective localities, glorified in the news, and advertised by every institute.</p>\n<p>The same story of numerous coaching institutes and ‘toppers’ and ‘losers’ continues. A few succeed, the rest spend precious years of their youth to gear up again. And yet, the hard and harsh truth is pretty logical and simple. Even if all the aspirants put in their cent percent effort and perform in the best manner possible with the best possible luck, it is impossible for everyone to qualify. Yet, students toil day and night, panic shared with their parents, and the enormously shattered ones even decide not to live. India ranks among the top few of those unfortunate countries where student suicides stand at a high rate of around 26,000 in three years. This roughly translates to one student dying every hour each day. The recent student suicides in Kota, a prime hub of coaching classes, are a grim reminder of the same.</p>\n<p>The question here is not just about letting the youth breathe, but also to ponder upon what we are running towards? Where do we stop and what are we achieving out of it? The statistics put up indeed a sad picture for India. India leads the group of nations that suffers the worst from everyday stress.</p>\n<p>According to the recently released World Happiness Report by United Nations Sustainable Development Solutions Network, India ranks 136 out of 146 countries ~ which surprisingly makes her stand far behind neighbours like Nepal and Bangladesh. <strong>(</strong>This may not be completely (A)/ attributed to the system of examinations, (B)/ but it cannot be denied that in a (C)/ struggling country like ours, (D)/ education is a major pathways to enter the workforce (E)<strong>)</strong>. The adult population consists of people who have either formal or informal employment, and while formal employment gives better job security and financial stability, entering it has its own set of struggles.</p>\n<p>Indian research has been reported to be weak, due to the lack of patent culture and funding. Academia has become more of a degree-churning field, where rigidities suffocate the interest and enthusiasm of bright students. <strong>(</strong>which includes labs under DRDO, IISc, IITs and six research facilities under ISRO (P)/ filed by a single US firm in India in 2016- 17 was more than (Q)/ This stagnancy is evident as the number of patents (R)/ double of all applications filed by the best laboratories in the country, (S)<strong>)</strong>.</p><br><p><strong>In context of the passage, which of the following words is/are synonym of ‘privilege’?</strong></p>\n<p><strong>a) </strong>Benefited</p>\n<p><strong>b) </strong>Fortunate</p>\n<p><strong>c) </strong>Classified</p>", "options": ["<p>Only (a)</p>", "<p>Only (b)</p>", "<p>Only (c)</p>", "<p>Both (a) and (b)</p>", "<p>All of the above</p>"], "correctIndex": 3, "solution": "<p><strong>Answer: D</strong></p>\n<p>Meaning of ‘privilege’ – a special right or advantage granted or available only to a particular person or group</p>\n<p>Only options (a) and (b) are its synonym</p>\n<p>‘Benefited’ – advantage grained from something</p>\n<p>‘Fortunate’ – materially well of</p>\n<p>Meaning of ‘classified’ – arranged in classes or categories</p>"}, {"question": "<p><strong>Read the passage carefully and answer the following questions.</strong></p>\n<p>According to the results of a poll conducted by the US Chamber of Commerce Q1 2022 one out of every three small firms cites rising prices as their primary worry. <strong>(</strong>These costs manifest (A)/ themself in the form (B)/ of increased prices (C)/ for products and services, (D)/ reduced cash flow, and decreased profitability (E)<strong>)</strong>. In fact, the earnings of two out of every three company owners have decreased during the last six months. Because of this, now is an excellent opportunity to put into place reforms in order to ward off the repercussions of inflation. Your financial situation is the location to get started with. </p>\n<p>A high rate of inflation makes both the collection of revenues and the management of public funds more difficult. </p>\n<p>Tax policy is one of the possible instruments that governments should consider utilizing to mitigate the negative effects of high inflation on the poor, particularly the negative effects of high energy and food costs. There is a possibility of making a mistake in economic policy while attempting to combat inflation in a timely manner via the use of tax policy. </p>\n<p>When there is substantial inflation, there are three business methods that become considerably more important: rapidly modifying pricing, giving priority to items with large profit margins, and transferring input when relative prices change. </p>\n<p>The significant rise in demand that has resulted from the <strong>substantial</strong> stimulus that has been provided by both fiscal policy and monetary policy is the root cause of inflation. Because of the increased demand, many businesses have the ability to raise their prices far more than they now believe they can.  </p>\n<p>The capacity of many organizations to satisfy the requirements of their clients is now being hindered. The method that is used the most often is not in any way the most effective. There are a lot of businesses that just assign priority depending on when the order was placed, regardless of the profit margin. </p>\n<p>Businesses that provide items or services that are considered necessities, as opposed to those that are just \"nice to have,\" are often in a better position to weather an economic slump. And the better off a firm is, the more difficult it is for its consumers to cease purchasing the items it sells. </p>\n<p><strong>(</strong>is one that can expand its (P)/ additional financial resources (Q)/ in a climate characterized by inflation, (R)/ The ideal kind of company, particularly (S)/ income stream without tying up significant (T)<strong>)</strong></p>\n<p>The cost of borrowing money will rise when the interest rate is greater. Therefore, it may be to your advantage to apply for a small business loan or line of credit right now so that you may lock in a reduced interest rate and pay less overall over the course of the loan's repayment period. If you have any debts that have an adjustable interest rate, now is the time to refinance them into loans with a fixed interest rate. </p><br><p><strong>In context to the passage, how tax policy is related to inflation?</strong></p>\n<p><strong>a) </strong>It is a form of taxation in which the government alters the money supply</p>\n<p><strong>b) </strong>Tax policy is seen as an instrument to lessen the effect of inflation</p>\n<p><strong>c) </strong>Tax system are directly impacted by the inflation due to the fact of taxation</p>", "options": ["<p>Only (a)</p>", "<p>Only (b)</p>", "<p>Only (c)</p>", "<p>Both (a) and (b)</p>", "<p>Both (b) and (c)</p>"], "correctIndex": 1, "solution": "<p><strong>Answer: B</strong></p>\n<p>Options (a) and (c) - both the options are out of context, no such information is mentioned in the passage. So, both the options are eliminated</p>\n<p>Option (b) - it is mentioned in the passage. So, this is the correct option (Tax policy is one of the possible instruments that governments should consider utilizing to mitigate the negative effects of high inflation on the poor, particularly the negative effects of high energy and food costs)</p>"}, {"question": "<p><strong>Read the passage carefully and answer the following questions.</strong></p>\n<p>According to the results of a poll conducted by the US Chamber of Commerce Q1 2022 one out of every three small firms cites rising prices as their primary worry. <strong>(</strong>These costs manifest (A)/ themself in the form (B)/ of increased prices (C)/ for products and services, (D)/ reduced cash flow, and decreased profitability (E)<strong>)</strong>. In fact, the earnings of two out of every three company owners have decreased during the last six months. Because of this, now is an excellent opportunity to put into place reforms in order to ward off the repercussions of inflation. Your financial situation is the location to get started with. </p>\n<p>A high rate of inflation makes both the collection of revenues and the management of public funds more difficult. </p>\n<p>Tax policy is one of the possible instruments that governments should consider utilizing to mitigate the negative effects of high inflation on the poor, particularly the negative effects of high energy and food costs. There is a possibility of making a mistake in economic policy while attempting to combat inflation in a timely manner via the use of tax policy. </p>\n<p>When there is substantial inflation, there are three business methods that become considerably more important: rapidly modifying pricing, giving priority to items with large profit margins, and transferring input when relative prices change. </p>\n<p>The significant rise in demand that has resulted from the <strong>substantial</strong> stimulus that has been provided by both fiscal policy and monetary policy is the root cause of inflation. Because of the increased demand, many businesses have the ability to raise their prices far more than they now believe they can.  </p>\n<p>The capacity of many organizations to satisfy the requirements of their clients is now being hindered. The method that is used the most often is not in any way the most effective. There are a lot of businesses that just assign priority depending on when the order was placed, regardless of the profit margin. </p>\n<p>Businesses that provide items or services that are considered necessities, as opposed to those that are just \"nice to have,\" are often in a better position to weather an economic slump. And the better off a firm is, the more difficult it is for its consumers to cease purchasing the items it sells. </p>\n<p><strong>(</strong>is one that can expand its (P)/ additional financial resources (Q)/ in a climate characterized by inflation, (R)/ The ideal kind of company, particularly (S)/ income stream without tying up significant (T)<strong>)</strong></p>\n<p>The cost of borrowing money will rise when the interest rate is greater. Therefore, it may be to your advantage to apply for a small business loan or line of credit right now so that you may lock in a reduced interest rate and pay less overall over the course of the loan's repayment period. If you have any debts that have an adjustable interest rate, now is the time to refinance them into loans with a fixed interest rate. </p><br><p><strong>What is/are the way (s) discussed in the passage for a business to be considered during inflation?</strong></p>\n<p><strong>a) </strong>Business models should set up price according to the market demand</p>\n<p><strong>b) </strong>Business should prioritize the goods that bring in the greatest revenue</p>\n<p><strong>c) </strong>Companies should varying profit margins throughout their many product lines</p>", "options": ["<p>Only (a)</p>", "<p>Only (b)</p>", "<p>Only (c)</p>", "<p>Both (a) and (b)</p>", "<p>Both (b) and (c)</p>"], "correctIndex": 3, "solution": "<p><strong>Answer: D</strong></p>\n<p>Option (c) - the option is out of context. The information about profit margins throughout the different product lines is not mentioned in the passage. So, the option is eliminated</p>\n<p>Option (a) - it is mentioned in the passage. So, this is the correct option (Because of the increased demand, many businesses have the ability to raise their prices far more than they now believe they can)  </p>\n<p>Option (b) - it is mentioned in the passage. So, this is the correct option (There are a lot of businesses that just assign priority depending on when the order was placed, regardless of the profit margin)</p>"}, {"question": "<p><strong>Read the passage carefully and answer the following questions.</strong></p>\n<p>According to the results of a poll conducted by the US Chamber of Commerce Q1 2022 one out of every three small firms cites rising prices as their primary worry. <strong>(</strong>These costs manifest (A)/ themself in the form (B)/ of increased prices (C)/ for products and services, (D)/ reduced cash flow, and decreased profitability (E)<strong>)</strong>. In fact, the earnings of two out of every three company owners have decreased during the last six months. Because of this, now is an excellent opportunity to put into place reforms in order to ward off the repercussions of inflation. Your financial situation is the location to get started with. </p>\n<p>A high rate of inflation makes both the collection of revenues and the management of public funds more difficult. </p>\n<p>Tax policy is one of the possible instruments that governments should consider utilizing to mitigate the negative effects of high inflation on the poor, particularly the negative effects of high energy and food costs. There is a possibility of making a mistake in economic policy while attempting to combat inflation in a timely manner via the use of tax policy. </p>\n<p>When there is substantial inflation, there are three business methods that become considerably more important: rapidly modifying pricing, giving priority to items with large profit margins, and transferring input when relative prices change. </p>\n<p>The significant rise in demand that has resulted from the <strong>substantial</strong> stimulus that has been provided by both fiscal policy and monetary policy is the root cause of inflation. Because of the increased demand, many businesses have the ability to raise their prices far more than they now believe they can.  </p>\n<p>The capacity of many organizations to satisfy the requirements of their clients is now being hindered. The method that is used the most often is not in any way the most effective. There are a lot of businesses that just assign priority depending on when the order was placed, regardless of the profit margin. </p>\n<p>Businesses that provide items or services that are considered necessities, as opposed to those that are just \"nice to have,\" are often in a better position to weather an economic slump. And the better off a firm is, the more difficult it is for its consumers to cease purchasing the items it sells. </p>\n<p><strong>(</strong>is one that can expand its (P)/ additional financial resources (Q)/ in a climate characterized by inflation, (R)/ The ideal kind of company, particularly (S)/ income stream without tying up significant (T)<strong>)</strong></p>\n<p>The cost of borrowing money will rise when the interest rate is greater. Therefore, it may be to your advantage to apply for a small business loan or line of credit right now so that you may lock in a reduced interest rate and pay less overall over the course of the loan's repayment period. If you have any debts that have an adjustable interest rate, now is the time to refinance them into loans with a fixed interest rate. </p><br><p><strong>In context to the passage, what kind (s) of the product (s) remain (s) successful during the economic slump?</strong></p>\n<p><strong>a) </strong>Products, those are advertised more</p>\n<p><strong>b) </strong>Products, those are just nice to have</p>\n<p><strong>c)</strong> Products, those are considered as necessities </p>", "options": ["<p>Only (a)</p>", "<p>Only (b)</p>", "<p>Only (c)</p>", "<p>Both (a) and (b)</p>", "<p>Both (b) and (c)</p>"], "correctIndex": 2, "solution": "<p><strong>Answer: C</strong></p>\n<p>Option (a) - the option is out of context. Information related to the advertisement of the product is not mentioned in the passage. So, the option is eliminated</p>\n<p>Option (b) - it is said in the passage that products that are just nice to have, are not in a better position during economic slump. So, this cannot be the correct option</p>\n<p>Option (c) - it is mentioned in the passage. So, this is the correct option (Businesses that provide items or services that are considered necessities, as opposed to those that are just \"nice to have,\" are often in a better position to weather an economic slump)</p>"}, {"question": "<p><strong>Read the passage carefully and answer the following questions.</strong></p>\n<p>According to the results of a poll conducted by the US Chamber of Commerce Q1 2022 one out of every three small firms cites rising prices as their primary worry. <strong>(</strong>These costs manifest (A)/ themself in the form (B)/ of increased prices (C)/ for products and services, (D)/ reduced cash flow, and decreased profitability (E)<strong>)</strong>. In fact, the earnings of two out of every three company owners have decreased during the last six months. Because of this, now is an excellent opportunity to put into place reforms in order to ward off the repercussions of inflation. Your financial situation is the location to get started with. </p>\n<p>A high rate of inflation makes both the collection of revenues and the management of public funds more difficult. </p>\n<p>Tax policy is one of the possible instruments that governments should consider utilizing to mitigate the negative effects of high inflation on the poor, particularly the negative effects of high energy and food costs. There is a possibility of making a mistake in economic policy while attempting to combat inflation in a timely manner via the use of tax policy. </p>\n<p>When there is substantial inflation, there are three business methods that become considerably more important: rapidly modifying pricing, giving priority to items with large profit margins, and transferring input when relative prices change. </p>\n<p>The significant rise in demand that has resulted from the <strong>substantial</strong> stimulus that has been provided by both fiscal policy and monetary policy is the root cause of inflation. Because of the increased demand, many businesses have the ability to raise their prices far more than they now believe they can.  </p>\n<p>The capacity of many organizations to satisfy the requirements of their clients is now being hindered. The method that is used the most often is not in any way the most effective. There are a lot of businesses that just assign priority depending on when the order was placed, regardless of the profit margin. </p>\n<p>Businesses that provide items or services that are considered necessities, as opposed to those that are just \"nice to have,\" are often in a better position to weather an economic slump. And the better off a firm is, the more difficult it is for its consumers to cease purchasing the items it sells. </p>\n<p><strong>(</strong>is one that can expand its (P)/ additional financial resources (Q)/ in a climate characterized by inflation, (R)/ The ideal kind of company, particularly (S)/ income stream without tying up significant (T)<strong>)</strong></p>\n<p>The cost of borrowing money will rise when the interest rate is greater. Therefore, it may be to your advantage to apply for a small business loan or line of credit right now so that you may lock in a reduced interest rate and pay less overall over the course of the loan's repayment period. If you have any debts that have an adjustable interest rate, now is the time to refinance them into loans with a fixed interest rate. </p><br><p><strong>In context to the passage, which of the following words is/are synonym of ‘substantial’?</strong></p>\n<p><strong>a) </strong>Basic</p>\n<p><strong>b) </strong>Considerable</p>\n<p><strong>c) </strong>Notable</p>", "options": ["<p>Only (a)</p>", "<p>Only (b)</p>", "<p>Only (c)</p>", "<p>Both (a) and (b)</p>", "<p>Both (b) and (c)</p>"], "correctIndex": 4, "solution": "<p><strong>Answer: E</strong></p>\n<p>Meaning of ‘substantial’ – of considerable importance, size or worth</p>\n<p>Options (b) and (c) are its synonym</p>\n<p>‘Considerable’ – notable in size, amount or extent</p>\n<p>‘Notable’ – worthy of attention or notice; remarkable</p>\n<p>Meaning of ‘basic’ – essential foundation or starting point</p>"}, {"question": "<p><strong>Read the passage carefully and answer the following questions.</strong></p>\n<p>According to the results of a poll conducted by the US Chamber of Commerce Q1 2022 one out of every three small firms cites rising prices as their primary worry. <strong>(</strong>These costs manifest (A)/ themself in the form (B)/ of increased prices (C)/ for products and services, (D)/ reduced cash flow, and decreased profitability (E)<strong>)</strong>. In fact, the earnings of two out of every three company owners have decreased during the last six months. Because of this, now is an excellent opportunity to put into place reforms in order to ward off the repercussions of inflation. Your financial situation is the location to get started with. </p>\n<p>A high rate of inflation makes both the collection of revenues and the management of public funds more difficult. </p>\n<p>Tax policy is one of the possible instruments that governments should consider utilizing to mitigate the negative effects of high inflation on the poor, particularly the negative effects of high energy and food costs. There is a possibility of making a mistake in economic policy while attempting to combat inflation in a timely manner via the use of tax policy. </p>\n<p>When there is substantial inflation, there are three business methods that become considerably more important: rapidly modifying pricing, giving priority to items with large profit margins, and transferring input when relative prices change. </p>\n<p>The significant rise in demand that has resulted from the <strong>substantial</strong> stimulus that has been provided by both fiscal policy and monetary policy is the root cause of inflation. Because of the increased demand, many businesses have the ability to raise their prices far more than they now believe they can.  </p>\n<p>The capacity of many organizations to satisfy the requirements of their clients is now being hindered. The method that is used the most often is not in any way the most effective. There are a lot of businesses that just assign priority depending on when the order was placed, regardless of the profit margin. </p>\n<p>Businesses that provide items or services that are considered necessities, as opposed to those that are just \"nice to have,\" are often in a better position to weather an economic slump. And the better off a firm is, the more difficult it is for its consumers to cease purchasing the items it sells. </p>\n<p><strong>(</strong>is one that can expand its (P)/ additional financial resources (Q)/ in a climate characterized by inflation, (R)/ The ideal kind of company, particularly (S)/ income stream without tying up significant (T)<strong>)</strong></p>\n<p>The cost of borrowing money will rise when the interest rate is greater. Therefore, it may be to your advantage to apply for a small business loan or line of credit right now so that you may lock in a reduced interest rate and pay less overall over the course of the loan's repayment period. If you have any debts that have an adjustable interest rate, now is the time to refinance them into loans with a fixed interest rate. </p><br><p><strong>In the passage, a sentence is given, which is divided into five parts (P), (Q), (R), (S) and (T), the divided parts of the sentence are jumbled into a random order. You have to rearrange the parts of the sentence so that a meaningful sentence can be formed</strong></p>", "options": ["<p>QSPTR</p>", "<p>SPRTQ</p>", "<p>SRPTQ</p>", "<p>TQPRS</p>", "<p>RPSQT</p>"], "correctIndex": 2, "solution": "<p><strong>Answer: C</strong></p>\n<p>After rearrangement - The ideal kind of company, particularly in a climate characterized by inflation, is one that can expand its income stream without tying up significant additional financial resources</p>"}, {"question": "<p><strong>Read the passage carefully and answer the following questions.</strong></p>\n<p>According to the results of a poll conducted by the US Chamber of Commerce Q1 2022 one out of every three small firms cites rising prices as their primary worry. <strong>(</strong>These costs manifest (A)/ themself in the form (B)/ of increased prices (C)/ for products and services, (D)/ reduced cash flow, and decreased profitability (E)<strong>)</strong>. In fact, the earnings of two out of every three company owners have decreased during the last six months. Because of this, now is an excellent opportunity to put into place reforms in order to ward off the repercussions of inflation. Your financial situation is the location to get started with. </p>\n<p>A high rate of inflation makes both the collection of revenues and the management of public funds more difficult. </p>\n<p>Tax policy is one of the possible instruments that governments should consider utilizing to mitigate the negative effects of high inflation on the poor, particularly the negative effects of high energy and food costs. There is a possibility of making a mistake in economic policy while attempting to combat inflation in a timely manner via the use of tax policy. </p>\n<p>When there is substantial inflation, there are three business methods that become considerably more important: rapidly modifying pricing, giving priority to items with large profit margins, and transferring input when relative prices change. </p>\n<p>The significant rise in demand that has resulted from the <strong>substantial</strong> stimulus that has been provided by both fiscal policy and monetary policy is the root cause of inflation. Because of the increased demand, many businesses have the ability to raise their prices far more than they now believe they can.  </p>\n<p>The capacity of many organizations to satisfy the requirements of their clients is now being hindered. The method that is used the most often is not in any way the most effective. There are a lot of businesses that just assign priority depending on when the order was placed, regardless of the profit margin. </p>\n<p>Businesses that provide items or services that are considered necessities, as opposed to those that are just \"nice to have,\" are often in a better position to weather an economic slump. And the better off a firm is, the more difficult it is for its consumers to cease purchasing the items it sells. </p>\n<p><strong>(</strong>is one that can expand its (P)/ additional financial resources (Q)/ in a climate characterized by inflation, (R)/ The ideal kind of company, particularly (S)/ income stream without tying up significant (T)<strong>)</strong></p>\n<p>The cost of borrowing money will rise when the interest rate is greater. Therefore, it may be to your advantage to apply for a small business loan or line of credit right now so that you may lock in a reduced interest rate and pay less overall over the course of the loan's repayment period. If you have any debts that have an adjustable interest rate, now is the time to refinance them into loans with a fixed interest rate. </p><br><p><strong>In the passage, a sentence is given which is divided into five parts (A), (B), (C), (D) and (E). Only one part of the sentence contains error. You have to mark that part of the sentence which contains error</strong></p>", "options": ["<p>A</p>", "<p>B</p>", "<p>C</p>", "<p>D</p>", "<p>E</p>"], "correctIndex": 1, "solution": "<p><strong>Answer: B</strong></p>\n<p>‘Themself’ will be replaced by ‘themselves’, ‘them’ is a plural pronoun, so the reflexive pronoun should be in its plural form, that is – ‘themselves’. So, ‘themself’ is an incorrect word</p>"}, {"question": "<p><strong>Read the passage carefully and answer the following questions.</strong></p>\n<p>According to the results of a poll conducted by the US Chamber of Commerce Q1 2022 one out of every three small firms cites rising prices as their primary worry. <strong>(</strong>These costs manifest (A)/ themself in the form (B)/ of increased prices (C)/ for products and services, (D)/ reduced cash flow, and decreased profitability (E)<strong>)</strong>. In fact, the earnings of two out of every three company owners have decreased during the last six months. Because of this, now is an excellent opportunity to put into place reforms in order to ward off the repercussions of inflation. Your financial situation is the location to get started with. </p>\n<p>A high rate of inflation makes both the collection of revenues and the management of public funds more difficult. </p>\n<p>Tax policy is one of the possible instruments that governments should consider utilizing to mitigate the negative effects of high inflation on the poor, particularly the negative effects of high energy and food costs. There is a possibility of making a mistake in economic policy while attempting to combat inflation in a timely manner via the use of tax policy. </p>\n<p>When there is substantial inflation, there are three business methods that become considerably more important: rapidly modifying pricing, giving priority to items with large profit margins, and transferring input when relative prices change. </p>\n<p>The significant rise in demand that has resulted from the <strong>substantial</strong> stimulus that has been provided by both fiscal policy and monetary policy is the root cause of inflation. Because of the increased demand, many businesses have the ability to raise their prices far more than they now believe they can.  </p>\n<p>The capacity of many organizations to satisfy the requirements of their clients is now being hindered. The method that is used the most often is not in any way the most effective. There are a lot of businesses that just assign priority depending on when the order was placed, regardless of the profit margin. </p>\n<p>Businesses that provide items or services that are considered necessities, as opposed to those that are just \"nice to have,\" are often in a better position to weather an economic slump. And the better off a firm is, the more difficult it is for its consumers to cease purchasing the items it sells. </p>\n<p><strong>(</strong>is one that can expand its (P)/ additional financial resources (Q)/ in a climate characterized by inflation, (R)/ The ideal kind of company, particularly (S)/ income stream without tying up significant (T)<strong>)</strong></p>\n<p>The cost of borrowing money will rise when the interest rate is greater. Therefore, it may be to your advantage to apply for a small business loan or line of credit right now so that you may lock in a reduced interest rate and pay less overall over the course of the loan's repayment period. If you have any debts that have an adjustable interest rate, now is the time to refinance them into loans with a fixed interest rate. </p><br><p><strong>What is/are the way (s) discussed in the passage to secure finances?</strong></p>\n<p><strong>a) </strong>Try not to borrow money from other means, apart from small business loan or line of credit</p>\n<p><strong>b) </strong>Examine the products and services that are proven to be the most lucrative for the company</p>\n<p><strong>c) </strong>Reduce the involvement in offers that generate lesser profit for the company</p>", "options": ["<p>Only (a)</p>", "<p>Only (b)</p>", "<p>Only (c)</p>", "<p>Both (a) and (b)</p>", "<p>Both (b) and (c)</p>"], "correctIndex": 0, "solution": "<p><strong>Answer: A</strong></p>\n<p>Option (b) - the option doesn't serve answer to the question. The question is about the management of finances, the option talks about the examination of products and services. So, the option is eliminated</p>\n<p>Option (c) - the option is out of context. No such information is mentioned in the passage. So, the option is eliminated</p>\n<p>Option (a) - it is the correct option. It is mentioned in the passage (The cost of borrowing money will rise when the interest rate is greater. Therefore, it may be to your advantage to apply for a small business loan or line of credit right now so that you may lock in a reduced interest rate and pay less overall over the course of the loan's repayment period)</p>"}];
+
+// ===== STATE & DOM =====
+let currentIndex = 0;
+const totalQuestions = questions.length;
+const userAnswers = new Array(totalQuestions).fill(null); // selected option index or null
+const questionStates = new Array(totalQuestions).fill("notVisited"); // "notVisited", "notAnswered", "answered", "marked"
+
+// Timer
+const timerLabel = document.getElementById('timer-label');
+let timerInterval = null;
+let remainingSeconds = TEST_DURATION_SECONDS;
+
+// DOM elements
+const instructionHeader = document.getElementById('instruction-header');
+const quizHeader = document.getElementById('quiz-header');
+
+const instructionsContainer = document.getElementById('instructions-container');
+const quizContainer = document.getElementById('quiz-container');
+const solutionsContainer = document.getElementById('solutions-container');
+
+const qProgress = document.getElementById('q-progress');
+const questionText = document.getElementById('question-text');
+const optionsContainer = document.getElementById('options-container');
+
+const clearBtn = document.getElementById('clear-btn');
+const markBtn = document.getElementById('mark-btn');
+const nextBtn = document.getElementById('next-btn');
+const submitBtn = document.getElementById('submit-btn');
+
+const paletteContainer = document.getElementById('palette-container');
+const solutionsList = document.getElementById('solutions-list');
+const solutionsBackBtn = document.getElementById('solutions-back-btn');
+
+const resultOverlay = document.getElementById('result-overlay');
+const metricMarks = document.getElementById('metric-marks');
+const metricCorrect = document.getElementById('metric-correct');
+const metricWrong = document.getElementById('metric-wrong');
+const metricAttempted = document.getElementById('metric-attempted');
+const viewSolutionsBtn = document.getElementById('view-solutions-btn');
+const homeBtn = document.getElementById('home-btn');
+
+const instTotalQuestions = document.getElementById('inst-total-questions');
+const instSideTotal = document.getElementById('inst-side-total');
+const startTestBtn = document.getElementById('start-test-btn');
+
+let questionStartTime = null;
+let questionTimes = new Array(totalQuestions).fill(0);
+
+function formatTime(ms) {
+    const sec = Math.floor(ms / 1000);
+    return sec < 60 ? `${sec}s` : `${Math.floor(sec/60)}m ${sec % 60}s`;
+}
+
+// ===== TIMER FUNCTIONS =====
+function updateTimerLabel() {
+    const h = String(Math.floor(remainingSeconds / 3600)).padStart(2, '0');
+    const m = String(Math.floor((remainingSeconds % 3600) / 60)).padStart(2, '0');
+    const s = String(remainingSeconds % 60).padStart(2, '0');
+    timerLabel.textContent = `Time: ${h}:${m}:${s}`;
+}
+function startTimer() {
+    if (timerInterval) clearInterval(timerInterval);
+
+    updateTimerLabel();
+
+    timerInterval = setInterval(() => {
+        remainingSeconds--;
+
+        if (remainingSeconds <= 0) {
+            remainingSeconds = 0;
+            updateTimerLabel();
+            clearInterval(timerInterval);
+
+            // AUTO SUBMIT
+            if (questionStartTime !== null) {
+                questionTimes[currentIndex] +=
+                    (Date.now() - questionStartTime);
+            }
+            saveAnswerForCurrent();
+            showResultOverlay();
+            return;
+        }
+
+        updateTimerLabel();
+    }, 1000);
+}
+
+// ===== RENDERING =====
+function renderQuestion(index) {
+	if (questionStartTime !== null) {
+    questionTimes[currentIndex] += (Date.now() - questionStartTime);
+	}
+	questionStartTime = Date.now();
+
+    const q = questions[index];
+    qProgress.textContent = `Question ${index + 1} of ${totalQuestions}`;
+    questionText.innerHTML = q.question;
+    optionsContainer.innerHTML = '';
+
+    q.options.forEach((optHtml, optIndex) => {
+        const label = document.createElement('label');
+        label.className = 'option';
+
+        const input = document.createElement('input');
+        input.type = 'radio';
+        input.name = 'option';
+        input.value = optIndex;
+
+        if (userAnswers[index] === optIndex) {
+            input.checked = true;
+        }
+
+        const span = document.createElement('div');
+        span.className = 'option-text';
+        span.innerHTML = optHtml;
+
+        label.appendChild(input);
+        label.appendChild(span);
+
+        label.addEventListener('click', () => {
+            input.checked = true;
+        });
+
+        optionsContainer.appendChild(label);
+    });
+
+    // If first visit, mark as notAnswered for palette
+    if (questionStates[index] === "notVisited") {
+        questionStates[index] = (userAnswers[index] != null) ? "answered" : "notAnswered";
+    }
+
+    updatePalette();
+}
+
+function updatePalette() {
+    paletteContainer.innerHTML = '';
+
+    const drawerContainer =
+        document.getElementById('palette-drawer-container');
+    if (drawerContainer) drawerContainer.innerHTML = '';
+
+    for (let i = 0; i < totalQuestions; i++) {
+
+        function createBtn() {
+            const btn = document.createElement('div');
+            let cls = 'palette-item';
+
+            if (questionStates[i] === 'notVisited') cls += ' state-notVisited';
+            else if (questionStates[i] === 'notAnswered') cls += ' state-notAnswered';
+            else if (questionStates[i] === 'answered') cls += ' state-answered';
+            else if (questionStates[i] === 'marked') cls += ' state-marked';
+
+            if (i === currentIndex) cls += ' current';
+
+            btn.className = cls;
+            btn.textContent = i + 1;
+
+            btn.addEventListener('click', () => {
+                saveAnswerForCurrent();
+                currentIndex = i;
+                renderQuestion(currentIndex);
+                closeDrawer(); // safe on desktop
+            });
+
+            return btn;
+        }
+
+        paletteContainer.appendChild(createBtn());
+        if (drawerContainer) drawerContainer.appendChild(createBtn());
+    }
+}
+
+function getSelectedOptionIndex() {
+    const selected = document.querySelector('input[name="option"]:checked');
+    if (!selected) return null;
+    return parseInt(selected.value, 10);
+}
+
+function saveAnswerForCurrent() {
+    const selIndex = getSelectedOptionIndex();
+    if (selIndex !== null) {
+        userAnswers[currentIndex] = selIndex;
+        questionStates[currentIndex] = "answered";
+    } else {
+        // Only change to notAnswered if not marked
+        if (questionStates[currentIndex] !== "marked") {
+            questionStates[currentIndex] = "notAnswered";
+        }
+    }
+    updatePalette();
+}
+
+// ===== RESULT & SOLUTIONS =====
+function showResultOverlay() {
+    let correct = 0;
+    let attempted = 0;
+
+    const MARKS_PER_Q = 1;
+    const NEGATIVE_MARKS = 0.25;
+    const totalQuestions = questions.length;
+    const maxMarks = totalQuestions * MARKS_PER_Q;
+    let totalMarks = 0;
+
+    questions.forEach((q, i) => {
+        const ans = userAnswers[i];
+        if (ans !== null && ans !== undefined) {
+            attempted++;
+            if (ans === q.correctIndex) {
+                correct++;
+                totalMarks += MARKS_PER_Q;
+            } else {
+                totalMarks -= NEGATIVE_MARKS;
+            }
+        }
+    });
+
+    const wrong = attempted - correct;
+    const avgTime =
+        questionTimes.reduce((a, b) => a + b, 0) / totalQuestions;
+
+    metricMarks.textContent =
+        `${totalMarks.toFixed(2)} / ${maxMarks.toFixed(2)}`;
+    metricCorrect.textContent = correct;
+    metricWrong.textContent = wrong;
+    metricAttempted.textContent = attempted;
+    document.getElementById("metric-avgtime").textContent =
+        formatTime(avgTime);
+
+    resultOverlay.style.display = "flex";
+}
+
+function closeResultOverlay() {
+    resultOverlay.style.display = 'none';
+}
+
+function buildSolutionsView() {
+    solutionsList.innerHTML = '';
+    questions.forEach((q, index) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'solution-item';
+
+        const qDiv = document.createElement('div');
+        qDiv.className = 'solution-question';
+        qDiv.innerHTML = `<strong>Q${index + 1}.</strong> ${q.question}`;
+        wrapper.appendChild(qDiv);
+
+        const optsDiv = document.createElement('div');
+        optsDiv.className = 'solution-options';
+
+        q.options.forEach((optHtml, optIndex) => {
+            const optDiv = document.createElement('div');
+            let cls = 'solution-option';
+            if (optIndex === q.correctIndex) {
+                cls += ' correct';
+            } else if (userAnswers[index] === optIndex) {
+                cls += ' wrong';
+            }
+            optDiv.className = cls;
+
+            const labelSpan = document.createElement('div');
+            labelSpan.className = 'solution-label';
+            labelSpan.textContent = String.fromCharCode(65 + optIndex) + '.';
+
+            const textDiv = document.createElement('div');
+            textDiv.className = 'solution-text';
+            textDiv.innerHTML = optHtml;
+
+            optDiv.appendChild(labelSpan);
+            optDiv.appendChild(textDiv);
+            optsDiv.appendChild(optDiv);
+        });
+
+        wrapper.appendChild(optsDiv);
+
+        const solDiv = document.createElement('div');
+        solDiv.className = 'solution-explanation';
+        const solutionHtml = (q.solution || '')
+			.replace(/\\"/g, '"')      // unescape quotes
+			.replace(/\\n/g, '')       // remove escaped newlines
+			.replace(/\\t/g, '');      // remove escaped tabs
+
+		solDiv.innerHTML = `<strong>Solution:</strong><br>${solutionHtml}`;
+        wrapper.appendChild(solDiv);
+
+        solutionsList.appendChild(wrapper);
+    });
+}
+
+// ===== EVENT HANDLERS =====
+startTestBtn.addEventListener('click', () => {
+    // Hide instruction header + screen
+    instructionHeader.style.display = 'none';
+    instructionsContainer.style.display = 'none';
+
+    // Show quiz header + screen
+    quizHeader.style.display = 'flex';
+    quizContainer.style.display = 'block';
+    solutionsContainer.style.display = 'none';
+
+    currentIndex = 0;
+    renderQuestion(currentIndex);
+    startTimer();
+    questionStartTime = Date.now();
+});
+
+clearBtn.addEventListener('click', () => {
+    // Clear selection & mark as "notAnswered" (red)
+    userAnswers[currentIndex] = null;
+    questionStates[currentIndex] = "notAnswered";
+    renderQuestion(currentIndex);
+});
+
+markBtn.addEventListener('click', () => {
+    // Option 2: DO NOT save answer when marking for review
+    userAnswers[currentIndex] = null;
+    questionStates[currentIndex] = "marked";
+    if (currentIndex < totalQuestions - 1) {
+        currentIndex++;
+        renderQuestion(currentIndex);
+    } else {
+        // stay on last, just refresh colors
+        renderQuestion(currentIndex);
+    }
+});
+
+nextBtn.addEventListener('click', () => {
+    saveAnswerForCurrent();
+    if (currentIndex < totalQuestions - 1) {
+        currentIndex++;
+        renderQuestion(currentIndex);
+    } else {
+        // last question: nothing to move, but answer is saved
+        renderQuestion(currentIndex);
+    }
+});
+
+submitBtn.addEventListener('click', () => {
+	if (questionStartTime !== null) {
+    questionTimes[currentIndex] += (Date.now() - questionStartTime);
+    questionStartTime = null;
+	}
+    saveAnswerForCurrent();
+    clearInterval(timerInterval);
+    showResultOverlay();
+});
+
+viewSolutionsBtn.addEventListener('click', () => {
+    resultOverlay.style.display = 'none';
+    quizContainer.style.display = 'none';
+    solutionsContainer.style.display = 'block';
+    buildSolutionsView();
+});
+
+solutionsBackBtn.addEventListener('click', () => {
+    solutionsContainer.style.display = 'none';
+    quizContainer.style.display = 'none';
+    resultOverlay.style.display = 'flex';
+});
+
+homeBtn.addEventListener('click', () => {
+    resultOverlay.style.display = 'none';
+    solutionsContainer.style.display = 'none';
+    quizContainer.style.display = 'none';       // FIXED
+    instructionsContainer.style.display = 'block'; // FIXED
+
+    instructionHeader.style.display = 'block';
+    quizHeader.style.display = 'none';
+
+    currentIndex = 0;
+    userAnswers.fill(null);
+    questionStates.fill("notVisited");
+
+    window.scrollTo(0, 0);
+});
+
+
+// ===== INIT =====
+instTotalQuestions.textContent = totalQuestions;
+instSideTotal.textContent = totalQuestions;
+
+// ===== HAMBURGER MENU LOGIC =====
+const menuBtn = document.getElementById('menu-btn');
+const drawer = document.getElementById('palette-drawer');
+const drawerOverlay = document.getElementById('drawer-overlay');
+
+function openDrawer() {
+    if (!drawer || !drawerOverlay) return;
+    drawer.classList.add('open');
+    drawerOverlay.classList.add('show');
+    document.body.classList.add('drawer-open');
+}
+
+function closeDrawer() {
+    if (!drawer || !drawerOverlay) return;
+    drawer.classList.remove('open');
+    drawerOverlay.classList.remove('show');
+    document.body.classList.remove('drawer-open');
+}
+
+if (menuBtn) {
+    menuBtn.addEventListener('click', openDrawer);
+}
+
+if (drawerOverlay) {
+    drawerOverlay.addEventListener('click', closeDrawer);
+}
+</script>
+
+</body>
+</html>

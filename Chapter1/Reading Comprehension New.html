@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Beginners Quiz Reading Comprehension New Quiz | MockTest Buddy</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<script src="../home.js"></script>
+
+<style>
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --bg: #f3f4f6;
+    --card-bg: #ffffff;
+    --text: #111827;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --danger: #ef4444;
+    --success: #22c55e;
+    --marked: #7c3aed;
+    --correct-bg: #ecfdf3;
+    --wrong-bg: #fef2f2;
+    --marked-bg: #f3e8ff;
+}
+
+/* Reset-ish */
+* {
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: radial-gradient(circle at top left, #dbeafe, #eff6ff 40%, #f9fafb 80%);
+    color: var(--text);
+}
+
+/* Instruction header (brand only) */
+.brand-header {
+    background: linear-gradient(90deg, #0f172a, #111827);
+    color: #fff;
+    padding: 14px 16px;
+    text-align: center;
+}
+.brand-title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+.brand-sub {
+    font-size: 12px;
+    opacity: 0.8;
+    margin-top: 4px;
+}
+
+/* Test header (only after start) */
+.header-test {
+    display: none;
+    background: linear-gradient(90deg, var(--primary-dark), var(--primary));
+    color: #fff;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.header-left {
+    display: flex;
+    flex-direction: column;
+}
+.header-title {
+    font-size: 20px;
+    font-weight: 600;
+}
+.header-subtitle {
+    font-size: 12px;
+    opacity: 0.9;
+}
+.header-right {
+    font-size: 12px;
+    text-align: right;
+}
+.badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.12);
+    font-size: 11px;
+}
+
+/* Layout */
+.main {
+    max-width: 1000px;
+    margin: 16px auto 28px;
+    padding: 0 12px;
+}
+.card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
+    padding: 18px 16px 16px;
+}
+
+/* Instructions */
+#instructions-container {
+    display: block;
+}
+.instructions-layout {
+    display: flex;
+    gap: 16px;
+}
+.instructions-main {
+    flex: 1;
+}
+.instructions-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+.instructions-list {
+    font-size: 14px;
+    margin-left: 16px;
+    margin-bottom: 12px;
+}
+.instructions-list li {
+    margin-bottom: 4px;
+}
+.instructions-summary {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin: 10px 0 16px;
+}
+.instructions-summary-item {
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #f9fafb;
+    padding: 8px;
+    font-size: 13px;
+}
+.instructions-summary-label {
+    font-size: 11px;
+    color: var(--muted);
+}
+.instructions-summary-value {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* Instruction candidate box (right side) */
+.instructions-side {
+    width: 230px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #f1f5f9;
+    padding: 10px;
+    font-size: 13px;
+}
+.instructions-side-title {
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+.instructions-side-row {
+    margin-bottom: 4px;
+}
+.instructions-side-label {
+    color: var(--muted);
+    font-size: 12px;
+}
+.instructions-side-value {
+    font-weight: 500;
+}
+
+/* Test layout */
+#quiz-container {
+    display: none;
+}
+.header-test {
+    display: none;
+}
+.test-layout {
+    display: flex;
+    gap: 16px;
+}
+.test-main {
+    flex: 1;
+}
+.test-side {
+    width: 300px;
+}
+
+/* Question header */
+.question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 15px;
+    color: var(--muted);
+}
+.q-progress {
+    font-weight: 500;
+}
+.marks-info {
+    font-size: 12px;
+}
+.marks-info span {
+    margin-left: 8px;
+}
+.marks-pos {
+    color: var(--success);
+}
+.marks-neg {
+    color: var(--danger);
+}
+
+/* Question body */
+.question-body {
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    padding: 12px 10px;
+    background: #f9fafb;
+    margin-bottom: 12px;
+    font-size: 17px;
+	line-height: 1.5;
+}
+.question-body p {
+    margin: 4px 0;
+}
+
+/* Options */
+.options-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.option {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #fff;
+    cursor: pointer;
+    transition: background 0.12s ease, border-color 0.12s ease, transform 0.08s ease;
+}
+.option:hover {
+    background: #eff6ff;
+    border-color: var(--primary);
+    transform: translateY(-1px);
+}
+.option input {
+    margin-top: 3px;
+}
+.option-text {
+    font-size: 17px;
+	line-height: 1.4;
+}
+
+/* Nav buttons */
+.nav-bar {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.nav-left,
+.nav-right {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.btn {
+    border: none;
+    border-radius: 999px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.12s ease, transform 0.08s ease, box-shadow 0.12s ease;
+}
+.btn:active {
+    transform: translateY(1px);
+}
+.btn-primary {
+    background: var(--primary);
+    color: #fff;
+    box-shadow: 0 8px 16px rgba(37, 99, 235, 0.3);
+}
+.btn-primary:hover {
+    background: var(--primary-dark);
+}
+.btn-secondary {
+    background: #e5e7eb;
+    color: #111827;
+}
+.btn-secondary:hover {
+    background: #d1d5db;
+}
+.btn-danger {
+    background: var(--danger);
+    color: #fff;
+}
+.btn-danger:hover {
+    background: #b91c1c;
+}
+
+/* Side panel (palette only during test) */
+.sidebar-card {
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #f9fafb;
+    padding: 10px;
+    font-size: 12px;
+}
+
+/* Palette */
+.palette {
+    margin-top: 0;
+}
+.palette-title {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+.palette-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.palette-item {
+    min-width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 2px solid #d1d5db;
+    font-size: 18px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.15s;
+}
+.palette-item:hover {
+    transform: scale(1.08);
+    border-color: #3b82f6;
+}
+.palette-item.current {
+    outline: 2px solid var(--primary);
+}
+
+/* Palette colors per your request */
+.palette-item.state-notVisited {
+    background: #9ca3af;  /* darker grey */
+    color: #ffffff;
+}
+.palette-item.state-notAnswered {
+    background: #ef4444;  /* red */
+    color: #ffffff;
+}
+.palette-item.state-answered {
+    background: #22c55e;  /* green */
+    color: #ffffff;
+}
+.palette-item.state-marked {
+    background: #8b5cf6;  /* strong purple */
+    color: #ffffff;
+}
+
+/* Palette legend */
+.palette-legend {
+    margin-top: 8px;
+    font-size: 11px;
+    color: var(--muted);
+}
+.palette-legend-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 2px;
+}
+.legend-box {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+}
+.legend-notVisited { background: #e5e7eb; }
+.legend-notAnswered { background: #fee2e2; border-color:#fecaca; }
+.legend-answered { background: #dcfce7; border-color:#bbf7d0; }
+.legend-marked { background: #e9d5ff; border-color:#c4b5fd; }
+
+/* Solutions page */
+#solutions-container {
+    display: none;
+}
+.solutions-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+.solutions-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 10px;
+}
+.solution-item {
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+    margin-top: 10px;
+}
+.solution-item:first-child {
+    border-top: none;
+    padding-top: 0;
+    margin-top: 0;
+}
+.solution-question {
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+.solution-options {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+.solution-option {
+    display: flex;
+    gap: 6px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #fff;
+}
+.solution-option.correct {
+    background: var(--correct-bg);
+    border-color: var(--success);
+}
+.solution-option.wrong {
+    background: var(--wrong-bg);
+    border-color: var(--danger);
+}
+.solution-label {
+    font-size: 13px;
+    font-weight: 600;
+}
+.solution-text {
+    flex: 1;
+    font-size: 13px;
+}
+.solution-explanation {
+    font-size: 13px;
+    background: #eef2ff;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+/* Overlay */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15,23,42,0.55);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+}
+.overlay-content {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 16px 16px 14px;
+    width: 94%;
+    max-width: 430px;
+    box-shadow: 0 26px 50px rgba(15,23,42,0.4);
+}
+.overlay-header h2 {
+    margin: 0;
+    font-size: 20px;
+}
+.overlay-body {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 8px 0 10px;
+}
+.overlay-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-bottom: 10px;
+    font-size: 13px;
+}
+.metric-card {
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    padding: 8px;
+    background: #f9fafb;
+}
+.metric-label {
+    font-size: 11px;
+    color: var(--muted);
+}
+.metric-value {
+    font-size: 15px;
+    font-weight: 600;
+    margin-top: 2px;
+}
+.overlay-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+/* Utils */
+.hidden {
+    display: none !important;
+}
+
+/* Responsive: hide side panels & palette on phones */
+@media (max-width: 768px) {
+    .instructions-layout,
+    .test-layout {
+        flex-direction: column;
+    }
+    .instructions-side,
+    .test-side {
+        display: none;
+    }
+    .card {
+        padding: 16px 12px 14px;
+    }
+}
+
+/* >>> ADD NEW CODE BELOW <<< */
+
+/* Expand quiz layout width */
+.main {
+    max-width: 1400px !important;
+}
+
+/* Expand quiz card width */
+#quiz-container.card {
+    width: 100% !important;
+    padding: 20px !important;
+}
+
+/* Reduce left+right margin */
+.main {
+    margin: 10px auto !important;
+    padding: 0px 5px !important;
+}
+
+/* Ensure question+palette stay visible side by side */
+.test-layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 16px;
+}
+
+/* Reduce question padding */
+.question-body {
+    padding: 12px !important;
+}
+
+/* Keep buttons in one row */
+.nav-bar {
+    flex-wrap: nowrap !important;
+    justify-content: space-between !important;
+}
+
+.nav-left button,
+.nav-right button {
+    white-space: nowrap !important;
+}
+
+/* Medium screen adjustments */
+@media (max-width: 1100px) {
+    .test-layout {
+        display: block !important;
+    }
+    .test-side {
+        display: none !important;
+    }
+    #quiz-container.card {
+        padding: 10px !important;
+    }
+    .question-body {
+        font-size: 18px !important;
+    }
+    .btn {
+        font-size: 16px !important;
+    }
+}
+
+/* Small screen adjustments */
+@media (max-width: 600px) {
+    body {
+        font-size: 16px !important;
+    }
+    .btn {
+        padding: 10px 16px !important;
+        font-size: 15px !important;
+    }
+    .option-text {
+        font-size: 18px !important;
+    }
+}
+/* Buttons shown on desktop */
+.nav-right .btn-submit {
+    display: inline-flex;
+}
+
+/* Buttons shown on mobile */
+@media (max-width: 600px) {
+    .btn-submit {
+        display: none !important;
+    }
+
+    .btn-mark {
+        display: inline-flex !important;
+    }
+
+    .btn-clear {
+        display: inline-flex !important;
+    }
+
+    .btn-save {
+        display: inline-flex !important;
+    }
+
+    /* Change button labels visually */
+    .btn-mark::after {
+        content: "Mark";
+    }
+    .btn-clear::after {
+        content: "Clear";
+    }
+    .btn-save::after {
+        content: "Save & Next";
+    }
+
+    /* hide original text inside buttons */
+    .btn-mark span,
+    .btn-clear span,
+    .btn-save span {
+        display: none;
+    }
+
+    /* Make buttons larger and easier to tap */
+    .nav-left button,
+    .nav-right button {
+        padding: 14px 20px;
+        font-size: 18px;
+        border-radius: 8px;
+    }
+}
+
+@media (max-width: 600px) {
+    .header-test {
+        flex-wrap: wrap;
+        padding: 8px 10px;
+        gap: 6px;
+    }
+
+    .header-left {
+        flex: 1 1 100%;
+    }
+
+    .header-title {
+        font-size: 14px;
+        line-height: 1.2;
+    }
+
+    .header-subtitle {
+        font-size: 11px;
+    }
+
+    .header-right {
+        flex: 1 1 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 11px;
+    }
+
+    .badge {
+        font-size: 10px;
+        padding: 2px 6px;
+    }
+}
+/* ===== HAMBURGER MENU ===== */
+.menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .menu-btn {
+        display: block;
+    }
+}
+
+/* ===== PALETTE DRAWER ===== */
+.palette-drawer {
+    position: fixed;
+    top: 0;
+    left: -320px;
+    width: 300px;
+    height: 100dvh; /* mobile safe height */
+    background: #ffffff;
+    box-shadow: 2px 0 20px rgba(0,0,0,0.2);
+    z-index: 100;
+    padding: 12px;
+    transition: left 0.3s ease;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.palette-drawer.open {
+    left: 0;
+}
+
+.drawer-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    display: none;
+    z-index: 90;
+}
+
+.drawer-overlay.show {
+    display: block;
+}
+#palette-drawer-container {
+    flex: 0 0 auto;          
+    max-height: calc(100dvh - 170px); 
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+/* Improve scroll on mobile */
+#palette-drawer-container::-webkit-scrollbar {
+    width: 6px;
+}
+#palette-drawer-container::-webkit-scrollbar-thumb {
+    background: #c7d2fe;
+    border-radius: 6px;
+}
+/* Keep legend always visible */
+.palette-drawer .palette-legend {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid #e5e7eb;
+    flex-shrink: 0;
+}
+
+body.drawer-open {
+    overflow: hidden;
+}
+</style>
+</head>
+<body>
+
+<div id="drawer-overlay" class="drawer-overlay"></div>
+
+<div id="palette-drawer" class="palette-drawer">
+    <h3 style="margin:6px 0 10px;font-size:14px;">Question Palette</h3>
+
+    <div id="palette-drawer-container" class="palette-grid"></div>
+
+    <!-- LEGEND FOR MOBILE -->
+    <div class="palette-legend">
+        <div class="palette-legend-row">
+            <span class="legend-box legend-notVisited"></span> Not visited
+        </div>
+        <div class="palette-legend-row">
+            <span class="legend-box legend-notAnswered"></span> Not answered
+        </div>
+        <div class="palette-legend-row">
+            <span class="legend-box legend-answered"></span> Answered
+        </div>
+        <div class="palette-legend-row">
+            <span class="legend-box legend-marked"></span> Marked for review
+        </div>
+    </div>
+</div>
+
+<!-- INSTRUCTION HEADER (BRAND ONLY) -->
+<div id="instruction-header" class="brand-header">
+    <div class="brand-title">MockTest Buddy</div>
+    <div class="brand-sub">by Team LuciferBanker</div>
+</div>
+
+<!-- TEST HEADER (ONLY AFTER START) -->
+<div id="quiz-header" class="header-test">
+    <button id="menu-btn" class="menu-btn">☰</button>
+    <div class="header-left">
+        <span class="header-title">Beginners Quiz Reading Comprehension New</span>
+        <span class="header-subtitle">Single-correct MCQ • One question per screen</span>
+    </div>
+    <div class="header-right">
+        <span class="badge">Quiz Mode</span><br />
+        <span style="font-size: 11px;">Marks: +1 / −0.25</span><br />
+        <span id="timer-label" style="font-size: 11px;">Time: 00:00:00</span>
+    </div>
+</div>
+
+<div class="main">
+
+    <!-- INSTRUCTIONS SCREEN -->
+    <div class="card" id="instructions-container">
+        <div class="instructions-layout">
+            <div class="instructions-main">
+                <div class="instructions-title">Instructions</div>
+                <p style="font-size:14px;margin-bottom:6px;">
+                    Read the instructions carefully before starting. Once started, the timer will not stop.
+                </p>
+
+                <div class="instructions-summary">
+                    <div class="instructions-summary-item">
+                        <div class="instructions-summary-label">Total Questions</div>
+                        <div class="instructions-summary-value" id="inst-total-questions">30</div>
+                    </div>
+                    <div class="instructions-summary-item">
+                        <div class="instructions-summary-label">Marks / Q</div>
+                        <div class="instructions-summary-value">+1</div>
+                    </div>
+                    <div class="instructions-summary-item">
+                        <div class="instructions-summary-label">Negative</div>
+                        <div class="instructions-summary-value">−0.25</div>
+                    </div>
+                </div>
+
+                <ul class="instructions-list">
+                    <li>Each question has a single correct answer.</li>
+                    <li>Use the palette on the right to move between questions or sections.</li>
+                    <li>Use <strong>Mark for Review &amp; Next</strong> to mark questions you want to review later.</li>
+                    <li>You can submit the test anytime using the <strong>Submit</strong> button.</li>
+                </ul>
+
+                <button class="btn btn-primary" id="start-test-btn">Start Test</button>
+            </div>
+
+            <div class="instructions-side">
+                <div class="instructions-side-title">Details</div>
+                <div class="instructions-side-row">
+                    <div class="instructions-side-label">Canditate</div>
+                    <div class="instructions-side-value">Guest User</div>
+                </div>
+                <div class="instructions-side-row">
+                    <div class="instructions-side-label">Section</div>
+                    <div class="instructions-side-value" id="inst-section-name">Beginners Quiz Reading Comprehension New</div>
+                </div>
+                <div class="instructions-side-row">
+                    <div class="instructions-side-label">Questions</div>
+                    <div class="instructions-side-value" id="inst-side-total">30</div>
+                </div>
+                <div class="instructions-side-row">
+                    <div class="instructions-side-label">Marks</div>
+                    <div class="instructions-side-value">+1 / −0.25</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- QUIZ SCREEN -->
+    <div class="card" id="quiz-container">
+        <div class="test-layout">
+            <div class="test-main">
+                <div class="question-header">
+                    <div class="q-progress" id="q-progress">Question 1 of 30</div>
+                    <div class="marks-info">
+                        <span class="marks-pos">+1 mark</span>
+                        <span class="marks-neg">−0.25 negative</span>
+                    </div>
+                </div>
+                <div class="question-body" id="question-text"></div>
+                <div class="options-group" id="options-container"></div>
+
+                <div class="nav-bar">
+					<div class="nav-left">
+						<button class="btn btn-secondary" id="clear-btn">
+							<svg width="18" height="18" viewBox="0 0 24 24" class="btn-icon"><path d="M6 19L19 6" stroke="currentColor" stroke-width="2"/><path d="M6 6L19 19" stroke="currentColor" stroke-width="2"/></svg>
+							<span class="btn-text">Clear Response</span>
+						</button>
+						<button class="btn btn-secondary" id="mark-btn">
+							<svg width="18" height="18" viewBox="0 0 24 24" class="btn-icon"><path d="M6 3h12v18l-6-4-6 4V3z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+							<span class="btn-text">Mark for Review & Next</span>
+						</button>
+					</div>
+					<div class="nav-right">
+						<button class="btn btn-primary" id="next-btn">
+							<svg width="18" height="18" viewBox="0 0 24 24" class="btn-icon"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+							<span class="btn-text">Save & Next</span>
+						</button>
+						<button class="btn btn-danger" id="submit-btn">
+							<svg width="18" height="18" viewBox="0 0 24 24" class="btn-icon"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+							<span class="btn-text">Submit</span>
+						</button>
+					</div>
+				</div>
+
+            </div>
+
+            <aside class="test-side">
+                <div class="sidebar-card palette">
+                    <div class="palette-title">Question Palette</div>
+                    <div class="palette-grid" id="palette-container"></div>
+                    <div class="palette-legend">
+                        <div class="palette-legend-row">
+                            <span class="legend-box legend-notVisited"></span> Not visited
+                        </div>
+                        <div class="palette-legend-row">
+                            <span class="legend-box legend-notAnswered"></span> Not answered
+                        </div>
+                        <div class="palette-legend-row">
+                            <span class="legend-box legend-answered"></span> Answered
+                        </div>
+                        <div class="palette-legend-row">
+                            <span class="legend-box legend-marked"></span> Marked for review
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- SOLUTIONS SCREEN -->
+    <div class="card" id="solutions-container">
+        <div class="solutions-title">Solutions – Beginners Quiz Reading Comprehension New</div>
+        <div class="solutions-sub">
+            Correct options are highlighted in <span style="color:var(--success);font-weight:600;">green</span>.
+            Your wrong selections (if any) are highlighted in <span style="color:var(--danger);font-weight:600;">red</span>.
+        </div>
+        <div id="solutions-list"></div>
+        <div style="margin-top:12px; display:flex; justify-content:flex-end; gap:8px;">
+            <button class="btn btn-secondary" id="solutions-back-btn">&larr; Back to Result</button>
+        </div>
+    </div>
+</div>
+
+<!-- RESULT OVERLAY -->
+<div class="overlay" id="result-overlay">
+    <div class="overlay-content">
+        <div class="overlay-header">
+            <h2>Quiz Summary</h2>
+        </div>
+        <div class="overlay-body">
+            Here is your performance analytics for this test.
+        </div>
+        <div class="overlay-metrics">
+            <div class="metric-card">
+                <div class="metric-label">Total Marks</div>
+                <div class="metric-value" id="metric-marks">0</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Correct Answers</div>
+                <div class="metric-value" id="metric-correct">0</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Wrong Answers</div>
+                <div class="metric-value" id="metric-wrong">0</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Questions Attempted</div>
+                <div class="metric-value" id="metric-attempted">0</div>
+            </div>
+			<div class="metric-card">
+				<div class="metric-label">Avg Time / Question</div>
+				<div class="metric-value" id="metric-avgtime">0</div>
+			</div>
+        </div>
+        <div class="overlay-footer">
+            <button class="btn btn-secondary" id="home-btn">Home</button>
+            <button class="btn btn-primary" id="view-solutions-btn">View Solutions</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("home-btn").onclick = function () {
+  window.location.href = "../index.html";
+};
+const TEST_DURATION_SECONDS = 1200;
+
+const questions = [{"question": "<p><strong>Read the given passage and answer the questions that follow.</strong></p>\n<p>General BipinRawat, his wife and 11 other armed personnel were killed after the IAF chopper they were travelling in crashed near Coonoor, in the hilly Nilgiri district in Tamil Nadu, on Wednesday, the 8<sup>th</sup> of December 2021. General Rawat was India’s first Chief of Defence Staff.</p>\n<p>The security around the residence of the General has been strengthened as several important dignitaries came to offer their condolences to the <strong>euphoric</strong> family. The couple is survived by their two daughters – Kritika and Tarini. Defence Minister Rajnath Singh, Indian Army chief M.M. Naravane and Navy chief Admiral R. Hari Kumar met the family of the General. The family has been serving in the Indian Army for four generations. MadhulikaRawat, the General’s wife, had been the President of the Army Wives’ Welfare Association. This organisation is one of the largest NGOs working towards ensuring the welfare of the wives, children, and dependents of Army personnel.</p>\n<p>This crash is not a one-off incident. Every year, tragic incidents like these happen where soldiers lose their lives. At times it is due to an aging fleet or due to technical glitches. In the last few years, there have been 5-10 incidents of transport aircraft crash every year. The Government had stated that every aircraft accident in the IAF is to be investigated by the Court of Inquiry to ascertain the cause of the accident. The Indian Air Force has ordered the Court of Inquiry to look into this case also.</p>\n<p>The lone survivor of the crash that occurred on Wednesday, Group Captain Varun Singh, is battling for life with 80-85 % burn injuries. He was the Directing Staff at the Defence Services Staff College at Wellington in Tami Nadu. The Captain has also been the recipient of the Shaurya Chakra gallantry award. He had recently been promoted from Wing Commander to Group Captain and recently joined the college at Wellington.</p>\n<p>From the group of people who had first reached the crash site at Kattari Park in Coonoor, one villager said that General BipinRawat was alive when they had arrived. He had even asked for water from them. Two more people were found to be alive by them, and they took them to the Wellington Army Hospital. They also informed that they did not know who the General was when they rescued him, but later identified him when the pictures of the late officer came out.</p><br><p><strong>In which state did the crash take place?</strong></p>", "options": ["<p>Tamil Nadu</p>", "<p>Uttar Pradesh</p>", "<p>West Bengal</p>", "<p>Karnataka</p>", "<p>Kerala</p>"], "correctIndex": 0, "solution": "<p><strong>Answer: A</strong></p>\n<p>It is clearly stated in the first paragraph that the crash took place in Coonoor Tamil Nadu. Therefore, the correct answer is option A.</p>"}, {"question": "<p><strong>Read the given passage and answer the questions that follow.</strong></p>\n<p>General BipinRawat, his wife and 11 other armed personnel were killed after the IAF chopper they were travelling in crashed near Coonoor, in the hilly Nilgiri district in Tamil Nadu, on Wednesday, the 8<sup>th</sup> of December 2021. General Rawat was India’s first Chief of Defence Staff.</p>\n<p>The security around the residence of the General has been strengthened as several important dignitaries came to offer their condolences to the <strong>euphoric</strong> family. The couple is survived by their two daughters – Kritika and Tarini. Defence Minister Rajnath Singh, Indian Army chief M.M. Naravane and Navy chief Admiral R. Hari Kumar met the family of the General. The family has been serving in the Indian Army for four generations. MadhulikaRawat, the General’s wife, had been the President of the Army Wives’ Welfare Association. This organisation is one of the largest NGOs working towards ensuring the welfare of the wives, children, and dependents of Army personnel.</p>\n<p>This crash is not a one-off incident. Every year, tragic incidents like these happen where soldiers lose their lives. At times it is due to an aging fleet or due to technical glitches. In the last few years, there have been 5-10 incidents of transport aircraft crash every year. The Government had stated that every aircraft accident in the IAF is to be investigated by the Court of Inquiry to ascertain the cause of the accident. The Indian Air Force has ordered the Court of Inquiry to look into this case also.</p>\n<p>The lone survivor of the crash that occurred on Wednesday, Group Captain Varun Singh, is battling for life with 80-85 % burn injuries. He was the Directing Staff at the Defence Services Staff College at Wellington in Tami Nadu. The Captain has also been the recipient of the Shaurya Chakra gallantry award. He had recently been promoted from Wing Commander to Group Captain and recently joined the college at Wellington.</p>\n<p>From the group of people who had first reached the crash site at Kattari Park in Coonoor, one villager said that General BipinRawat was alive when they had arrived. He had even asked for water from them. Two more people were found to be alive by them, and they took them to the Wellington Army Hospital. They also informed that they did not know who the General was when they rescued him, but later identified him when the pictures of the late officer came out.</p><br><p><strong>What was the designation of the officer who survived the crash?</strong></p>", "options": ["<p>Lieutenant</p>", "<p>Marshall</p>", "<p>Major</p>", "<p>Captain</p>", "<p>Group Captain</p>"], "correctIndex": 4, "solution": "<p><strong>Answer: E</strong></p>\n<p>It is written unambiguously in the first line of the second last paragraph that the lone survivor of the crash Varun Singh holds the designation of Group Captain. Thus, the correct option for this question is E.</p>"}, {"question": "<p><strong>Read the given passage and answer the questions that follow.</strong></p>\n<p>General BipinRawat, his wife and 11 other armed personnel were killed after the IAF chopper they were travelling in crashed near Coonoor, in the hilly Nilgiri district in Tamil Nadu, on Wednesday, the 8<sup>th</sup> of December 2021. General Rawat was India’s first Chief of Defence Staff.</p>\n<p>The security around the residence of the General has been strengthened as several important dignitaries came to offer their condolences to the <strong>euphoric</strong> family. The couple is survived by their two daughters – Kritika and Tarini. Defence Minister Rajnath Singh, Indian Army chief M.M. Naravane and Navy chief Admiral R. Hari Kumar met the family of the General. The family has been serving in the Indian Army for four generations. MadhulikaRawat, the General’s wife, had been the President of the Army Wives’ Welfare Association. This organisation is one of the largest NGOs working towards ensuring the welfare of the wives, children, and dependents of Army personnel.</p>\n<p>This crash is not a one-off incident. Every year, tragic incidents like these happen where soldiers lose their lives. At times it is due to an aging fleet or due to technical glitches. In the last few years, there have been 5-10 incidents of transport aircraft crash every year. The Government had stated that every aircraft accident in the IAF is to be investigated by the Court of Inquiry to ascertain the cause of the accident. The Indian Air Force has ordered the Court of Inquiry to look into this case also.</p>\n<p>The lone survivor of the crash that occurred on Wednesday, Group Captain Varun Singh, is battling for life with 80-85 % burn injuries. He was the Directing Staff at the Defence Services Staff College at Wellington in Tami Nadu. The Captain has also been the recipient of the Shaurya Chakra gallantry award. He had recently been promoted from Wing Commander to Group Captain and recently joined the college at Wellington.</p>\n<p>From the group of people who had first reached the crash site at Kattari Park in Coonoor, one villager said that General BipinRawat was alive when they had arrived. He had even asked for water from them. Two more people were found to be alive by them, and they took them to the Wellington Army Hospital. They also informed that they did not know who the General was when they rescued him, but later identified him when the pictures of the late officer came out.</p><br><p><strong>What is the name of the park where the crash took place?</strong></p>", "options": ["<p>Guindy National Park</p>", "<p>Central Park</p>", "<p>Beauty Park</p>", "<p>Kattari Park</p>", "<p>Anamalai Tiger Reserve</p>"], "correctIndex": 3, "solution": "<p><strong>Answer: D</strong></p>\n<p>It is clearly written in the first line of the last paragraph that the crash site was at Kattari Park. Thus, the correct choice for this question is D.</p>"}, {"question": "<p><strong>Read the given passage and answer the questions that follow.</strong></p>\n<p>General BipinRawat, his wife and 11 other armed personnel were killed after the IAF chopper they were travelling in crashed near Coonoor, in the hilly Nilgiri district in Tamil Nadu, on Wednesday, the 8<sup>th</sup> of December 2021. General Rawat was India’s first Chief of Defence Staff.</p>\n<p>The security around the residence of the General has been strengthened as several important dignitaries came to offer their condolences to the <strong>euphoric</strong> family. The couple is survived by their two daughters – Kritika and Tarini. Defence Minister Rajnath Singh, Indian Army chief M.M. Naravane and Navy chief Admiral R. Hari Kumar met the family of the General. The family has been serving in the Indian Army for four generations. MadhulikaRawat, the General’s wife, had been the President of the Army Wives’ Welfare Association. This organisation is one of the largest NGOs working towards ensuring the welfare of the wives, children, and dependents of Army personnel.</p>\n<p>This crash is not a one-off incident. Every year, tragic incidents like these happen where soldiers lose their lives. At times it is due to an aging fleet or due to technical glitches. In the last few years, there have been 5-10 incidents of transport aircraft crash every year. The Government had stated that every aircraft accident in the IAF is to be investigated by the Court of Inquiry to ascertain the cause of the accident. The Indian Air Force has ordered the Court of Inquiry to look into this case also.</p>\n<p>The lone survivor of the crash that occurred on Wednesday, Group Captain Varun Singh, is battling for life with 80-85 % burn injuries. He was the Directing Staff at the Defence Services Staff College at Wellington in Tami Nadu. The Captain has also been the recipient of the Shaurya Chakra gallantry award. He had recently been promoted from Wing Commander to Group Captain and recently joined the college at Wellington.</p>\n<p>From the group of people who had first reached the crash site at Kattari Park in Coonoor, one villager said that General BipinRawat was alive when they had arrived. He had even asked for water from them. Two more people were found to be alive by them, and they took them to the Wellington Army Hospital. They also informed that they did not know who the General was when they rescued him, but later identified him when the pictures of the late officer came out.</p><br><p><strong>How many armed personnel died in the crash other than General BipinRawat</strong></p>", "options": ["<p>23</p>", "<p>11</p>", "<p>12</p>", "<p>45</p>", "<p>67</p>"], "correctIndex": 1, "solution": "<p><strong>Answer: B</strong></p>\n<p>It is stated in the first line of the first paragraph that 11 other armed personal were killed in the crash. Thus, the correct option is B.</p>"}, {"question": "<p><strong>Read the given passage and answer the questions that follow.</strong></p>\n<p>General BipinRawat, his wife and 11 other armed personnel were killed after the IAF chopper they were travelling in crashed near Coonoor, in the hilly Nilgiri district in Tamil Nadu, on Wednesday, the 8<sup>th</sup> of December 2021. General Rawat was India’s first Chief of Defence Staff.</p>\n<p>The security around the residence of the General has been strengthened as several important dignitaries came to offer their condolences to the <strong>euphoric</strong> family. The couple is survived by their two daughters – Kritika and Tarini. Defence Minister Rajnath Singh, Indian Army chief M.M. Naravane and Navy chief Admiral R. Hari Kumar met the family of the General. The family has been serving in the Indian Army for four generations. MadhulikaRawat, the General’s wife, had been the President of the Army Wives’ Welfare Association. This organisation is one of the largest NGOs working towards ensuring the welfare of the wives, children, and dependents of Army personnel.</p>\n<p>This crash is not a one-off incident. Every year, tragic incidents like these happen where soldiers lose their lives. At times it is due to an aging fleet or due to technical glitches. In the last few years, there have been 5-10 incidents of transport aircraft crash every year. The Government had stated that every aircraft accident in the IAF is to be investigated by the Court of Inquiry to ascertain the cause of the accident. The Indian Air Force has ordered the Court of Inquiry to look into this case also.</p>\n<p>The lone survivor of the crash that occurred on Wednesday, Group Captain Varun Singh, is battling for life with 80-85 % burn injuries. He was the Directing Staff at the Defence Services Staff College at Wellington in Tami Nadu. The Captain has also been the recipient of the Shaurya Chakra gallantry award. He had recently been promoted from Wing Commander to Group Captain and recently joined the college at Wellington.</p>\n<p>From the group of people who had first reached the crash site at Kattari Park in Coonoor, one villager said that General BipinRawat was alive when they had arrived. He had even asked for water from them. Two more people were found to be alive by them, and they took them to the Wellington Army Hospital. They also informed that they did not know who the General was when they rescued him, but later identified him when the pictures of the late officer came out.</p><br><p><strong>Which NGO was presided by MadhulikaRawat, as mentioned in the given passage?</strong></p>", "options": ["<p>Asha</p>", "<p>Help Age India</p>", "<p>Teach India</p>", "<p>Army Wives&rsquo; Welfare Association.</p>", "<p>Jivni</p>"], "correctIndex": 3, "solution": "<p><strong>Answer: D</strong></p>\n<p>It is clearly written in the second paragraph of the given piece that MadhulikaRawat was the President of Army Wives’ Welfare Association. Therefore, the correct option is D</p>"}, {"question": "<p><strong>Read the given passage and answer the questions that follow.</strong></p>\n<p>General BipinRawat, his wife and 11 other armed personnel were killed after the IAF chopper they were travelling in crashed near Coonoor, in the hilly Nilgiri district in Tamil Nadu, on Wednesday, the 8<sup>th</sup> of December 2021. General Rawat was India’s first Chief of Defence Staff.</p>\n<p>The security around the residence of the General has been strengthened as several important dignitaries came to offer their condolences to the <strong>euphoric</strong> family. The couple is survived by their two daughters – Kritika and Tarini. Defence Minister Rajnath Singh, Indian Army chief M.M. Naravane and Navy chief Admiral R. Hari Kumar met the family of the General. The family has been serving in the Indian Army for four generations. MadhulikaRawat, the General’s wife, had been the President of the Army Wives’ Welfare Association. This organisation is one of the largest NGOs working towards ensuring the welfare of the wives, children, and dependents of Army personnel.</p>\n<p>This crash is not a one-off incident. Every year, tragic incidents like these happen where soldiers lose their lives. At times it is due to an aging fleet or due to technical glitches. In the last few years, there have been 5-10 incidents of transport aircraft crash every year. The Government had stated that every aircraft accident in the IAF is to be investigated by the Court of Inquiry to ascertain the cause of the accident. The Indian Air Force has ordered the Court of Inquiry to look into this case also.</p>\n<p>The lone survivor of the crash that occurred on Wednesday, Group Captain Varun Singh, is battling for life with 80-85 % burn injuries. He was the Directing Staff at the Defence Services Staff College at Wellington in Tami Nadu. The Captain has also been the recipient of the Shaurya Chakra gallantry award. He had recently been promoted from Wing Commander to Group Captain and recently joined the college at Wellington.</p>\n<p>From the group of people who had first reached the crash site at Kattari Park in Coonoor, one villager said that General BipinRawat was alive when they had arrived. He had even asked for water from them. Two more people were found to be alive by them, and they took them to the Wellington Army Hospital. They also informed that they did not know who the General was when they rescued him, but later identified him when the pictures of the late officer came out.</p><br><p><strong>Which of the following can replace the word ‘euphoric’ that is given in bold in the passage?</strong></p>", "options": ["<p>incorporate</p>", "<p>enraptured</p>", "<p>bereaved</p>", "<p>Disagreed</p>", "<p>Separated</p>"], "correctIndex": 2, "solution": "<p><strong>Answer: C</strong></p>\n<p>Here the correct word will be ‘bereaved’. If we look at the context of the passage, we can easily understand that only ‘bereaved’ fits here. It means deprived of a close relation or friend through their death.</p>\n<p>Therefore, the correct answer is option C.</p>"}, {"question": "<p><strong>Read the given passage and answer the questions that follow.</strong></p>\n<p>General BipinRawat, his wife and 11 other armed personnel were killed after the IAF chopper they were travelling in crashed near Coonoor, in the hilly Nilgiri district in Tamil Nadu, on Wednesday, the 8<sup>th</sup> of December 2021. General Rawat was India’s first Chief of Defence Staff.</p>\n<p>The security around the residence of the General has been strengthened as several important dignitaries came to offer their condolences to the <strong>euphoric</strong> family. The couple is survived by their two daughters – Kritika and Tarini. Defence Minister Rajnath Singh, Indian Army chief M.M. Naravane and Navy chief Admiral R. Hari Kumar met the family of the General. The family has been serving in the Indian Army for four generations. MadhulikaRawat, the General’s wife, had been the President of the Army Wives’ Welfare Association. This organisation is one of the largest NGOs working towards ensuring the welfare of the wives, children, and dependents of Army personnel.</p>\n<p>This crash is not a one-off incident. Every year, tragic incidents like these happen where soldiers lose their lives. At times it is due to an aging fleet or due to technical glitches. In the last few years, there have been 5-10 incidents of transport aircraft crash every year. The Government had stated that every aircraft accident in the IAF is to be investigated by the Court of Inquiry to ascertain the cause of the accident. The Indian Air Force has ordered the Court of Inquiry to look into this case also.</p>\n<p>The lone survivor of the crash that occurred on Wednesday, Group Captain Varun Singh, is battling for life with 80-85 % burn injuries. He was the Directing Staff at the Defence Services Staff College at Wellington in Tami Nadu. The Captain has also been the recipient of the Shaurya Chakra gallantry award. He had recently been promoted from Wing Commander to Group Captain and recently joined the college at Wellington.</p>\n<p>From the group of people who had first reached the crash site at Kattari Park in Coonoor, one villager said that General BipinRawat was alive when they had arrived. He had even asked for water from them. Two more people were found to be alive by them, and they took them to the Wellington Army Hospital. They also informed that they did not know who the General was when they rescued him, but later identified him when the pictures of the late officer came out.</p><br><p><strong>What is the antonym of the word ‘Lone’?</strong></p>", "options": ["<p>Crowd</p>", "<p>Alone</p>", "<p>deserted</p>", "<p>Solo</p>", "<p>Solitary</p>"], "correctIndex": 0, "solution": "<p><strong>Answer: A</strong></p>\n<p>The rest of the words are synonyms to the word lone which means single or solitary. Thus, the correct answer for this question is A.</p>"}, {"question": "<p><strong>Read the following passage carefully and answer the following questions.</strong></p>\n<p>Ironically, the coal crisis has forced the Indian government to ramp up domestic production and imports of coal, the dirtiest fossil fuel, while the world focuses on net-zero carbon emissions by 2050. This irony reflects the reality that power generation and hence our economy is heavily dependent on coal, followed by petroleum.</p>\n<p>Power generation is the main source of carbon emissions. Estimates based on data from the International Renewable Energy Agency (IRENA) indicate that non-renewable fossil fuels account for 70% of the current (2020) generation capacity of 452,3038 MW, followed by hydro/marine power at 11%, solar and wind power at 6% each, nuclear power at 5% and bio-energy at 2%</p>\n<p>A recent Council for Energy, Environment and Water (CEEW) report has highlighted many <strong>formidable </strong>challenges to India’s transformation from a fossil-fuel-dependent economy to one based on renewable energy. First, there is the technological, managerial and regulatory capacity to manage this revolutionary transformation. Then there is the major constraint of finance. The transformation will involve massive high-cost, high-risk, long-gestation investments. There is little fiscal space for large public investment in renewables, while private investment in renewables at scale is just starting.</p>\n<p>The willingness of developed countries, especially the US, to make available adequate low-cost finance and required technologies remain uncertain. India has negotiated hard to tie up access to such financing and technologies. The results are still awaited.</p><br><p><strong>The coal crisis has forced the Indian government to _______?</strong></p>\n<p><strong>I). </strong>To increase domestic production</p>\n<p><strong>II). </strong>Importing of coals</p>\n<p><strong>III). </strong>Reducing exports to different countries</p>", "options": ["<p>Only I</p>", "<p>Only III</p>", "<p>Both I and II</p>", "<p>Both II and III</p>", "<p>All I, II and III</p>"], "correctIndex": 2, "solution": "<p><strong>Answer: C</strong></p>\n<p><strong>Refer to the first paragraph-</strong> “Ironically, the coal crisis has forced the Indian government to ramp up domestic production and imports of coal, the dirtiest fossil fuel, while the world focuses on net-zero carbon emissions by 2050.” <strong>From the above quoted lines we can say that option C is the correct answer.</strong></p>"}, {"question": "<p><strong>Read the following passage carefully and answer the following questions.</strong></p>\n<p>Ironically, the coal crisis has forced the Indian government to ramp up domestic production and imports of coal, the dirtiest fossil fuel, while the world focuses on net-zero carbon emissions by 2050. This irony reflects the reality that power generation and hence our economy is heavily dependent on coal, followed by petroleum.</p>\n<p>Power generation is the main source of carbon emissions. Estimates based on data from the International Renewable Energy Agency (IRENA) indicate that non-renewable fossil fuels account for 70% of the current (2020) generation capacity of 452,3038 MW, followed by hydro/marine power at 11%, solar and wind power at 6% each, nuclear power at 5% and bio-energy at 2%</p>\n<p>A recent Council for Energy, Environment and Water (CEEW) report has highlighted many <strong>formidable </strong>challenges to India’s transformation from a fossil-fuel-dependent economy to one based on renewable energy. First, there is the technological, managerial and regulatory capacity to manage this revolutionary transformation. Then there is the major constraint of finance. The transformation will involve massive high-cost, high-risk, long-gestation investments. There is little fiscal space for large public investment in renewables, while private investment in renewables at scale is just starting.</p>\n<p>The willingness of developed countries, especially the US, to make available adequate low-cost finance and required technologies remain uncertain. India has negotiated hard to tie up access to such financing and technologies. The results are still awaited.</p><br><p><strong>Which of the following statements is/are true to the context of the passage?</strong></p>\n<p><strong>I). </strong>The target of net-zero carbon emissions of India is by 2050.</p>\n<p><strong>II). </strong>Power generation is the main source of carbon emissions.</p>\n<p><strong>III). </strong>Coal is the dirtiest fossil fuel.</p>", "options": ["<p>Only I</p>", "<p>Only III</p>", "<p>Both I and II</p>", "<p>Both II and III</p>", "<p>All I, II and III</p>"], "correctIndex": 3, "solution": "<p><strong>Answer: D</strong></p>\n<p>Statements II and III are true to the context of the passage but I one is incorrect because the <strong>world </strong>focuses on net-zero carbon emissions by 2050. <strong>Hence option D is the correct answer.</strong></p>"}, {"question": "<p><strong>Read the following passage carefully and answer the following questions.</strong></p>\n<p>Ironically, the coal crisis has forced the Indian government to ramp up domestic production and imports of coal, the dirtiest fossil fuel, while the world focuses on net-zero carbon emissions by 2050. This irony reflects the reality that power generation and hence our economy is heavily dependent on coal, followed by petroleum.</p>\n<p>Power generation is the main source of carbon emissions. Estimates based on data from the International Renewable Energy Agency (IRENA) indicate that non-renewable fossil fuels account for 70% of the current (2020) generation capacity of 452,3038 MW, followed by hydro/marine power at 11%, solar and wind power at 6% each, nuclear power at 5% and bio-energy at 2%</p>\n<p>A recent Council for Energy, Environment and Water (CEEW) report has highlighted many <strong>formidable </strong>challenges to India’s transformation from a fossil-fuel-dependent economy to one based on renewable energy. First, there is the technological, managerial and regulatory capacity to manage this revolutionary transformation. Then there is the major constraint of finance. The transformation will involve massive high-cost, high-risk, long-gestation investments. There is little fiscal space for large public investment in renewables, while private investment in renewables at scale is just starting.</p>\n<p>The willingness of developed countries, especially the US, to make available adequate low-cost finance and required technologies remain uncertain. India has negotiated hard to tie up access to such financing and technologies. The results are still awaited.</p><br><p><strong>According to the estimates based on data from the International Renewable Energy Agency (IRENA) which of the following is incorrect?</strong></p>", "options": ["<p>Non-renewable fossil fuels account for 70% of the current generation capacity.</p>", "<p>Current generation capacity is 452,3038 MW.</p>", "<p>Non-renewable fossil fuels account for 11% of the hydro/marine power.</p>", "<p>All are correct</p>", "<p>All are incorrect</p>"], "correctIndex": 3, "solution": "<p><strong>Answer: D</strong></p>\n<p><strong>None of the given statements is incorrect</strong></p>\n<p>Refer to the second paragraph- “ Estimates based on data from the International Renewable Energy Agency (IRENA) indicate that non-renewable fossil fuels account for 70% of the current (2020) generation capacity of 452,3038 MW, followed by hydro/marine power at 11%, solar and wind power at 6% each, nuclear power at 5% and bio-energy at 2%”</p>"}, {"question": "<p><strong>Read the following passage carefully and answer the following questions.</strong></p>\n<p>Ironically, the coal crisis has forced the Indian government to ramp up domestic production and imports of coal, the dirtiest fossil fuel, while the world focuses on net-zero carbon emissions by 2050. This irony reflects the reality that power generation and hence our economy is heavily dependent on coal, followed by petroleum.</p>\n<p>Power generation is the main source of carbon emissions. Estimates based on data from the International Renewable Energy Agency (IRENA) indicate that non-renewable fossil fuels account for 70% of the current (2020) generation capacity of 452,3038 MW, followed by hydro/marine power at 11%, solar and wind power at 6% each, nuclear power at 5% and bio-energy at 2%</p>\n<p>A recent Council for Energy, Environment and Water (CEEW) report has highlighted many <strong>formidable </strong>challenges to India’s transformation from a fossil-fuel-dependent economy to one based on renewable energy. First, there is the technological, managerial and regulatory capacity to manage this revolutionary transformation. Then there is the major constraint of finance. The transformation will involve massive high-cost, high-risk, long-gestation investments. There is little fiscal space for large public investment in renewables, while private investment in renewables at scale is just starting.</p>\n<p>The willingness of developed countries, especially the US, to make available adequate low-cost finance and required technologies remain uncertain. India has negotiated hard to tie up access to such financing and technologies. The results are still awaited.</p><br><p><strong>India’s transformation from a fossil-fuel-dependent economy to one based on renewable energy. What does this transformation involve?</strong></p>\n<p><strong>I). </strong>Massive high-cost and high-risk</p>\n<p><strong>II). </strong>A very long-gestation investments</p>\n<p><strong>III). </strong>Technological, managerial and regulatory capacity</p>", "options": ["<p>Only I</p>", "<p>Only III</p>", "<p>Both I and II</p>", "<p>Both II and III</p>", "<p>All I, II and III</p>"], "correctIndex": 2, "solution": "<p><strong>Answer: C</strong></p>\n<p><strong>Refer to the second last paragraph</strong>- “The transformation will involve massive high-cost, high-risk, long-gestation investments. There is little fiscal space for large public investment in renewables, while private investment in renewables at scale is just starting.” <strong>Hence option C is the correct answer.</strong></p>"}, {"question": "<p><strong>Read the following passage carefully and answer the following questions.</strong></p>\n<p>Ironically, the coal crisis has forced the Indian government to ramp up domestic production and imports of coal, the dirtiest fossil fuel, while the world focuses on net-zero carbon emissions by 2050. This irony reflects the reality that power generation and hence our economy is heavily dependent on coal, followed by petroleum.</p>\n<p>Power generation is the main source of carbon emissions. Estimates based on data from the International Renewable Energy Agency (IRENA) indicate that non-renewable fossil fuels account for 70% of the current (2020) generation capacity of 452,3038 MW, followed by hydro/marine power at 11%, solar and wind power at 6% each, nuclear power at 5% and bio-energy at 2%</p>\n<p>A recent Council for Energy, Environment and Water (CEEW) report has highlighted many <strong>formidable </strong>challenges to India’s transformation from a fossil-fuel-dependent economy to one based on renewable energy. First, there is the technological, managerial and regulatory capacity to manage this revolutionary transformation. Then there is the major constraint of finance. The transformation will involve massive high-cost, high-risk, long-gestation investments. There is little fiscal space for large public investment in renewables, while private investment in renewables at scale is just starting.</p>\n<p>The willingness of developed countries, especially the US, to make available adequate low-cost finance and required technologies remain uncertain. India has negotiated hard to tie up access to such financing and technologies. The results are still awaited.</p><br><p><strong>Choose the erroneous option-</strong></p>", "options": ["<p>The willingness of developed countries</p>", "<p>especially the US, to make available</p>", "<p>adequate low-cost finance and required</p>", "<p>technologies remain uncertain</p>", "<p>Both B and C</p>"], "correctIndex": 3, "solution": "<p><strong>Answer: D</strong></p>\n<p>Option D is incorrect, usage of “remain” is grammatically incorrect, rather it should be “remains”. All the remaining options are correct.</p>"}, {"question": "<p><strong>Read the following passage carefully and answer the following questions.</strong></p>\n<p>Ironically, the coal crisis has forced the Indian government to ramp up domestic production and imports of coal, the dirtiest fossil fuel, while the world focuses on net-zero carbon emissions by 2050. This irony reflects the reality that power generation and hence our economy is heavily dependent on coal, followed by petroleum.</p>\n<p>Power generation is the main source of carbon emissions. Estimates based on data from the International Renewable Energy Agency (IRENA) indicate that non-renewable fossil fuels account for 70% of the current (2020) generation capacity of 452,3038 MW, followed by hydro/marine power at 11%, solar and wind power at 6% each, nuclear power at 5% and bio-energy at 2%</p>\n<p>A recent Council for Energy, Environment and Water (CEEW) report has highlighted many <strong>formidable </strong>challenges to India’s transformation from a fossil-fuel-dependent economy to one based on renewable energy. First, there is the technological, managerial and regulatory capacity to manage this revolutionary transformation. Then there is the major constraint of finance. The transformation will involve massive high-cost, high-risk, long-gestation investments. There is little fiscal space for large public investment in renewables, while private investment in renewables at scale is just starting.</p>\n<p>The willingness of developed countries, especially the US, to make available adequate low-cost finance and required technologies remain uncertain. India has negotiated hard to tie up access to such financing and technologies. The results are still awaited.</p><br><p><strong>Which of the following doesn’t come under the category of renewable energy?</strong></p>", "options": ["<p>Biomass</p>", "<p>Crude oil</p>", "<p>Water</p>", "<p>Sun</p>", "<p>Wind</p>"], "correctIndex": 1, "solution": "<p><strong>Answer: B</strong></p>\n<p>Renewable energy means energy from a source that is not depleted when used, such as wind or solar power. Biomass, Water, Sun, Wind falls under the same category, thus making option B i.e. Crude oil as the correct answer.</p>"}, {"question": "<p><strong>Read the following passage carefully and answer the following questions.</strong></p>\n<p>Ironically, the coal crisis has forced the Indian government to ramp up domestic production and imports of coal, the dirtiest fossil fuel, while the world focuses on net-zero carbon emissions by 2050. This irony reflects the reality that power generation and hence our economy is heavily dependent on coal, followed by petroleum.</p>\n<p>Power generation is the main source of carbon emissions. Estimates based on data from the International Renewable Energy Agency (IRENA) indicate that non-renewable fossil fuels account for 70% of the current (2020) generation capacity of 452,3038 MW, followed by hydro/marine power at 11%, solar and wind power at 6% each, nuclear power at 5% and bio-energy at 2%</p>\n<p>A recent Council for Energy, Environment and Water (CEEW) report has highlighted many <strong>formidable </strong>challenges to India’s transformation from a fossil-fuel-dependent economy to one based on renewable energy. First, there is the technological, managerial and regulatory capacity to manage this revolutionary transformation. Then there is the major constraint of finance. The transformation will involve massive high-cost, high-risk, long-gestation investments. There is little fiscal space for large public investment in renewables, while private investment in renewables at scale is just starting.</p>\n<p>The willingness of developed countries, especially the US, to make available adequate low-cost finance and required technologies remain uncertain. India has negotiated hard to tie up access to such financing and technologies. The results are still awaited.</p><br><p><strong>Which of the following words is the synonym of the highlighted word “formidable”?</strong></p>", "options": ["<p>Effortless</p>", "<p>Accessible</p>", "<p>Facile</p>", "<p>Arduous</p>", "<p>Both A and B</p>"], "correctIndex": 3, "solution": "<p><strong>Answer: D</strong></p>\n<p>The highlighted word <strong>“formidable” </strong>means requiring considerable physical or mental effort so <strong>“arduous”</strong> is the correct synonym<strong>. </strong>Facile<strong>, </strong>Effortless and Accessible means entirely opposite. So option D is apt</p>"}, {"question": "<p><strong>Read the following passage carefully and answer the following questions.</strong></p>\n<p>As per India’s 2015-16 health survey, one in every three children in the country is stunted, more than 50% of adolescent girls and pregnant women are anaemic, and almost 80% mothers do not receive full antenatal care during their pregnancy. Data from phase one of the National Family Health Survey-5, 2019-20 also points to a <strong>gloomy </strong>reality.</p>\n<p> After over a year of full and partial lockdowns and a devastating second wave of covid infections in April 2021, the situation remains bleak. There has been a decline in the uptake of health services like antenatal check-ups, counseling and consumption of micronutrient supplements among pregnant women. Dietary diversity has decreased significantly due to the food insecurity <strong>triggered </strong>by the pandemic, resulting in adverse consequences on maternal and child nutrition. Schools continue to remain shut, disrupting access to mid-day meals for the underprivileged and weekly iron and folic acid supplementation. The availability of nutritious food and micronutrient supplements supplied through India’s social safety net programmeshave become erratic as a result of disrupted supply chains. The deadly second wave, which took away earning members of many families, has left many households vulnerable and struggling for basic food.</p>\n<p>While policymakers are adapting food security programmes to current needs, it is also crucial to consider the ‘hidden hunger’ among populations, especially among those with special dietary and nutritional requirements like pregnant and lactating women, adolescent girls and children. Tackling this malnutrition crisis requires a far-sighted dual approach of providing food that fills stomachs as well as nourishes the body and spirit with nutrients to survive and thrive.</p>\n<p>The disruptions caused by the pandemic have further emphasized the need for local nutritious foods and community-based initiatives to tackle food and nutrition insecurity. The PoshanMatka initiative in Madhya Pradesh and the promotion of nutrition gardens in Uttar Pradesh, for example, help promote dietary diversity and the inclusion of nutrient-rich local and affordable food items.</p><br><p><strong>Which of the following is incorrect according to India's 2015-16 health survey?</strong></p>", "options": ["<p>One in every four children in the country is stunted.</p>", "<p>More than 50% of girls are adolescents.</p>", "<p>Pregnant women are suffering from anaemia.</p>", "<p>80% mothers do not receive antenatal care during their pregnancy</p>", "<p>All are correct</p>"], "correctIndex": 0, "solution": "<p><strong>Answer: A</strong></p>\n<p><strong>Refer to the first paragraph- </strong>“As per India’s 2015-16 health survey, one in every three children in the country is stunted, more than 50% of adolescent girls and pregnant women are anaemic, and almost 80% mothers do not receive full antenatal care during their pregnancy.”<strong>From the above quoted lines we can say that option A is the correct answer.</strong></p>"}, {"question": "<p><strong>Read the following passage carefully and answer the following questions.</strong></p>\n<p>As per India’s 2015-16 health survey, one in every three children in the country is stunted, more than 50% of adolescent girls and pregnant women are anaemic, and almost 80% mothers do not receive full antenatal care during their pregnancy. Data from phase one of the National Family Health Survey-5, 2019-20 also points to a <strong>gloomy </strong>reality.</p>\n<p> After over a year of full and partial lockdowns and a devastating second wave of covid infections in April 2021, the situation remains bleak. There has been a decline in the uptake of health services like antenatal check-ups, counseling and consumption of micronutrient supplements among pregnant women. Dietary diversity has decreased significantly due to the food insecurity <strong>triggered </strong>by the pandemic, resulting in adverse consequences on maternal and child nutrition. Schools continue to remain shut, disrupting access to mid-day meals for the underprivileged and weekly iron and folic acid supplementation. The availability of nutritious food and micronutrient supplements supplied through India’s social safety net programmeshave become erratic as a result of disrupted supply chains. The deadly second wave, which took away earning members of many families, has left many households vulnerable and struggling for basic food.</p>\n<p>While policymakers are adapting food security programmes to current needs, it is also crucial to consider the ‘hidden hunger’ among populations, especially among those with special dietary and nutritional requirements like pregnant and lactating women, adolescent girls and children. Tackling this malnutrition crisis requires a far-sighted dual approach of providing food that fills stomachs as well as nourishes the body and spirit with nutrients to survive and thrive.</p>\n<p>The disruptions caused by the pandemic have further emphasized the need for local nutritious foods and community-based initiatives to tackle food and nutrition insecurity. The PoshanMatka initiative in Madhya Pradesh and the promotion of nutrition gardens in Uttar Pradesh, for example, help promote dietary diversity and the inclusion of nutrient-rich local and affordable food items.</p><br><p><strong>What are the effects of the deadly second wave according to the paragraph?</strong></p>", "options": ["<p>Schoolscontinue to remain shut</p>", "<p>The second wave has left many households vulnerable and struggling for basic food</p>", "<p>Dietary diversity has increased notably</p>", "<p>All except C</p>", "<p>A decline in the uptake of health services has been seen</p>"], "correctIndex": 3, "solution": "<p><strong>Answer: D</strong></p>\n<p>Refer to the second paragraph- Only statement C is incorrect, the correct sentence will be - Dietary diversity has <strong>decreased </strong>notably.</p>\n<p><strong>Therefore, the correct answer is option D</strong></p>"}, {"question": "<p><strong>Read the following passage carefully and answer the following questions.</strong></p>\n<p>As per India’s 2015-16 health survey, one in every three children in the country is stunted, more than 50% of adolescent girls and pregnant women are anaemic, and almost 80% mothers do not receive full antenatal care during their pregnancy. Data from phase one of the National Family Health Survey-5, 2019-20 also points to a <strong>gloomy </strong>reality.</p>\n<p> After over a year of full and partial lockdowns and a devastating second wave of covid infections in April 2021, the situation remains bleak. There has been a decline in the uptake of health services like antenatal check-ups, counseling and consumption of micronutrient supplements among pregnant women. Dietary diversity has decreased significantly due to the food insecurity <strong>triggered </strong>by the pandemic, resulting in adverse consequences on maternal and child nutrition. Schools continue to remain shut, disrupting access to mid-day meals for the underprivileged and weekly iron and folic acid supplementation. The availability of nutritious food and micronutrient supplements supplied through India’s social safety net programmeshave become erratic as a result of disrupted supply chains. The deadly second wave, which took away earning members of many families, has left many households vulnerable and struggling for basic food.</p>\n<p>While policymakers are adapting food security programmes to current needs, it is also crucial to consider the ‘hidden hunger’ among populations, especially among those with special dietary and nutritional requirements like pregnant and lactating women, adolescent girls and children. Tackling this malnutrition crisis requires a far-sighted dual approach of providing food that fills stomachs as well as nourishes the body and spirit with nutrients to survive and thrive.</p>\n<p>The disruptions caused by the pandemic have further emphasized the need for local nutritious foods and community-based initiatives to tackle food and nutrition insecurity. The PoshanMatka initiative in Madhya Pradesh and the promotion of nutrition gardens in Uttar Pradesh, for example, help promote dietary diversity and the inclusion of nutrient-rich local and affordable food items.</p><br><p><strong>How tackling the malnutrition crisis require a dual approach?</strong></p>", "options": ["<p>To help fulfill nutrition requirements and boost immunity</p>", "<p>Maintaining smooth production and a strong supply chain is critical to ensure the availability without disruption.</p>", "<p>Fortified staples can provide populations the basic micronutrients needed by them</p>", "<p>To provide food that fills stomachs as well as nourishes the body</p>", "<p>None of the above</p>"], "correctIndex": 3, "solution": "<p><strong>Answer: D</strong></p>\n<p><strong>Refer to the third paragraph- </strong>“Tackling this malnutrition crisis requires a far-sighted dual approach of providing food that fills stomachs as well as nourishes the body and spirit with nutrients to survive and thrive.” <strong>From the above quoted lines we can say that option D is the correct answer.</strong></p>"}, {"question": "<p><strong>Read the following passage carefully and answer the following questions.</strong></p>\n<p>As per India’s 2015-16 health survey, one in every three children in the country is stunted, more than 50% of adolescent girls and pregnant women are anaemic, and almost 80% mothers do not receive full antenatal care during their pregnancy. Data from phase one of the National Family Health Survey-5, 2019-20 also points to a <strong>gloomy </strong>reality.</p>\n<p> After over a year of full and partial lockdowns and a devastating second wave of covid infections in April 2021, the situation remains bleak. There has been a decline in the uptake of health services like antenatal check-ups, counseling and consumption of micronutrient supplements among pregnant women. Dietary diversity has decreased significantly due to the food insecurity <strong>triggered </strong>by the pandemic, resulting in adverse consequences on maternal and child nutrition. Schools continue to remain shut, disrupting access to mid-day meals for the underprivileged and weekly iron and folic acid supplementation. The availability of nutritious food and micronutrient supplements supplied through India’s social safety net programmeshave become erratic as a result of disrupted supply chains. The deadly second wave, which took away earning members of many families, has left many households vulnerable and struggling for basic food.</p>\n<p>While policymakers are adapting food security programmes to current needs, it is also crucial to consider the ‘hidden hunger’ among populations, especially among those with special dietary and nutritional requirements like pregnant and lactating women, adolescent girls and children. Tackling this malnutrition crisis requires a far-sighted dual approach of providing food that fills stomachs as well as nourishes the body and spirit with nutrients to survive and thrive.</p>\n<p>The disruptions caused by the pandemic have further emphasized the need for local nutritious foods and community-based initiatives to tackle food and nutrition insecurity. The PoshanMatka initiative in Madhya Pradesh and the promotion of nutrition gardens in Uttar Pradesh, for example, help promote dietary diversity and the inclusion of nutrient-rich local and affordable food items.</p><br><p><strong>Who among the following needs special dietary and nutritional requirements?</strong></p>", "options": ["<p>Pregnant and lactating women</p>", "<p>Patients who are covid positive</p>", "<p>Adolescent girls and children</p>", "<p>None of the above</p>", "<p>All of the above</p>"], "correctIndex": 4, "solution": "<p><strong>Answer: E</strong></p>\n<p><strong>Refer to the third paragraph- </strong>“While policymakers are adapting food security programmes to current needs, it is also crucial to consider the ‘hidden hunger’ among populations, especially among those with special dietary and nutritional requirements like pregnant and lactating women, adolescent girls and children.”</p>\n<p><strong>From the above quoted lines we can say that option E is the correct answer.</strong></p>"}, {"question": "<p><strong>Read the following passage carefully and answer the following questions.</strong></p>\n<p>As per India’s 2015-16 health survey, one in every three children in the country is stunted, more than 50% of adolescent girls and pregnant women are anaemic, and almost 80% mothers do not receive full antenatal care during their pregnancy. Data from phase one of the National Family Health Survey-5, 2019-20 also points to a <strong>gloomy </strong>reality.</p>\n<p> After over a year of full and partial lockdowns and a devastating second wave of covid infections in April 2021, the situation remains bleak. There has been a decline in the uptake of health services like antenatal check-ups, counseling and consumption of micronutrient supplements among pregnant women. Dietary diversity has decreased significantly due to the food insecurity <strong>triggered </strong>by the pandemic, resulting in adverse consequences on maternal and child nutrition. Schools continue to remain shut, disrupting access to mid-day meals for the underprivileged and weekly iron and folic acid supplementation. The availability of nutritious food and micronutrient supplements supplied through India’s social safety net programmeshave become erratic as a result of disrupted supply chains. The deadly second wave, which took away earning members of many families, has left many households vulnerable and struggling for basic food.</p>\n<p>While policymakers are adapting food security programmes to current needs, it is also crucial to consider the ‘hidden hunger’ among populations, especially among those with special dietary and nutritional requirements like pregnant and lactating women, adolescent girls and children. Tackling this malnutrition crisis requires a far-sighted dual approach of providing food that fills stomachs as well as nourishes the body and spirit with nutrients to survive and thrive.</p>\n<p>The disruptions caused by the pandemic have further emphasized the need for local nutritious foods and community-based initiatives to tackle food and nutrition insecurity. The PoshanMatka initiative in Madhya Pradesh and the promotion of nutrition gardens in Uttar Pradesh, for example, help promote dietary diversity and the inclusion of nutrient-rich local and affordable food items.</p><br><p><strong>Which of the following is incorrect as per the context of the passage?</strong></p>", "options": ["<p>The Poshan Matka initiative is taken by Uttar Pradesh</p>", "<p>All are incorrect</p>", "<p>The availability of nutritious food and micronutrient supplements are consistent</p>", "<p>Mid-day meals in schools were disrupted due to natural disasters</p>", "<p>All are correct</p>"], "correctIndex": 1, "solution": "<p><strong>Answer: B</strong></p>\n<p><strong>All the given statements are incorrect</strong></p>\n<p>A- The PoshanMatka initiative is taken by <strong>Madhya Pradesh</strong></p>\n<p>C- The availability of nutritious food and micronutrient supplements are<strong> inconsistent.</strong></p>\n<p>D- Mid-day meals in schools were disrupted <strong>due to the deadly second wave.</strong></p>\n<p><strong>Therefore option B is the correct answer.</strong></p>"}, {"question": "<p><strong>Read the following passage carefully and answer the following questions.</strong></p>\n<p>As per India’s 2015-16 health survey, one in every three children in the country is stunted, more than 50% of adolescent girls and pregnant women are anaemic, and almost 80% mothers do not receive full antenatal care during their pregnancy. Data from phase one of the National Family Health Survey-5, 2019-20 also points to a <strong>gloomy </strong>reality.</p>\n<p> After over a year of full and partial lockdowns and a devastating second wave of covid infections in April 2021, the situation remains bleak. There has been a decline in the uptake of health services like antenatal check-ups, counseling and consumption of micronutrient supplements among pregnant women. Dietary diversity has decreased significantly due to the food insecurity <strong>triggered </strong>by the pandemic, resulting in adverse consequences on maternal and child nutrition. Schools continue to remain shut, disrupting access to mid-day meals for the underprivileged and weekly iron and folic acid supplementation. The availability of nutritious food and micronutrient supplements supplied through India’s social safety net programmeshave become erratic as a result of disrupted supply chains. The deadly second wave, which took away earning members of many families, has left many households vulnerable and struggling for basic food.</p>\n<p>While policymakers are adapting food security programmes to current needs, it is also crucial to consider the ‘hidden hunger’ among populations, especially among those with special dietary and nutritional requirements like pregnant and lactating women, adolescent girls and children. Tackling this malnutrition crisis requires a far-sighted dual approach of providing food that fills stomachs as well as nourishes the body and spirit with nutrients to survive and thrive.</p>\n<p>The disruptions caused by the pandemic have further emphasized the need for local nutritious foods and community-based initiatives to tackle food and nutrition insecurity. The PoshanMatka initiative in Madhya Pradesh and the promotion of nutrition gardens in Uttar Pradesh, for example, help promote dietary diversity and the inclusion of nutrient-rich local and affordable food items.</p><br><p><strong>What emphasized the need for local nutritious foods and community-based initiatives?</strong></p>", "options": ["<p>Calorie deficit in adolescent girls and children</p>", "<p>The bleak situation of the deadly wave</p>", "<p>The disorder caused by the pandemic</p>", "<p>The ill health of the pregnant and lactating women</p>", "<p>None of the above</p>"], "correctIndex": 2, "solution": "<p><strong>Answer: C</strong></p>\n<p><strong>Refer to the last paragraph-</strong> “The disruptions caused by the pandemic have further emphasized the need for local nutritious foods and community-based initiatives to tackle food and nutrition insecurity.” <strong>From the above quoted lines we can say that option C is the correct answer.</strong></p>"}, {"question": "<p><strong>Read the following passage carefully and answer the following questions.</strong></p>\n<p>As per India’s 2015-16 health survey, one in every three children in the country is stunted, more than 50% of adolescent girls and pregnant women are anaemic, and almost 80% mothers do not receive full antenatal care during their pregnancy. Data from phase one of the National Family Health Survey-5, 2019-20 also points to a <strong>gloomy </strong>reality.</p>\n<p> After over a year of full and partial lockdowns and a devastating second wave of covid infections in April 2021, the situation remains bleak. There has been a decline in the uptake of health services like antenatal check-ups, counseling and consumption of micronutrient supplements among pregnant women. Dietary diversity has decreased significantly due to the food insecurity <strong>triggered </strong>by the pandemic, resulting in adverse consequences on maternal and child nutrition. Schools continue to remain shut, disrupting access to mid-day meals for the underprivileged and weekly iron and folic acid supplementation. The availability of nutritious food and micronutrient supplements supplied through India’s social safety net programmeshave become erratic as a result of disrupted supply chains. The deadly second wave, which took away earning members of many families, has left many households vulnerable and struggling for basic food.</p>\n<p>While policymakers are adapting food security programmes to current needs, it is also crucial to consider the ‘hidden hunger’ among populations, especially among those with special dietary and nutritional requirements like pregnant and lactating women, adolescent girls and children. Tackling this malnutrition crisis requires a far-sighted dual approach of providing food that fills stomachs as well as nourishes the body and spirit with nutrients to survive and thrive.</p>\n<p>The disruptions caused by the pandemic have further emphasized the need for local nutritious foods and community-based initiatives to tackle food and nutrition insecurity. The PoshanMatka initiative in Madhya Pradesh and the promotion of nutrition gardens in Uttar Pradesh, for example, help promote dietary diversity and the inclusion of nutrient-rich local and affordable food items.</p><br><p><strong>Which of the following is a synonym to the highlighted word “triggered”?</strong></p>", "options": ["<p>Actuate</p>", "<p>Repress</p>", "<p>Halt</p>", "<p>Decelerate</p>", "<p>None of the above</p>"], "correctIndex": 0, "solution": "<p><strong>Answer: A</strong></p>\n<p>The meaning of “triggered” is - to cause to function and the words except “Actuate” are antonyms of triggered.<strong> Therefore the correct option is A.</strong></p>"}, {"question": "<p><strong>Read the following passage carefully and answer the following questions.</strong></p>\n<p>As per India’s 2015-16 health survey, one in every three children in the country is stunted, more than 50% of adolescent girls and pregnant women are anaemic, and almost 80% mothers do not receive full antenatal care during their pregnancy. Data from phase one of the National Family Health Survey-5, 2019-20 also points to a <strong>gloomy </strong>reality.</p>\n<p> After over a year of full and partial lockdowns and a devastating second wave of covid infections in April 2021, the situation remains bleak. There has been a decline in the uptake of health services like antenatal check-ups, counseling and consumption of micronutrient supplements among pregnant women. Dietary diversity has decreased significantly due to the food insecurity <strong>triggered </strong>by the pandemic, resulting in adverse consequences on maternal and child nutrition. Schools continue to remain shut, disrupting access to mid-day meals for the underprivileged and weekly iron and folic acid supplementation. The availability of nutritious food and micronutrient supplements supplied through India’s social safety net programmeshave become erratic as a result of disrupted supply chains. The deadly second wave, which took away earning members of many families, has left many households vulnerable and struggling for basic food.</p>\n<p>While policymakers are adapting food security programmes to current needs, it is also crucial to consider the ‘hidden hunger’ among populations, especially among those with special dietary and nutritional requirements like pregnant and lactating women, adolescent girls and children. Tackling this malnutrition crisis requires a far-sighted dual approach of providing food that fills stomachs as well as nourishes the body and spirit with nutrients to survive and thrive.</p>\n<p>The disruptions caused by the pandemic have further emphasized the need for local nutritious foods and community-based initiatives to tackle food and nutrition insecurity. The PoshanMatka initiative in Madhya Pradesh and the promotion of nutrition gardens in Uttar Pradesh, for example, help promote dietary diversity and the inclusion of nutrient-rich local and affordable food items.</p><br><p><strong>Which of the following is an antonym to the highlighted word “gloomy”?</strong></p>", "options": ["<p>Dejected</p>", "<p>Miserable</p>", "<p>Buoyant</p>", "<p>Wailing</p>", "<p>None of the above</p>"], "correctIndex": 2, "solution": "<p><strong>Answer: C</strong></p>\n<p>The meaning of “gloomy” is - causing or feeling depressed or despondent or feeling unhappy and the words except “buoyant” are synonyms of gloomy.<strong> Therefore, the correct option is C.</strong></p>"}, {"question": "<p><strong>Read the given passage carefully and answer the questions that follow.</strong></p>\n<p>The attack on Afghan vice presidential candidate AmrullahSaleh’s office in Kabul on Sunday that killed at least 20 people and injured 50, including Mr. Saleh, is a grave reminder of the crisis the war-torn country is going through even amid attempts to find peace. Mr. Saleh, a former intelligence chief and a strong critic of the Taliban and Pakistan, is President AshrafGhani’s running-mate for the September 28 election. And the irony is that the assault occurred a few hours after President Ghani officially launched his campaign in which he promised that “peace is coming”. The message the insurgents are trying to send is that even the most <strong>fortified</strong> political offices in the country or its top politicians are not safe. The insurgents have made it clear they will carry out their offensive irrespective of the peace process, especially when Afghanistan gets down to a full-fledged election campaign. In recent months, even when the U.S. and Taliban representatives have held multiple rounds of talks in Doha, Qatar, insurgents have kept up attacks, both on military and civilian locations. The Taliban appears to be trying to <strong>leverage</strong> these assaults to boost its bargaining position in the talks with the U.S. And the Kabul government’s inability to prevent them and the U.S.’s apparent decision to delink the negotiations from the daily violence are giving the insurgents a free run in many Afghan cities.</p>\n<p>Afghanistan’s crises are many. Half the country is either directly controlled or dominated by the Taliban. In the eastern parts, the Islamic State has established a presence and the group targets the country’s religious minorities. The government in Kabul is weak and notorious for chronic corruption. Its failure to ensure the basic safety and security of civilians is in turn eroding the public’s confidence in the system. At present, the government appears <strong>beleaguered</strong>. Its security agencies are strained by the prolonged war. It is true that Afghanistan needs a political settlement. The war has been in a stalemate for long. The government, even with U.S. support, is not in a position to turn the war around. The Taliban, on the other side, has expanded its reach to the hinterland, but not the urban centres. While a peace process is the best way ahead in such a scenario, the question is whether the U.S. is giving too much leeway to the Taliban in its quest to get out of its longest war. The decision to keep the Afghan government out of the peace process was a big compromise. The absence of a ceasefire even when talks were under way was another. The result is that Afghans continue to suffer even when the Americans and the Taliban talk. This has to change. There has to be more pressure, both political and military, on the Taliban to cease the violence. And the U.S. should back the Afghan government and the coming elections resolutely, while Kabul has to get its act together.</p><br><p><strong>Which of the following statement is/are true based on the given passage?</strong></p>\n<p><strong>i). </strong>Attack on vice president AmrullahSaleh’s office in Kabul, killed at least 20 people and injured 50.</p>\n<p><strong>ii). </strong>Saleh, a former intelligence chief.</p>\n<p><strong>iii). </strong>President AshrafGhani launched a campaign and insisted that peace is coming.</p>", "options": ["<p>Onlyi&amp; ii</p>", "<p>Only ii &amp; iii</p>", "<p>Only iii &amp;i</p>", "<p>All are true</p>", "<p>All are true</p>"], "correctIndex": 1, "solution": "<p><strong>Answer: B</strong></p>\n<p>According to passage Statement (i) is false because AmrullahSaleh is not the vice president he is just the vice-presidential candidate.</p>"}, {"question": "<p><strong>Read the given passage carefully and answer the questions that follow.</strong></p>\n<p>The attack on Afghan vice presidential candidate AmrullahSaleh’s office in Kabul on Sunday that killed at least 20 people and injured 50, including Mr. Saleh, is a grave reminder of the crisis the war-torn country is going through even amid attempts to find peace. Mr. Saleh, a former intelligence chief and a strong critic of the Taliban and Pakistan, is President AshrafGhani’s running-mate for the September 28 election. And the irony is that the assault occurred a few hours after President Ghani officially launched his campaign in which he promised that “peace is coming”. The message the insurgents are trying to send is that even the most <strong>fortified</strong> political offices in the country or its top politicians are not safe. The insurgents have made it clear they will carry out their offensive irrespective of the peace process, especially when Afghanistan gets down to a full-fledged election campaign. In recent months, even when the U.S. and Taliban representatives have held multiple rounds of talks in Doha, Qatar, insurgents have kept up attacks, both on military and civilian locations. The Taliban appears to be trying to <strong>leverage</strong> these assaults to boost its bargaining position in the talks with the U.S. And the Kabul government’s inability to prevent them and the U.S.’s apparent decision to delink the negotiations from the daily violence are giving the insurgents a free run in many Afghan cities.</p>\n<p>Afghanistan’s crises are many. Half the country is either directly controlled or dominated by the Taliban. In the eastern parts, the Islamic State has established a presence and the group targets the country’s religious minorities. The government in Kabul is weak and notorious for chronic corruption. Its failure to ensure the basic safety and security of civilians is in turn eroding the public’s confidence in the system. At present, the government appears <strong>beleaguered</strong>. Its security agencies are strained by the prolonged war. It is true that Afghanistan needs a political settlement. The war has been in a stalemate for long. The government, even with U.S. support, is not in a position to turn the war around. The Taliban, on the other side, has expanded its reach to the hinterland, but not the urban centres. While a peace process is the best way ahead in such a scenario, the question is whether the U.S. is giving too much leeway to the Taliban in its quest to get out of its longest war. The decision to keep the Afghan government out of the peace process was a big compromise. The absence of a ceasefire even when talks were under way was another. The result is that Afghans continue to suffer even when the Americans and the Taliban talk. This has to change. There has to be more pressure, both political and military, on the Taliban to cease the violence. And the U.S. should back the Afghan government and the coming elections resolutely, while Kabul has to get its act together.</p><br><p><strong>What is/are the impact after the Afghan Government failed to provide its safety to the public?</strong></p>", "options": ["<p>Provoked prolonged war between US &amp; Afghans</p>", "<p>The attack on Afghan vice presidential candidate&nbsp;AmrullahSaleh&rsquo;s office</p>", "<p>Lost people&rsquo;s trust on the government.</p>", "<p>TheTaliban, has expanded its reach to the hinterland</p>", "<p>None of these</p>"], "correctIndex": 2, "solution": "<p><strong>Answer: C</strong></p>\n<p>From the line “Its failure to ensure the basic safety and security of civilians is in turn eroding the public’s confidence in the system” it can be concluded.</p>"}, {"question": "<p><strong>Read the given passage carefully and answer the questions that follow.</strong></p>\n<p>The attack on Afghan vice presidential candidate AmrullahSaleh’s office in Kabul on Sunday that killed at least 20 people and injured 50, including Mr. Saleh, is a grave reminder of the crisis the war-torn country is going through even amid attempts to find peace. Mr. Saleh, a former intelligence chief and a strong critic of the Taliban and Pakistan, is President AshrafGhani’s running-mate for the September 28 election. And the irony is that the assault occurred a few hours after President Ghani officially launched his campaign in which he promised that “peace is coming”. The message the insurgents are trying to send is that even the most <strong>fortified</strong> political offices in the country or its top politicians are not safe. The insurgents have made it clear they will carry out their offensive irrespective of the peace process, especially when Afghanistan gets down to a full-fledged election campaign. In recent months, even when the U.S. and Taliban representatives have held multiple rounds of talks in Doha, Qatar, insurgents have kept up attacks, both on military and civilian locations. The Taliban appears to be trying to <strong>leverage</strong> these assaults to boost its bargaining position in the talks with the U.S. And the Kabul government’s inability to prevent them and the U.S.’s apparent decision to delink the negotiations from the daily violence are giving the insurgents a free run in many Afghan cities.</p>\n<p>Afghanistan’s crises are many. Half the country is either directly controlled or dominated by the Taliban. In the eastern parts, the Islamic State has established a presence and the group targets the country’s religious minorities. The government in Kabul is weak and notorious for chronic corruption. Its failure to ensure the basic safety and security of civilians is in turn eroding the public’s confidence in the system. At present, the government appears <strong>beleaguered</strong>. Its security agencies are strained by the prolonged war. It is true that Afghanistan needs a political settlement. The war has been in a stalemate for long. The government, even with U.S. support, is not in a position to turn the war around. The Taliban, on the other side, has expanded its reach to the hinterland, but not the urban centres. While a peace process is the best way ahead in such a scenario, the question is whether the U.S. is giving too much leeway to the Taliban in its quest to get out of its longest war. The decision to keep the Afghan government out of the peace process was a big compromise. The absence of a ceasefire even when talks were under way was another. The result is that Afghans continue to suffer even when the Americans and the Taliban talk. This has to change. There has to be more pressure, both political and military, on the Taliban to cease the violence. And the U.S. should back the Afghan government and the coming elections resolutely, while Kabul has to get its act together.</p><br><p><strong>What does the insurgents try to convey from the attack on vice presidential candidate’s office?</strong></p>", "options": ["<p>Their anger against the government</p>", "<p>Anger against the US government</p>", "<p>Tries to evict the US government&rsquo;s participation in Afghanistan</p>", "<p>The Government cannot protect even the secured politicians and their offices</p>", "<p>Not mentioned in the passage</p>"], "correctIndex": 3, "solution": "<p><strong>Answer: D</strong></p>\n<p>From the line “The message the insurgents are trying to send is that even the most fortified political offices in the country or its top politicians are not safe” it can be concluded</p>"}, {"question": "<p><strong>Read the given passage carefully and answer the questions that follow.</strong></p>\n<p>The attack on Afghan vice presidential candidate AmrullahSaleh’s office in Kabul on Sunday that killed at least 20 people and injured 50, including Mr. Saleh, is a grave reminder of the crisis the war-torn country is going through even amid attempts to find peace. Mr. Saleh, a former intelligence chief and a strong critic of the Taliban and Pakistan, is President AshrafGhani’s running-mate for the September 28 election. And the irony is that the assault occurred a few hours after President Ghani officially launched his campaign in which he promised that “peace is coming”. The message the insurgents are trying to send is that even the most <strong>fortified</strong> political offices in the country or its top politicians are not safe. The insurgents have made it clear they will carry out their offensive irrespective of the peace process, especially when Afghanistan gets down to a full-fledged election campaign. In recent months, even when the U.S. and Taliban representatives have held multiple rounds of talks in Doha, Qatar, insurgents have kept up attacks, both on military and civilian locations. The Taliban appears to be trying to <strong>leverage</strong> these assaults to boost its bargaining position in the talks with the U.S. And the Kabul government’s inability to prevent them and the U.S.’s apparent decision to delink the negotiations from the daily violence are giving the insurgents a free run in many Afghan cities.</p>\n<p>Afghanistan’s crises are many. Half the country is either directly controlled or dominated by the Taliban. In the eastern parts, the Islamic State has established a presence and the group targets the country’s religious minorities. The government in Kabul is weak and notorious for chronic corruption. Its failure to ensure the basic safety and security of civilians is in turn eroding the public’s confidence in the system. At present, the government appears <strong>beleaguered</strong>. Its security agencies are strained by the prolonged war. It is true that Afghanistan needs a political settlement. The war has been in a stalemate for long. The government, even with U.S. support, is not in a position to turn the war around. The Taliban, on the other side, has expanded its reach to the hinterland, but not the urban centres. While a peace process is the best way ahead in such a scenario, the question is whether the U.S. is giving too much leeway to the Taliban in its quest to get out of its longest war. The decision to keep the Afghan government out of the peace process was a big compromise. The absence of a ceasefire even when talks were under way was another. The result is that Afghans continue to suffer even when the Americans and the Taliban talk. This has to change. There has to be more pressure, both political and military, on the Taliban to cease the violence. And the U.S. should back the Afghan government and the coming elections resolutely, while Kabul has to get its act together.</p><br><p><strong>What is/are the reasons behind the continuous attack of talibans in Afghanistan?</strong></p>\n<p><strong>i). </strong>To boost afghan govt’s bargaining position with US</p>\n<p><strong>ii). </strong>Governments inability to prevent them.</p>\n<p><strong>iii). </strong>US decision to curb the violence in Afghan</p>", "options": ["<p>Both i&amp; ii</p>", "<p>Bothi&amp; ii</p>", "<p>All i,ii,iii</p>", "<p>Only iii</p>", "<p>None of these&nbsp;</p>"], "correctIndex": 2, "solution": "<p><strong>Answer: C</strong></p>\n<p>In the 1<sup>nd</sup> paragraph refer the line “The Taliban appears to be trying to leverage these assaults to boost its bargaining position in the talks with the U.S. And the Kabul government’s inability to prevent them and the U.S.’s apparent decision to delink the negotiations from the daily violence are giving the insurgents a free run in many Afghan cities”.</p>"}, {"question": "<p><strong>Read the given passage carefully and answer the questions that follow.</strong></p>\n<p>The attack on Afghan vice presidential candidate AmrullahSaleh’s office in Kabul on Sunday that killed at least 20 people and injured 50, including Mr. Saleh, is a grave reminder of the crisis the war-torn country is going through even amid attempts to find peace. Mr. Saleh, a former intelligence chief and a strong critic of the Taliban and Pakistan, is President AshrafGhani’s running-mate for the September 28 election. And the irony is that the assault occurred a few hours after President Ghani officially launched his campaign in which he promised that “peace is coming”. The message the insurgents are trying to send is that even the most <strong>fortified</strong> political offices in the country or its top politicians are not safe. The insurgents have made it clear they will carry out their offensive irrespective of the peace process, especially when Afghanistan gets down to a full-fledged election campaign. In recent months, even when the U.S. and Taliban representatives have held multiple rounds of talks in Doha, Qatar, insurgents have kept up attacks, both on military and civilian locations. The Taliban appears to be trying to <strong>leverage</strong> these assaults to boost its bargaining position in the talks with the U.S. And the Kabul government’s inability to prevent them and the U.S.’s apparent decision to delink the negotiations from the daily violence are giving the insurgents a free run in many Afghan cities.</p>\n<p>Afghanistan’s crises are many. Half the country is either directly controlled or dominated by the Taliban. In the eastern parts, the Islamic State has established a presence and the group targets the country’s religious minorities. The government in Kabul is weak and notorious for chronic corruption. Its failure to ensure the basic safety and security of civilians is in turn eroding the public’s confidence in the system. At present, the government appears <strong>beleaguered</strong>. Its security agencies are strained by the prolonged war. It is true that Afghanistan needs a political settlement. The war has been in a stalemate for long. The government, even with U.S. support, is not in a position to turn the war around. The Taliban, on the other side, has expanded its reach to the hinterland, but not the urban centres. While a peace process is the best way ahead in such a scenario, the question is whether the U.S. is giving too much leeway to the Taliban in its quest to get out of its longest war. The decision to keep the Afghan government out of the peace process was a big compromise. The absence of a ceasefire even when talks were under way was another. The result is that Afghans continue to suffer even when the Americans and the Taliban talk. This has to change. There has to be more pressure, both political and military, on the Taliban to cease the violence. And the U.S. should back the Afghan government and the coming elections resolutely, while Kabul has to get its act together.</p><br><p><strong>What is authors view on afghan government?</strong></p>", "options": ["<p>Most part of the country is controlled by talibans.</p>", "<p>Needs to elect new vice president.</p>", "<p>Kabul government is too fragile.</p>", "<p>Afghanistan needs permanent political solution</p>", "<p>All except B</p>"], "correctIndex": 4, "solution": "<p><strong>Answer: E</strong></p>"}, {"question": "<p><strong>Read the given passage carefully and answer the questions that follow.</strong></p>\n<p>The attack on Afghan vice presidential candidate AmrullahSaleh’s office in Kabul on Sunday that killed at least 20 people and injured 50, including Mr. Saleh, is a grave reminder of the crisis the war-torn country is going through even amid attempts to find peace. Mr. Saleh, a former intelligence chief and a strong critic of the Taliban and Pakistan, is President AshrafGhani’s running-mate for the September 28 election. And the irony is that the assault occurred a few hours after President Ghani officially launched his campaign in which he promised that “peace is coming”. The message the insurgents are trying to send is that even the most <strong>fortified</strong> political offices in the country or its top politicians are not safe. The insurgents have made it clear they will carry out their offensive irrespective of the peace process, especially when Afghanistan gets down to a full-fledged election campaign. In recent months, even when the U.S. and Taliban representatives have held multiple rounds of talks in Doha, Qatar, insurgents have kept up attacks, both on military and civilian locations. The Taliban appears to be trying to <strong>leverage</strong> these assaults to boost its bargaining position in the talks with the U.S. And the Kabul government’s inability to prevent them and the U.S.’s apparent decision to delink the negotiations from the daily violence are giving the insurgents a free run in many Afghan cities.</p>\n<p>Afghanistan’s crises are many. Half the country is either directly controlled or dominated by the Taliban. In the eastern parts, the Islamic State has established a presence and the group targets the country’s religious minorities. The government in Kabul is weak and notorious for chronic corruption. Its failure to ensure the basic safety and security of civilians is in turn eroding the public’s confidence in the system. At present, the government appears <strong>beleaguered</strong>. Its security agencies are strained by the prolonged war. It is true that Afghanistan needs a political settlement. The war has been in a stalemate for long. The government, even with U.S. support, is not in a position to turn the war around. The Taliban, on the other side, has expanded its reach to the hinterland, but not the urban centres. While a peace process is the best way ahead in such a scenario, the question is whether the U.S. is giving too much leeway to the Taliban in its quest to get out of its longest war. The decision to keep the Afghan government out of the peace process was a big compromise. The absence of a ceasefire even when talks were under way was another. The result is that Afghans continue to suffer even when the Americans and the Taliban talk. This has to change. There has to be more pressure, both political and military, on the Taliban to cease the violence. And the U.S. should back the Afghan government and the coming elections resolutely, while Kabul has to get its act together.</p><br><p><strong>Which of the words could replace the word Fortified mentioned in the passage?</strong></p>", "options": ["<p>Strengthened</p>", "<p>Weakened</p>", "<p>Sedate</p>", "<p>Enfeebled</p>", "<p>All the above</p>"], "correctIndex": 0, "solution": "<p><strong>Answer: A</strong></p>\n<p>Fortify – to make stronger</p>\n<p>All the options are antonyms of the given word other than Option (A)</p>"}, {"question": "<p><strong>Read the given passage carefully and answer the questions that follow.</strong></p>\n<p>The attack on Afghan vice presidential candidate AmrullahSaleh’s office in Kabul on Sunday that killed at least 20 people and injured 50, including Mr. Saleh, is a grave reminder of the crisis the war-torn country is going through even amid attempts to find peace. Mr. Saleh, a former intelligence chief and a strong critic of the Taliban and Pakistan, is President AshrafGhani’s running-mate for the September 28 election. And the irony is that the assault occurred a few hours after President Ghani officially launched his campaign in which he promised that “peace is coming”. The message the insurgents are trying to send is that even the most <strong>fortified</strong> political offices in the country or its top politicians are not safe. The insurgents have made it clear they will carry out their offensive irrespective of the peace process, especially when Afghanistan gets down to a full-fledged election campaign. In recent months, even when the U.S. and Taliban representatives have held multiple rounds of talks in Doha, Qatar, insurgents have kept up attacks, both on military and civilian locations. The Taliban appears to be trying to <strong>leverage</strong> these assaults to boost its bargaining position in the talks with the U.S. And the Kabul government’s inability to prevent them and the U.S.’s apparent decision to delink the negotiations from the daily violence are giving the insurgents a free run in many Afghan cities.</p>\n<p>Afghanistan’s crises are many. Half the country is either directly controlled or dominated by the Taliban. In the eastern parts, the Islamic State has established a presence and the group targets the country’s religious minorities. The government in Kabul is weak and notorious for chronic corruption. Its failure to ensure the basic safety and security of civilians is in turn eroding the public’s confidence in the system. At present, the government appears <strong>beleaguered</strong>. Its security agencies are strained by the prolonged war. It is true that Afghanistan needs a political settlement. The war has been in a stalemate for long. The government, even with U.S. support, is not in a position to turn the war around. The Taliban, on the other side, has expanded its reach to the hinterland, but not the urban centres. While a peace process is the best way ahead in such a scenario, the question is whether the U.S. is giving too much leeway to the Taliban in its quest to get out of its longest war. The decision to keep the Afghan government out of the peace process was a big compromise. The absence of a ceasefire even when talks were under way was another. The result is that Afghans continue to suffer even when the Americans and the Taliban talk. This has to change. There has to be more pressure, both political and military, on the Taliban to cease the violence. And the U.S. should back the Afghan government and the coming elections resolutely, while Kabul has to get its act together.</p><br><p><strong>Which of the words have the same meaning as the word Leverage mentioned in passage?</strong></p>", "options": ["<p>Encourage</p>", "<p>Counter&nbsp;</p>", "<p>unauthorize</p>", "<p>Influence</p>", "<p>All the above</p>"], "correctIndex": 3, "solution": "<p><strong>Answer: D</strong></p>\n<p>Leverage - the power to influence a person or situation.</p>"}, {"question": "<p><strong>Read the given passage carefully and answer the questions that follow.</strong></p>\n<p>The attack on Afghan vice presidential candidate AmrullahSaleh’s office in Kabul on Sunday that killed at least 20 people and injured 50, including Mr. Saleh, is a grave reminder of the crisis the war-torn country is going through even amid attempts to find peace. Mr. Saleh, a former intelligence chief and a strong critic of the Taliban and Pakistan, is President AshrafGhani’s running-mate for the September 28 election. And the irony is that the assault occurred a few hours after President Ghani officially launched his campaign in which he promised that “peace is coming”. The message the insurgents are trying to send is that even the most <strong>fortified</strong> political offices in the country or its top politicians are not safe. The insurgents have made it clear they will carry out their offensive irrespective of the peace process, especially when Afghanistan gets down to a full-fledged election campaign. In recent months, even when the U.S. and Taliban representatives have held multiple rounds of talks in Doha, Qatar, insurgents have kept up attacks, both on military and civilian locations. The Taliban appears to be trying to <strong>leverage</strong> these assaults to boost its bargaining position in the talks with the U.S. And the Kabul government’s inability to prevent them and the U.S.’s apparent decision to delink the negotiations from the daily violence are giving the insurgents a free run in many Afghan cities.</p>\n<p>Afghanistan’s crises are many. Half the country is either directly controlled or dominated by the Taliban. In the eastern parts, the Islamic State has established a presence and the group targets the country’s religious minorities. The government in Kabul is weak and notorious for chronic corruption. Its failure to ensure the basic safety and security of civilians is in turn eroding the public’s confidence in the system. At present, the government appears <strong>beleaguered</strong>. Its security agencies are strained by the prolonged war. It is true that Afghanistan needs a political settlement. The war has been in a stalemate for long. The government, even with U.S. support, is not in a position to turn the war around. The Taliban, on the other side, has expanded its reach to the hinterland, but not the urban centres. While a peace process is the best way ahead in such a scenario, the question is whether the U.S. is giving too much leeway to the Taliban in its quest to get out of its longest war. The decision to keep the Afghan government out of the peace process was a big compromise. The absence of a ceasefire even when talks were under way was another. The result is that Afghans continue to suffer even when the Americans and the Taliban talk. This has to change. There has to be more pressure, both political and military, on the Taliban to cease the violence. And the U.S. should back the Afghan government and the coming elections resolutely, while Kabul has to get its act together.</p><br><p><strong>Which of the words have the opposite meaning to the word Beleaguered mentioned in the passage?</strong></p>", "options": ["<p>Besieged</p>", "<p>Blockaded</p>", "<p>Encircled</p>", "<p>Troubled</p>", "<p>None of these</p>"], "correctIndex": 4, "solution": "<p><strong>Answer: E</strong></p>\n<p>Beleaguered - put in a very difficult situation.</p>\n<p>All the options are the synonyms of the word.</p>"}];
+
+// ===== STATE & DOM =====
+let currentIndex = 0;
+const totalQuestions = questions.length;
+const userAnswers = new Array(totalQuestions).fill(null); // selected option index or null
+const questionStates = new Array(totalQuestions).fill("notVisited"); // "notVisited", "notAnswered", "answered", "marked"
+
+// Timer
+const timerLabel = document.getElementById('timer-label');
+let timerInterval = null;
+let remainingSeconds = TEST_DURATION_SECONDS;
+
+// DOM elements
+const instructionHeader = document.getElementById('instruction-header');
+const quizHeader = document.getElementById('quiz-header');
+
+const instructionsContainer = document.getElementById('instructions-container');
+const quizContainer = document.getElementById('quiz-container');
+const solutionsContainer = document.getElementById('solutions-container');
+
+const qProgress = document.getElementById('q-progress');
+const questionText = document.getElementById('question-text');
+const optionsContainer = document.getElementById('options-container');
+
+const clearBtn = document.getElementById('clear-btn');
+const markBtn = document.getElementById('mark-btn');
+const nextBtn = document.getElementById('next-btn');
+const submitBtn = document.getElementById('submit-btn');
+
+const paletteContainer = document.getElementById('palette-container');
+const solutionsList = document.getElementById('solutions-list');
+const solutionsBackBtn = document.getElementById('solutions-back-btn');
+
+const resultOverlay = document.getElementById('result-overlay');
+const metricMarks = document.getElementById('metric-marks');
+const metricCorrect = document.getElementById('metric-correct');
+const metricWrong = document.getElementById('metric-wrong');
+const metricAttempted = document.getElementById('metric-attempted');
+const viewSolutionsBtn = document.getElementById('view-solutions-btn');
+const homeBtn = document.getElementById('home-btn');
+
+const instTotalQuestions = document.getElementById('inst-total-questions');
+const instSideTotal = document.getElementById('inst-side-total');
+const startTestBtn = document.getElementById('start-test-btn');
+
+let questionStartTime = null;
+let questionTimes = new Array(totalQuestions).fill(0);
+
+function formatTime(ms) {
+    const sec = Math.floor(ms / 1000);
+    return sec < 60 ? `${sec}s` : `${Math.floor(sec/60)}m ${sec % 60}s`;
+}
+
+// ===== TIMER FUNCTIONS =====
+function updateTimerLabel() {
+    const h = String(Math.floor(remainingSeconds / 3600)).padStart(2, '0');
+    const m = String(Math.floor((remainingSeconds % 3600) / 60)).padStart(2, '0');
+    const s = String(remainingSeconds % 60).padStart(2, '0');
+    timerLabel.textContent = `Time: ${h}:${m}:${s}`;
+}
+function startTimer() {
+    if (timerInterval) clearInterval(timerInterval);
+
+    updateTimerLabel();
+
+    timerInterval = setInterval(() => {
+        remainingSeconds--;
+
+        if (remainingSeconds <= 0) {
+            remainingSeconds = 0;
+            updateTimerLabel();
+            clearInterval(timerInterval);
+
+            // AUTO SUBMIT
+            if (questionStartTime !== null) {
+                questionTimes[currentIndex] +=
+                    (Date.now() - questionStartTime);
+            }
+            saveAnswerForCurrent();
+            showResultOverlay();
+            return;
+        }
+
+        updateTimerLabel();
+    }, 1000);
+}
+
+// ===== RENDERING =====
+function renderQuestion(index) {
+	if (questionStartTime !== null) {
+    questionTimes[currentIndex] += (Date.now() - questionStartTime);
+	}
+	questionStartTime = Date.now();
+
+    const q = questions[index];
+    qProgress.textContent = `Question ${index + 1} of ${totalQuestions}`;
+    questionText.innerHTML = q.question;
+    optionsContainer.innerHTML = '';
+
+    q.options.forEach((optHtml, optIndex) => {
+        const label = document.createElement('label');
+        label.className = 'option';
+
+        const input = document.createElement('input');
+        input.type = 'radio';
+        input.name = 'option';
+        input.value = optIndex;
+
+        if (userAnswers[index] === optIndex) {
+            input.checked = true;
+        }
+
+        const span = document.createElement('div');
+        span.className = 'option-text';
+        span.innerHTML = optHtml;
+
+        label.appendChild(input);
+        label.appendChild(span);
+
+        label.addEventListener('click', () => {
+            input.checked = true;
+        });
+
+        optionsContainer.appendChild(label);
+    });
+
+    // If first visit, mark as notAnswered for palette
+    if (questionStates[index] === "notVisited") {
+        questionStates[index] = (userAnswers[index] != null) ? "answered" : "notAnswered";
+    }
+
+    updatePalette();
+}
+
+function updatePalette() {
+    paletteContainer.innerHTML = '';
+
+    const drawerContainer =
+        document.getElementById('palette-drawer-container');
+    if (drawerContainer) drawerContainer.innerHTML = '';
+
+    for (let i = 0; i < totalQuestions; i++) {
+
+        function createBtn() {
+            const btn = document.createElement('div');
+            let cls = 'palette-item';
+
+            if (questionStates[i] === 'notVisited') cls += ' state-notVisited';
+            else if (questionStates[i] === 'notAnswered') cls += ' state-notAnswered';
+            else if (questionStates[i] === 'answered') cls += ' state-answered';
+            else if (questionStates[i] === 'marked') cls += ' state-marked';
+
+            if (i === currentIndex) cls += ' current';
+
+            btn.className = cls;
+            btn.textContent = i + 1;
+
+            btn.addEventListener('click', () => {
+                saveAnswerForCurrent();
+                currentIndex = i;
+                renderQuestion(currentIndex);
+                closeDrawer(); // safe on desktop
+            });
+
+            return btn;
+        }
+
+        paletteContainer.appendChild(createBtn());
+        if (drawerContainer) drawerContainer.appendChild(createBtn());
+    }
+}
+
+function getSelectedOptionIndex() {
+    const selected = document.querySelector('input[name="option"]:checked');
+    if (!selected) return null;
+    return parseInt(selected.value, 10);
+}
+
+function saveAnswerForCurrent() {
+    const selIndex = getSelectedOptionIndex();
+    if (selIndex !== null) {
+        userAnswers[currentIndex] = selIndex;
+        questionStates[currentIndex] = "answered";
+    } else {
+        // Only change to notAnswered if not marked
+        if (questionStates[currentIndex] !== "marked") {
+            questionStates[currentIndex] = "notAnswered";
+        }
+    }
+    updatePalette();
+}
+
+// ===== RESULT & SOLUTIONS =====
+function showResultOverlay() {
+    let correct = 0;
+    let attempted = 0;
+
+    const MARKS_PER_Q = 1;
+    const NEGATIVE_MARKS = 0.25;
+    const totalQuestions = questions.length;
+    const maxMarks = totalQuestions * MARKS_PER_Q;
+    let totalMarks = 0;
+
+    questions.forEach((q, i) => {
+        const ans = userAnswers[i];
+        if (ans !== null && ans !== undefined) {
+            attempted++;
+            if (ans === q.correctIndex) {
+                correct++;
+                totalMarks += MARKS_PER_Q;
+            } else {
+                totalMarks -= NEGATIVE_MARKS;
+            }
+        }
+    });
+
+    const wrong = attempted - correct;
+    const avgTime =
+        questionTimes.reduce((a, b) => a + b, 0) / totalQuestions;
+
+    metricMarks.textContent =
+        `${totalMarks.toFixed(2)} / ${maxMarks.toFixed(2)}`;
+    metricCorrect.textContent = correct;
+    metricWrong.textContent = wrong;
+    metricAttempted.textContent = attempted;
+    document.getElementById("metric-avgtime").textContent =
+        formatTime(avgTime);
+
+    resultOverlay.style.display = "flex";
+}
+
+function closeResultOverlay() {
+    resultOverlay.style.display = 'none';
+}
+
+function buildSolutionsView() {
+    solutionsList.innerHTML = '';
+    questions.forEach((q, index) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'solution-item';
+
+        const qDiv = document.createElement('div');
+        qDiv.className = 'solution-question';
+        qDiv.innerHTML = `<strong>Q${index + 1}.</strong> ${q.question}`;
+        wrapper.appendChild(qDiv);
+
+        const optsDiv = document.createElement('div');
+        optsDiv.className = 'solution-options';
+
+        q.options.forEach((optHtml, optIndex) => {
+            const optDiv = document.createElement('div');
+            let cls = 'solution-option';
+            if (optIndex === q.correctIndex) {
+                cls += ' correct';
+            } else if (userAnswers[index] === optIndex) {
+                cls += ' wrong';
+            }
+            optDiv.className = cls;
+
+            const labelSpan = document.createElement('div');
+            labelSpan.className = 'solution-label';
+            labelSpan.textContent = String.fromCharCode(65 + optIndex) + '.';
+
+            const textDiv = document.createElement('div');
+            textDiv.className = 'solution-text';
+            textDiv.innerHTML = optHtml;
+
+            optDiv.appendChild(labelSpan);
+            optDiv.appendChild(textDiv);
+            optsDiv.appendChild(optDiv);
+        });
+
+        wrapper.appendChild(optsDiv);
+
+        const solDiv = document.createElement('div');
+        solDiv.className = 'solution-explanation';
+        const solutionHtml = (q.solution || '')
+			.replace(/\\"/g, '"')      // unescape quotes
+			.replace(/\\n/g, '')       // remove escaped newlines
+			.replace(/\\t/g, '');      // remove escaped tabs
+
+		solDiv.innerHTML = `<strong>Solution:</strong><br>${solutionHtml}`;
+        wrapper.appendChild(solDiv);
+
+        solutionsList.appendChild(wrapper);
+    });
+}
+
+// ===== EVENT HANDLERS =====
+startTestBtn.addEventListener('click', () => {
+    // Hide instruction header + screen
+    instructionHeader.style.display = 'none';
+    instructionsContainer.style.display = 'none';
+
+    // Show quiz header + screen
+    quizHeader.style.display = 'flex';
+    quizContainer.style.display = 'block';
+    solutionsContainer.style.display = 'none';
+
+    currentIndex = 0;
+    renderQuestion(currentIndex);
+    startTimer();
+    questionStartTime = Date.now();
+});
+
+clearBtn.addEventListener('click', () => {
+    // Clear selection & mark as "notAnswered" (red)
+    userAnswers[currentIndex] = null;
+    questionStates[currentIndex] = "notAnswered";
+    renderQuestion(currentIndex);
+});
+
+markBtn.addEventListener('click', () => {
+    // Option 2: DO NOT save answer when marking for review
+    userAnswers[currentIndex] = null;
+    questionStates[currentIndex] = "marked";
+    if (currentIndex < totalQuestions - 1) {
+        currentIndex++;
+        renderQuestion(currentIndex);
+    } else {
+        // stay on last, just refresh colors
+        renderQuestion(currentIndex);
+    }
+});
+
+nextBtn.addEventListener('click', () => {
+    saveAnswerForCurrent();
+    if (currentIndex < totalQuestions - 1) {
+        currentIndex++;
+        renderQuestion(currentIndex);
+    } else {
+        // last question: nothing to move, but answer is saved
+        renderQuestion(currentIndex);
+    }
+});
+
+submitBtn.addEventListener('click', () => {
+	if (questionStartTime !== null) {
+    questionTimes[currentIndex] += (Date.now() - questionStartTime);
+    questionStartTime = null;
+	}
+    saveAnswerForCurrent();
+    clearInterval(timerInterval);
+    showResultOverlay();
+});
+
+viewSolutionsBtn.addEventListener('click', () => {
+    resultOverlay.style.display = 'none';
+    quizContainer.style.display = 'none';
+    solutionsContainer.style.display = 'block';
+    buildSolutionsView();
+});
+
+solutionsBackBtn.addEventListener('click', () => {
+    solutionsContainer.style.display = 'none';
+    quizContainer.style.display = 'none';
+    resultOverlay.style.display = 'flex';
+});
+
+homeBtn.addEventListener('click', () => {
+    resultOverlay.style.display = 'none';
+    solutionsContainer.style.display = 'none';
+    quizContainer.style.display = 'none';       // FIXED
+    instructionsContainer.style.display = 'block'; // FIXED
+
+    instructionHeader.style.display = 'block';
+    quizHeader.style.display = 'none';
+
+    currentIndex = 0;
+    userAnswers.fill(null);
+    questionStates.fill("notVisited");
+
+    window.scrollTo(0, 0);
+});
+
+
+// ===== INIT =====
+instTotalQuestions.textContent = totalQuestions;
+instSideTotal.textContent = totalQuestions;
+
+// ===== HAMBURGER MENU LOGIC =====
+const menuBtn = document.getElementById('menu-btn');
+const drawer = document.getElementById('palette-drawer');
+const drawerOverlay = document.getElementById('drawer-overlay');
+
+function openDrawer() {
+    if (!drawer || !drawerOverlay) return;
+    drawer.classList.add('open');
+    drawerOverlay.classList.add('show');
+    document.body.classList.add('drawer-open');
+}
+
+function closeDrawer() {
+    if (!drawer || !drawerOverlay) return;
+    drawer.classList.remove('open');
+    drawerOverlay.classList.remove('show');
+    document.body.classList.remove('drawer-open');
+}
+
+if (menuBtn) {
+    menuBtn.addEventListener('click', openDrawer);
+}
+
+if (drawerOverlay) {
+    drawerOverlay.addEventListener('click', closeDrawer);
+}
+</script>
+
+</body>
+</html>

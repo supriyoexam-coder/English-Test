@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Beginners Quiz Reading Comprehension Set -4 Quiz | MockTest Buddy</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<script src="../home.js"></script>
+
+<style>
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --bg: #f3f4f6;
+    --card-bg: #ffffff;
+    --text: #111827;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --danger: #ef4444;
+    --success: #22c55e;
+    --marked: #7c3aed;
+    --correct-bg: #ecfdf3;
+    --wrong-bg: #fef2f2;
+    --marked-bg: #f3e8ff;
+}
+
+/* Reset-ish */
+* {
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: radial-gradient(circle at top left, #dbeafe, #eff6ff 40%, #f9fafb 80%);
+    color: var(--text);
+}
+
+/* Instruction header (brand only) */
+.brand-header {
+    background: linear-gradient(90deg, #0f172a, #111827);
+    color: #fff;
+    padding: 14px 16px;
+    text-align: center;
+}
+.brand-title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+.brand-sub {
+    font-size: 12px;
+    opacity: 0.8;
+    margin-top: 4px;
+}
+
+/* Test header (only after start) */
+.header-test {
+    display: none;
+    background: linear-gradient(90deg, var(--primary-dark), var(--primary));
+    color: #fff;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.header-left {
+    display: flex;
+    flex-direction: column;
+}
+.header-title {
+    font-size: 20px;
+    font-weight: 600;
+}
+.header-subtitle {
+    font-size: 12px;
+    opacity: 0.9;
+}
+.header-right {
+    font-size: 12px;
+    text-align: right;
+}
+.badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.12);
+    font-size: 11px;
+}
+
+/* Layout */
+.main {
+    max-width: 1000px;
+    margin: 16px auto 28px;
+    padding: 0 12px;
+}
+.card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
+    padding: 18px 16px 16px;
+}
+
+/* Instructions */
+#instructions-container {
+    display: block;
+}
+.instructions-layout {
+    display: flex;
+    gap: 16px;
+}
+.instructions-main {
+    flex: 1;
+}
+.instructions-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+.instructions-list {
+    font-size: 14px;
+    margin-left: 16px;
+    margin-bottom: 12px;
+}
+.instructions-list li {
+    margin-bottom: 4px;
+}
+.instructions-summary {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin: 10px 0 16px;
+}
+.instructions-summary-item {
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #f9fafb;
+    padding: 8px;
+    font-size: 13px;
+}
+.instructions-summary-label {
+    font-size: 11px;
+    color: var(--muted);
+}
+.instructions-summary-value {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* Instruction candidate box (right side) */
+.instructions-side {
+    width: 230px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #f1f5f9;
+    padding: 10px;
+    font-size: 13px;
+}
+.instructions-side-title {
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+.instructions-side-row {
+    margin-bottom: 4px;
+}
+.instructions-side-label {
+    color: var(--muted);
+    font-size: 12px;
+}
+.instructions-side-value {
+    font-weight: 500;
+}
+
+/* Test layout */
+#quiz-container {
+    display: none;
+}
+.header-test {
+    display: none;
+}
+.test-layout {
+    display: flex;
+    gap: 16px;
+}
+.test-main {
+    flex: 1;
+}
+.test-side {
+    width: 300px;
+}
+
+/* Question header */
+.question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 15px;
+    color: var(--muted);
+}
+.q-progress {
+    font-weight: 500;
+}
+.marks-info {
+    font-size: 12px;
+}
+.marks-info span {
+    margin-left: 8px;
+}
+.marks-pos {
+    color: var(--success);
+}
+.marks-neg {
+    color: var(--danger);
+}
+
+/* Question body */
+.question-body {
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    padding: 12px 10px;
+    background: #f9fafb;
+    margin-bottom: 12px;
+    font-size: 17px;
+	line-height: 1.5;
+}
+.question-body p {
+    margin: 4px 0;
+}
+
+/* Options */
+.options-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.option {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #fff;
+    cursor: pointer;
+    transition: background 0.12s ease, border-color 0.12s ease, transform 0.08s ease;
+}
+.option:hover {
+    background: #eff6ff;
+    border-color: var(--primary);
+    transform: translateY(-1px);
+}
+.option input {
+    margin-top: 3px;
+}
+.option-text {
+    font-size: 17px;
+	line-height: 1.4;
+}
+
+/* Nav buttons */
+.nav-bar {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.nav-left,
+.nav-right {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.btn {
+    border: none;
+    border-radius: 999px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.12s ease, transform 0.08s ease, box-shadow 0.12s ease;
+}
+.btn:active {
+    transform: translateY(1px);
+}
+.btn-primary {
+    background: var(--primary);
+    color: #fff;
+    box-shadow: 0 8px 16px rgba(37, 99, 235, 0.3);
+}
+.btn-primary:hover {
+    background: var(--primary-dark);
+}
+.btn-secondary {
+    background: #e5e7eb;
+    color: #111827;
+}
+.btn-secondary:hover {
+    background: #d1d5db;
+}
+.btn-danger {
+    background: var(--danger);
+    color: #fff;
+}
+.btn-danger:hover {
+    background: #b91c1c;
+}
+
+/* Side panel (palette only during test) */
+.sidebar-card {
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #f9fafb;
+    padding: 10px;
+    font-size: 12px;
+}
+
+/* Palette */
+.palette {
+    margin-top: 0;
+}
+.palette-title {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+.palette-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.palette-item {
+    min-width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 2px solid #d1d5db;
+    font-size: 18px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.15s;
+}
+.palette-item:hover {
+    transform: scale(1.08);
+    border-color: #3b82f6;
+}
+.palette-item.current {
+    outline: 2px solid var(--primary);
+}
+
+/* Palette colors per your request */
+.palette-item.state-notVisited {
+    background: #9ca3af;  /* darker grey */
+    color: #ffffff;
+}
+.palette-item.state-notAnswered {
+    background: #ef4444;  /* red */
+    color: #ffffff;
+}
+.palette-item.state-answered {
+    background: #22c55e;  /* green */
+    color: #ffffff;
+}
+.palette-item.state-marked {
+    background: #8b5cf6;  /* strong purple */
+    color: #ffffff;
+}
+
+/* Palette legend */
+.palette-legend {
+    margin-top: 8px;
+    font-size: 11px;
+    color: var(--muted);
+}
+.palette-legend-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 2px;
+}
+.legend-box {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+}
+.legend-notVisited { background: #e5e7eb; }
+.legend-notAnswered { background: #fee2e2; border-color:#fecaca; }
+.legend-answered { background: #dcfce7; border-color:#bbf7d0; }
+.legend-marked { background: #e9d5ff; border-color:#c4b5fd; }
+
+/* Solutions page */
+#solutions-container {
+    display: none;
+}
+.solutions-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+.solutions-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 10px;
+}
+.solution-item {
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+    margin-top: 10px;
+}
+.solution-item:first-child {
+    border-top: none;
+    padding-top: 0;
+    margin-top: 0;
+}
+.solution-question {
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+.solution-options {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+.solution-option {
+    display: flex;
+    gap: 6px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #fff;
+}
+.solution-option.correct {
+    background: var(--correct-bg);
+    border-color: var(--success);
+}
+.solution-option.wrong {
+    background: var(--wrong-bg);
+    border-color: var(--danger);
+}
+.solution-label {
+    font-size: 13px;
+    font-weight: 600;
+}
+.solution-text {
+    flex: 1;
+    font-size: 13px;
+}
+.solution-explanation {
+    font-size: 13px;
+    background: #eef2ff;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+/* Overlay */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15,23,42,0.55);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+}
+.overlay-content {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 16px 16px 14px;
+    width: 94%;
+    max-width: 430px;
+    box-shadow: 0 26px 50px rgba(15,23,42,0.4);
+}
+.overlay-header h2 {
+    margin: 0;
+    font-size: 20px;
+}
+.overlay-body {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 8px 0 10px;
+}
+.overlay-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-bottom: 10px;
+    font-size: 13px;
+}
+.metric-card {
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    padding: 8px;
+    background: #f9fafb;
+}
+.metric-label {
+    font-size: 11px;
+    color: var(--muted);
+}
+.metric-value {
+    font-size: 15px;
+    font-weight: 600;
+    margin-top: 2px;
+}
+.overlay-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+/* Utils */
+.hidden {
+    display: none !important;
+}
+
+/* Responsive: hide side panels & palette on phones */
+@media (max-width: 768px) {
+    .instructions-layout,
+    .test-layout {
+        flex-direction: column;
+    }
+    .instructions-side,
+    .test-side {
+        display: none;
+    }
+    .card {
+        padding: 16px 12px 14px;
+    }
+}
+
+/* >>> ADD NEW CODE BELOW <<< */
+
+/* Expand quiz layout width */
+.main {
+    max-width: 1400px !important;
+}
+
+/* Expand quiz card width */
+#quiz-container.card {
+    width: 100% !important;
+    padding: 20px !important;
+}
+
+/* Reduce left+right margin */
+.main {
+    margin: 10px auto !important;
+    padding: 0px 5px !important;
+}
+
+/* Ensure question+palette stay visible side by side */
+.test-layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 16px;
+}
+
+/* Reduce question padding */
+.question-body {
+    padding: 12px !important;
+}
+
+/* Keep buttons in one row */
+.nav-bar {
+    flex-wrap: nowrap !important;
+    justify-content: space-between !important;
+}
+
+.nav-left button,
+.nav-right button {
+    white-space: nowrap !important;
+}
+
+/* Medium screen adjustments */
+@media (max-width: 1100px) {
+    .test-layout {
+        display: block !important;
+    }
+    .test-side {
+        display: none !important;
+    }
+    #quiz-container.card {
+        padding: 10px !important;
+    }
+    .question-body {
+        font-size: 18px !important;
+    }
+    .btn {
+        font-size: 16px !important;
+    }
+}
+
+/* Small screen adjustments */
+@media (max-width: 600px) {
+    body {
+        font-size: 16px !important;
+    }
+    .btn {
+        padding: 10px 16px !important;
+        font-size: 15px !important;
+    }
+    .option-text {
+        font-size: 18px !important;
+    }
+}
+/* Buttons shown on desktop */
+.nav-right .btn-submit {
+    display: inline-flex;
+}
+
+/* Buttons shown on mobile */
+@media (max-width: 600px) {
+    .btn-submit {
+        display: none !important;
+    }
+
+    .btn-mark {
+        display: inline-flex !important;
+    }
+
+    .btn-clear {
+        display: inline-flex !important;
+    }
+
+    .btn-save {
+        display: inline-flex !important;
+    }
+
+    /* Change button labels visually */
+    .btn-mark::after {
+        content: "Mark";
+    }
+    .btn-clear::after {
+        content: "Clear";
+    }
+    .btn-save::after {
+        content: "Save & Next";
+    }
+
+    /* hide original text inside buttons */
+    .btn-mark span,
+    .btn-clear span,
+    .btn-save span {
+        display: none;
+    }
+
+    /* Make buttons larger and easier to tap */
+    .nav-left button,
+    .nav-right button {
+        padding: 14px 20px;
+        font-size: 18px;
+        border-radius: 8px;
+    }
+}
+
+@media (max-width: 600px) {
+    .header-test {
+        flex-wrap: wrap;
+        padding: 8px 10px;
+        gap: 6px;
+    }
+
+    .header-left {
+        flex: 1 1 100%;
+    }
+
+    .header-title {
+        font-size: 14px;
+        line-height: 1.2;
+    }
+
+    .header-subtitle {
+        font-size: 11px;
+    }
+
+    .header-right {
+        flex: 1 1 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 11px;
+    }
+
+    .badge {
+        font-size: 10px;
+        padding: 2px 6px;
+    }
+}
+/* ===== HAMBURGER MENU ===== */
+.menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .menu-btn {
+        display: block;
+    }
+}
+
+/* ===== PALETTE DRAWER ===== */
+.palette-drawer {
+    position: fixed;
+    top: 0;
+    left: -320px;
+    width: 300px;
+    height: 100dvh; /* mobile safe height */
+    background: #ffffff;
+    box-shadow: 2px 0 20px rgba(0,0,0,0.2);
+    z-index: 100;
+    padding: 12px;
+    transition: left 0.3s ease;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.palette-drawer.open {
+    left: 0;
+}
+
+.drawer-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    display: none;
+    z-index: 90;
+}
+
+.drawer-overlay.show {
+    display: block;
+}
+#palette-drawer-container {
+    flex: 0 0 auto;          
+    max-height: calc(100dvh - 170px); 
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+/* Improve scroll on mobile */
+#palette-drawer-container::-webkit-scrollbar {
+    width: 6px;
+}
+#palette-drawer-container::-webkit-scrollbar-thumb {
+    background: #c7d2fe;
+    border-radius: 6px;
+}
+/* Keep legend always visible */
+.palette-drawer .palette-legend {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid #e5e7eb;
+    flex-shrink: 0;
+}
+
+body.drawer-open {
+    overflow: hidden;
+}
+</style>
+</head>
+<body>
+
+<div id="drawer-overlay" class="drawer-overlay"></div>
+
+<div id="palette-drawer" class="palette-drawer">
+    <h3 style="margin:6px 0 10px;font-size:14px;">Question Palette</h3>
+
+    <div id="palette-drawer-container" class="palette-grid"></div>
+
+    <!-- LEGEND FOR MOBILE -->
+    <div class="palette-legend">
+        <div class="palette-legend-row">
+            <span class="legend-box legend-notVisited"></span> Not visited
+        </div>
+        <div class="palette-legend-row">
+            <span class="legend-box legend-notAnswered"></span> Not answered
+        </div>
+        <div class="palette-legend-row">
+            <span class="legend-box legend-answered"></span> Answered
+        </div>
+        <div class="palette-legend-row">
+            <span class="legend-box legend-marked"></span> Marked for review
+        </div>
+    </div>
+</div>
+
+<!-- INSTRUCTION HEADER (BRAND ONLY) -->
+<div id="instruction-header" class="brand-header">
+    <div class="brand-title">MockTest Buddy</div>
+    <div class="brand-sub">by Team LuciferBanker</div>
+</div>
+
+<!-- TEST HEADER (ONLY AFTER START) -->
+<div id="quiz-header" class="header-test">
+    <button id="menu-btn" class="menu-btn">☰</button>
+    <div class="header-left">
+        <span class="header-title">Beginners Quiz Reading Comprehension Set -4</span>
+        <span class="header-subtitle">Single-correct MCQ • One question per screen</span>
+    </div>
+    <div class="header-right">
+        <span class="badge">Quiz Mode</span><br />
+        <span style="font-size: 11px;">Marks: +1 / −0.25</span><br />
+        <span id="timer-label" style="font-size: 11px;">Time: 00:00:00</span>
+    </div>
+</div>
+
+<div class="main">
+
+    <!-- INSTRUCTIONS SCREEN -->
+    <div class="card" id="instructions-container">
+        <div class="instructions-layout">
+            <div class="instructions-main">
+                <div class="instructions-title">Instructions</div>
+                <p style="font-size:14px;margin-bottom:6px;">
+                    Read the instructions carefully before starting. Once started, the timer will not stop.
+                </p>
+
+                <div class="instructions-summary">
+                    <div class="instructions-summary-item">
+                        <div class="instructions-summary-label">Total Questions</div>
+                        <div class="instructions-summary-value" id="inst-total-questions">16</div>
+                    </div>
+                    <div class="instructions-summary-item">
+                        <div class="instructions-summary-label">Marks / Q</div>
+                        <div class="instructions-summary-value">+1</div>
+                    </div>
+                    <div class="instructions-summary-item">
+                        <div class="instructions-summary-label">Negative</div>
+                        <div class="instructions-summary-value">−0.25</div>
+                    </div>
+                </div>
+
+                <ul class="instructions-list">
+                    <li>Each question has a single correct answer.</li>
+                    <li>Use the palette on the right to move between questions or sections.</li>
+                    <li>Use <strong>Mark for Review &amp; Next</strong> to mark questions you want to review later.</li>
+                    <li>You can submit the test anytime using the <strong>Submit</strong> button.</li>
+                </ul>
+
+                <button class="btn btn-primary" id="start-test-btn">Start Test</button>
+            </div>
+
+            <div class="instructions-side">
+                <div class="instructions-side-title">Details</div>
+                <div class="instructions-side-row">
+                    <div class="instructions-side-label">Canditate</div>
+                    <div class="instructions-side-value">Guest User</div>
+                </div>
+                <div class="instructions-side-row">
+                    <div class="instructions-side-label">Section</div>
+                    <div class="instructions-side-value" id="inst-section-name">Beginners Quiz Reading Comprehension Set -4</div>
+                </div>
+                <div class="instructions-side-row">
+                    <div class="instructions-side-label">Questions</div>
+                    <div class="instructions-side-value" id="inst-side-total">16</div>
+                </div>
+                <div class="instructions-side-row">
+                    <div class="instructions-side-label">Marks</div>
+                    <div class="instructions-side-value">+1 / −0.25</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- QUIZ SCREEN -->
+    <div class="card" id="quiz-container">
+        <div class="test-layout">
+            <div class="test-main">
+                <div class="question-header">
+                    <div class="q-progress" id="q-progress">Question 1 of 16</div>
+                    <div class="marks-info">
+                        <span class="marks-pos">+1 mark</span>
+                        <span class="marks-neg">−0.25 negative</span>
+                    </div>
+                </div>
+                <div class="question-body" id="question-text"></div>
+                <div class="options-group" id="options-container"></div>
+
+                <div class="nav-bar">
+					<div class="nav-left">
+						<button class="btn btn-secondary" id="clear-btn">
+							<svg width="18" height="18" viewBox="0 0 24 24" class="btn-icon"><path d="M6 19L19 6" stroke="currentColor" stroke-width="2"/><path d="M6 6L19 19" stroke="currentColor" stroke-width="2"/></svg>
+							<span class="btn-text">Clear Response</span>
+						</button>
+						<button class="btn btn-secondary" id="mark-btn">
+							<svg width="18" height="18" viewBox="0 0 24 24" class="btn-icon"><path d="M6 3h12v18l-6-4-6 4V3z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+							<span class="btn-text">Mark for Review & Next</span>
+						</button>
+					</div>
+					<div class="nav-right">
+						<button class="btn btn-primary" id="next-btn">
+							<svg width="18" height="18" viewBox="0 0 24 24" class="btn-icon"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+							<span class="btn-text">Save & Next</span>
+						</button>
+						<button class="btn btn-danger" id="submit-btn">
+							<svg width="18" height="18" viewBox="0 0 24 24" class="btn-icon"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+							<span class="btn-text">Submit</span>
+						</button>
+					</div>
+				</div>
+
+            </div>
+
+            <aside class="test-side">
+                <div class="sidebar-card palette">
+                    <div class="palette-title">Question Palette</div>
+                    <div class="palette-grid" id="palette-container"></div>
+                    <div class="palette-legend">
+                        <div class="palette-legend-row">
+                            <span class="legend-box legend-notVisited"></span> Not visited
+                        </div>
+                        <div class="palette-legend-row">
+                            <span class="legend-box legend-notAnswered"></span> Not answered
+                        </div>
+                        <div class="palette-legend-row">
+                            <span class="legend-box legend-answered"></span> Answered
+                        </div>
+                        <div class="palette-legend-row">
+                            <span class="legend-box legend-marked"></span> Marked for review
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- SOLUTIONS SCREEN -->
+    <div class="card" id="solutions-container">
+        <div class="solutions-title">Solutions – Beginners Quiz Reading Comprehension Set -4</div>
+        <div class="solutions-sub">
+            Correct options are highlighted in <span style="color:var(--success);font-weight:600;">green</span>.
+            Your wrong selections (if any) are highlighted in <span style="color:var(--danger);font-weight:600;">red</span>.
+        </div>
+        <div id="solutions-list"></div>
+        <div style="margin-top:12px; display:flex; justify-content:flex-end; gap:8px;">
+            <button class="btn btn-secondary" id="solutions-back-btn">&larr; Back to Result</button>
+        </div>
+    </div>
+</div>
+
+<!-- RESULT OVERLAY -->
+<div class="overlay" id="result-overlay">
+    <div class="overlay-content">
+        <div class="overlay-header">
+            <h2>Quiz Summary</h2>
+        </div>
+        <div class="overlay-body">
+            Here is your performance analytics for this test.
+        </div>
+        <div class="overlay-metrics">
+            <div class="metric-card">
+                <div class="metric-label">Total Marks</div>
+                <div class="metric-value" id="metric-marks">0</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Correct Answers</div>
+                <div class="metric-value" id="metric-correct">0</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Wrong Answers</div>
+                <div class="metric-value" id="metric-wrong">0</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Questions Attempted</div>
+                <div class="metric-value" id="metric-attempted">0</div>
+            </div>
+			<div class="metric-card">
+				<div class="metric-label">Avg Time / Question</div>
+				<div class="metric-value" id="metric-avgtime">0</div>
+			</div>
+        </div>
+        <div class="overlay-footer">
+            <button class="btn btn-secondary" id="home-btn">Home</button>
+            <button class="btn btn-primary" id="view-solutions-btn">View Solutions</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const TEST_DURATION_SECONDS = 600;
+
+const questions = [{"question": "<p><strong>Read the following passage and answer the questions given below. Some words are highlighted to help you answer the questions.</strong></p>\n<p>Cloud computing refers to the technology used to access different services over the internet. By using different services through the internet means that the data will be stored on servers, rather than individual drives. Cloud computing allows people to access their files from anywhere, despite of the computer they are using. Cloud computing became a <strong>viable</strong> business model because certain companies like Amazon had assembled enormous amount of servers and resources to handle their customers demands during peak seasons. This entire IT infrastructure wasn’t used efficiently for the rest of the year. Therefore, they decided to ___________ their resources to the public. This way the public is able to use computing resources over the internet, any time of the day, and from any place in the world. The third party service provider is responsible for linking the users with the type and amount of IT resources they need, for their document management, and backup storage.</p>\n<p>There are four types of ways in which a ‘cloud’ can be structured. The first type is the public cloud, in which the services are available through the internet from third party sources. The second type of cloud is the community cloud, in which many organizations realize that they’ve got similar needs and requirements, and hence, should share the infrastructure. An example of a community cloud is Google’s Gov cloud, in which the services are specifically modified for the public sector agencies. The third type of structure is the private cloud, in which the business buys, and maintains the software, so that its employees could centrally store the date, and collaborate efficiently. The last type of structure is the hybrid cloud, in which a combination of public and private clouds is used. The advantage of such a structure is that it makes it easier to archive and back up the data on the public cloud.</p>\n<p>There are numerous advantages of cloud computing. Firstly, cloud computing lowers computer costs. As the services are provided over the internet, and there’s no need to install any software, the desktop PC doesn’t need to be powerful processing powers. Along with the hardware requirements, it also reduce software costs. Another advantage of cloud computing is that it makes it easier for groups to collaborate their files. Multiple users can edit a document at the same time, and have discussions over the internet. With cloud computing, organizations can truly run a business without borders. They won’t be restricted to a specific location as all their data is available on the internet.  Along with the numerous advantages, there are some disadvantages of cloud computing. Firstly, cloud computing is dependent on the internet. If the internet connection is down, then the whole ‘cloud’ doesn’t work. It requires a constant internet connection; otherwise a user may not be able to access own files. As the files need to be accessed on the internet, the back and forth communication between the computer and the cloud may be slow to respond because it is busy handling other users. Another disadvantage of cloud computing is that the features that they offer are limited. Another issue is of the privacy of the customers. With the data being shared with the third party, it can use the data for all kind of purposes.</p>\n<p>There are many security and reliability related issues that still need to be answered. As it is still in its initial stages, there is a lot of room for improvement. To increase its usage in the IT industry, cloud service providers will need to address some major issues like security, application <strong>interoperability</strong>, application and data portability, and governance. They’ll need to come up with consistent variables so as to monitor and measure the performance of cloud applications.</p><br><p><strong>Why the tech companies have decided to allow their resources to public?</strong></p>", "options": ["<p>Companies allowed the people to use their servers because those were not suitable for their work.</p>", "<p>The servers were not used efficiently by the company so they decided to rent it to public according to their usage.</p>", "<p>The company decided to buy new servers so they planned to allow people to use their old servers.</p>", "<p>The advancement in the technology made the company not to use those servers.</p>", "<p>None of these.</p>"], "correctIndex": 1, "solution": "<p><strong>Answer: B</strong></p>\n<p>The question can be answered by the statement from first paragraph. It states that companies’ resources were not used efficiently, so they want to rent it to people according to their usage. Hence, option b is the correct answer.</p>"}, {"question": "<p><strong>Read the following passage and answer the questions given below. Some words are highlighted to help you answer the questions.</strong></p>\n<p>Cloud computing refers to the technology used to access different services over the internet. By using different services through the internet means that the data will be stored on servers, rather than individual drives. Cloud computing allows people to access their files from anywhere, despite of the computer they are using. Cloud computing became a <strong>viable</strong> business model because certain companies like Amazon had assembled enormous amount of servers and resources to handle their customers demands during peak seasons. This entire IT infrastructure wasn’t used efficiently for the rest of the year. Therefore, they decided to ___________ their resources to the public. This way the public is able to use computing resources over the internet, any time of the day, and from any place in the world. The third party service provider is responsible for linking the users with the type and amount of IT resources they need, for their document management, and backup storage.</p>\n<p>There are four types of ways in which a ‘cloud’ can be structured. The first type is the public cloud, in which the services are available through the internet from third party sources. The second type of cloud is the community cloud, in which many organizations realize that they’ve got similar needs and requirements, and hence, should share the infrastructure. An example of a community cloud is Google’s Gov cloud, in which the services are specifically modified for the public sector agencies. The third type of structure is the private cloud, in which the business buys, and maintains the software, so that its employees could centrally store the date, and collaborate efficiently. The last type of structure is the hybrid cloud, in which a combination of public and private clouds is used. The advantage of such a structure is that it makes it easier to archive and back up the data on the public cloud.</p>\n<p>There are numerous advantages of cloud computing. Firstly, cloud computing lowers computer costs. As the services are provided over the internet, and there’s no need to install any software, the desktop PC doesn’t need to be powerful processing powers. Along with the hardware requirements, it also reduce software costs. Another advantage of cloud computing is that it makes it easier for groups to collaborate their files. Multiple users can edit a document at the same time, and have discussions over the internet. With cloud computing, organizations can truly run a business without borders. They won’t be restricted to a specific location as all their data is available on the internet.  Along with the numerous advantages, there are some disadvantages of cloud computing. Firstly, cloud computing is dependent on the internet. If the internet connection is down, then the whole ‘cloud’ doesn’t work. It requires a constant internet connection; otherwise a user may not be able to access own files. As the files need to be accessed on the internet, the back and forth communication between the computer and the cloud may be slow to respond because it is busy handling other users. Another disadvantage of cloud computing is that the features that they offer are limited. Another issue is of the privacy of the customers. With the data being shared with the third party, it can use the data for all kind of purposes.</p>\n<p>There are many security and reliability related issues that still need to be answered. As it is still in its initial stages, there is a lot of room for improvement. To increase its usage in the IT industry, cloud service providers will need to address some major issues like security, application <strong>interoperability</strong>, application and data portability, and governance. They’ll need to come up with consistent variables so as to monitor and measure the performance of cloud applications.</p><br><p><strong>According to the passage, what is considered as the community cloud?</strong></p>", "options": ["<p>A cloud infrastructure that is managed by third party and shared with public organizations.</p>", "<p>A cloud infrastructure where applications are running in a combination.</p>", "<p>A cloud infrastructure in which multiple organizations share resources and services based on common requirements.</p>", "<p>A cloud infrastructure is dedicated to single user organization.</p>", "<p>None of these.</p>"], "correctIndex": 2, "solution": "<p><strong>Answer: C</strong></p>\n<p>The answer lies in the second passage, a community cloud is where many organisations realise that they have similar requirements among them and so sharing the cloud. Hence, option c is the correct answer.</p>"}, {"question": "<p><strong>Read the following passage and answer the questions given below. Some words are highlighted to help you answer the questions.</strong></p>\n<p>Cloud computing refers to the technology used to access different services over the internet. By using different services through the internet means that the data will be stored on servers, rather than individual drives. Cloud computing allows people to access their files from anywhere, despite of the computer they are using. Cloud computing became a <strong>viable</strong> business model because certain companies like Amazon had assembled enormous amount of servers and resources to handle their customers demands during peak seasons. This entire IT infrastructure wasn’t used efficiently for the rest of the year. Therefore, they decided to ___________ their resources to the public. This way the public is able to use computing resources over the internet, any time of the day, and from any place in the world. The third party service provider is responsible for linking the users with the type and amount of IT resources they need, for their document management, and backup storage.</p>\n<p>There are four types of ways in which a ‘cloud’ can be structured. The first type is the public cloud, in which the services are available through the internet from third party sources. The second type of cloud is the community cloud, in which many organizations realize that they’ve got similar needs and requirements, and hence, should share the infrastructure. An example of a community cloud is Google’s Gov cloud, in which the services are specifically modified for the public sector agencies. The third type of structure is the private cloud, in which the business buys, and maintains the software, so that its employees could centrally store the date, and collaborate efficiently. The last type of structure is the hybrid cloud, in which a combination of public and private clouds is used. The advantage of such a structure is that it makes it easier to archive and back up the data on the public cloud.</p>\n<p>There are numerous advantages of cloud computing. Firstly, cloud computing lowers computer costs. As the services are provided over the internet, and there’s no need to install any software, the desktop PC doesn’t need to be powerful processing powers. Along with the hardware requirements, it also reduce software costs. Another advantage of cloud computing is that it makes it easier for groups to collaborate their files. Multiple users can edit a document at the same time, and have discussions over the internet. With cloud computing, organizations can truly run a business without borders. They won’t be restricted to a specific location as all their data is available on the internet.  Along with the numerous advantages, there are some disadvantages of cloud computing. Firstly, cloud computing is dependent on the internet. If the internet connection is down, then the whole ‘cloud’ doesn’t work. It requires a constant internet connection; otherwise a user may not be able to access own files. As the files need to be accessed on the internet, the back and forth communication between the computer and the cloud may be slow to respond because it is busy handling other users. Another disadvantage of cloud computing is that the features that they offer are limited. Another issue is of the privacy of the customers. With the data being shared with the third party, it can use the data for all kind of purposes.</p>\n<p>There are many security and reliability related issues that still need to be answered. As it is still in its initial stages, there is a lot of room for improvement. To increase its usage in the IT industry, cloud service providers will need to address some major issues like security, application <strong>interoperability</strong>, application and data portability, and governance. They’ll need to come up with consistent variables so as to monitor and measure the performance of cloud applications.</p><br><p><strong>Why the customers privacy has been considered as disadvantage in cloud computing?</strong></p>", "options": ["<p>The data is shared with third party agencies, so it can be used for any other purposes.</p>", "<p>The data shared will be misused by the cloud&rsquo;s organization.</p>", "<p>The data stored here can go missing if the server had a crackdown.</p>", "<p>All of these.</p>", "<p>None of these.</p>"], "correctIndex": 0, "solution": "<p><strong>Answer: A</strong></p>\n<p>The data we store in the cloud is accessed by third party agencies, so the credential information can be misused. So, cloud computing is considered as disadvantage when it comes to data privacy. Hence, option a is the correct answer.</p>"}, {"question": "<p><strong>Read the following passage and answer the questions given below. Some words are highlighted to help you answer the questions.</strong></p>\n<p>Cloud computing refers to the technology used to access different services over the internet. By using different services through the internet means that the data will be stored on servers, rather than individual drives. Cloud computing allows people to access their files from anywhere, despite of the computer they are using. Cloud computing became a <strong>viable</strong> business model because certain companies like Amazon had assembled enormous amount of servers and resources to handle their customers demands during peak seasons. This entire IT infrastructure wasn’t used efficiently for the rest of the year. Therefore, they decided to ___________ their resources to the public. This way the public is able to use computing resources over the internet, any time of the day, and from any place in the world. The third party service provider is responsible for linking the users with the type and amount of IT resources they need, for their document management, and backup storage.</p>\n<p>There are four types of ways in which a ‘cloud’ can be structured. The first type is the public cloud, in which the services are available through the internet from third party sources. The second type of cloud is the community cloud, in which many organizations realize that they’ve got similar needs and requirements, and hence, should share the infrastructure. An example of a community cloud is Google’s Gov cloud, in which the services are specifically modified for the public sector agencies. The third type of structure is the private cloud, in which the business buys, and maintains the software, so that its employees could centrally store the date, and collaborate efficiently. The last type of structure is the hybrid cloud, in which a combination of public and private clouds is used. The advantage of such a structure is that it makes it easier to archive and back up the data on the public cloud.</p>\n<p>There are numerous advantages of cloud computing. Firstly, cloud computing lowers computer costs. As the services are provided over the internet, and there’s no need to install any software, the desktop PC doesn’t need to be powerful processing powers. Along with the hardware requirements, it also reduce software costs. Another advantage of cloud computing is that it makes it easier for groups to collaborate their files. Multiple users can edit a document at the same time, and have discussions over the internet. With cloud computing, organizations can truly run a business without borders. They won’t be restricted to a specific location as all their data is available on the internet.  Along with the numerous advantages, there are some disadvantages of cloud computing. Firstly, cloud computing is dependent on the internet. If the internet connection is down, then the whole ‘cloud’ doesn’t work. It requires a constant internet connection; otherwise a user may not be able to access own files. As the files need to be accessed on the internet, the back and forth communication between the computer and the cloud may be slow to respond because it is busy handling other users. Another disadvantage of cloud computing is that the features that they offer are limited. Another issue is of the privacy of the customers. With the data being shared with the third party, it can use the data for all kind of purposes.</p>\n<p>There are many security and reliability related issues that still need to be answered. As it is still in its initial stages, there is a lot of room for improvement. To increase its usage in the IT industry, cloud service providers will need to address some major issues like security, application <strong>interoperability</strong>, application and data portability, and governance. They’ll need to come up with consistent variables so as to monitor and measure the performance of cloud applications.</p><br><p><strong>Why the cloud computing is considered an advantage in the passage?</strong></p>", "options": ["<p>It lowers both the hardware and software costs.</p>", "<p>It can be accessed from anywhere and from any device.</p>", "<p>Users can share their documents with others through cloud computing.</p>", "<p>Only A and B.</p>", "<p>All of these.</p>"], "correctIndex": 4, "solution": "<p><strong>Answer: E</strong></p>\n<p>The answer lies in the third passage, the passage discussed about the list of advantages in using cloud computing. All the options mentioned here is correct. Hence, option e is the correct answer.</p>"}, {"question": "<p><strong>Read the following passage and answer the questions given below. Some words are highlighted to help you answer the questions.</strong></p>\n<p>Cloud computing refers to the technology used to access different services over the internet. By using different services through the internet means that the data will be stored on servers, rather than individual drives. Cloud computing allows people to access their files from anywhere, despite of the computer they are using. Cloud computing became a <strong>viable</strong> business model because certain companies like Amazon had assembled enormous amount of servers and resources to handle their customers demands during peak seasons. This entire IT infrastructure wasn’t used efficiently for the rest of the year. Therefore, they decided to ___________ their resources to the public. This way the public is able to use computing resources over the internet, any time of the day, and from any place in the world. The third party service provider is responsible for linking the users with the type and amount of IT resources they need, for their document management, and backup storage.</p>\n<p>There are four types of ways in which a ‘cloud’ can be structured. The first type is the public cloud, in which the services are available through the internet from third party sources. The second type of cloud is the community cloud, in which many organizations realize that they’ve got similar needs and requirements, and hence, should share the infrastructure. An example of a community cloud is Google’s Gov cloud, in which the services are specifically modified for the public sector agencies. The third type of structure is the private cloud, in which the business buys, and maintains the software, so that its employees could centrally store the date, and collaborate efficiently. The last type of structure is the hybrid cloud, in which a combination of public and private clouds is used. The advantage of such a structure is that it makes it easier to archive and back up the data on the public cloud.</p>\n<p>There are numerous advantages of cloud computing. Firstly, cloud computing lowers computer costs. As the services are provided over the internet, and there’s no need to install any software, the desktop PC doesn’t need to be powerful processing powers. Along with the hardware requirements, it also reduce software costs. Another advantage of cloud computing is that it makes it easier for groups to collaborate their files. Multiple users can edit a document at the same time, and have discussions over the internet. With cloud computing, organizations can truly run a business without borders. They won’t be restricted to a specific location as all their data is available on the internet.  Along with the numerous advantages, there are some disadvantages of cloud computing. Firstly, cloud computing is dependent on the internet. If the internet connection is down, then the whole ‘cloud’ doesn’t work. It requires a constant internet connection; otherwise a user may not be able to access own files. As the files need to be accessed on the internet, the back and forth communication between the computer and the cloud may be slow to respond because it is busy handling other users. Another disadvantage of cloud computing is that the features that they offer are limited. Another issue is of the privacy of the customers. With the data being shared with the third party, it can use the data for all kind of purposes.</p>\n<p>There are many security and reliability related issues that still need to be answered. As it is still in its initial stages, there is a lot of room for improvement. To increase its usage in the IT industry, cloud service providers will need to address some major issues like security, application <strong>interoperability</strong>, application and data portability, and governance. They’ll need to come up with consistent variables so as to monitor and measure the performance of cloud applications.</p><br><p><strong>Which of the following statements is/are false according to the passage?</strong></p>", "options": ["<p>A hybrid cloud is a combination of both private and public cloud.</p>", "<p>The third party is not responsible for linking the users with the IT resources.</p>", "<p>It has been a successful model since the inception.</p>", "<p>Both B and C.</p>", "<p>Both A and B.</p>"], "correctIndex": 1, "solution": "<p><strong>Answer: B</strong></p>\n<p>Only option b is considered as the false statement, in the first passage it mentions that the third party is solely responsible for providing the resources to public.  Hence, option b is the correct answer.</p>"}, {"question": "<p><strong>Read the following passage and answer the questions given below. Some words are highlighted to help you answer the questions.</strong></p>\n<p>Cloud computing refers to the technology used to access different services over the internet. By using different services through the internet means that the data will be stored on servers, rather than individual drives. Cloud computing allows people to access their files from anywhere, despite of the computer they are using. Cloud computing became a <strong>viable</strong> business model because certain companies like Amazon had assembled enormous amount of servers and resources to handle their customers demands during peak seasons. This entire IT infrastructure wasn’t used efficiently for the rest of the year. Therefore, they decided to ___________ their resources to the public. This way the public is able to use computing resources over the internet, any time of the day, and from any place in the world. The third party service provider is responsible for linking the users with the type and amount of IT resources they need, for their document management, and backup storage.</p>\n<p>There are four types of ways in which a ‘cloud’ can be structured. The first type is the public cloud, in which the services are available through the internet from third party sources. The second type of cloud is the community cloud, in which many organizations realize that they’ve got similar needs and requirements, and hence, should share the infrastructure. An example of a community cloud is Google’s Gov cloud, in which the services are specifically modified for the public sector agencies. The third type of structure is the private cloud, in which the business buys, and maintains the software, so that its employees could centrally store the date, and collaborate efficiently. The last type of structure is the hybrid cloud, in which a combination of public and private clouds is used. The advantage of such a structure is that it makes it easier to archive and back up the data on the public cloud.</p>\n<p>There are numerous advantages of cloud computing. Firstly, cloud computing lowers computer costs. As the services are provided over the internet, and there’s no need to install any software, the desktop PC doesn’t need to be powerful processing powers. Along with the hardware requirements, it also reduce software costs. Another advantage of cloud computing is that it makes it easier for groups to collaborate their files. Multiple users can edit a document at the same time, and have discussions over the internet. With cloud computing, organizations can truly run a business without borders. They won’t be restricted to a specific location as all their data is available on the internet.  Along with the numerous advantages, there are some disadvantages of cloud computing. Firstly, cloud computing is dependent on the internet. If the internet connection is down, then the whole ‘cloud’ doesn’t work. It requires a constant internet connection; otherwise a user may not be able to access own files. As the files need to be accessed on the internet, the back and forth communication between the computer and the cloud may be slow to respond because it is busy handling other users. Another disadvantage of cloud computing is that the features that they offer are limited. Another issue is of the privacy of the customers. With the data being shared with the third party, it can use the data for all kind of purposes.</p>\n<p>There are many security and reliability related issues that still need to be answered. As it is still in its initial stages, there is a lot of room for improvement. To increase its usage in the IT industry, cloud service providers will need to address some major issues like security, application <strong>interoperability</strong>, application and data portability, and governance. They’ll need to come up with consistent variables so as to monitor and measure the performance of cloud applications.</p><br><p><strong>Choose the word that is most similar to the word “interoperability”.</strong></p>", "options": ["<p>Frailty</p>", "<p>Similitude</p>", "<p>Scalability</p>", "<p>All of these</p>", "<p>None of these.</p>"], "correctIndex": 1, "solution": "<p><strong>Answer: B</strong></p>\n<p><strong>Interoperability</strong><strong> - </strong>the degree to which two products, programs, etc. can be used together.</p>\n<p><strong>Similitude</strong><strong> - </strong>the quality or state of being similar to something.</p>\n<p><strong>Scalability</strong><strong> - </strong>Scalability is the ability of a computer application or product (hardware or software) to continue to perform well when it (or its context) is changed in size or volume in order to meet the users need.</p>\n<p><strong>Frailty</strong><strong> - </strong>weakness of a person's body or character.</p>\n<p>The word \"similitude\" is the synonym for the word “interoperability”. Hence, option b is the correct answer.</p>"}, {"question": "<p><strong>Read the following passage and answer the questions given below. Some words are highlighted to help you answer the questions.</strong></p>\n<p>Cloud computing refers to the technology used to access different services over the internet. By using different services through the internet means that the data will be stored on servers, rather than individual drives. Cloud computing allows people to access their files from anywhere, despite of the computer they are using. Cloud computing became a <strong>viable</strong> business model because certain companies like Amazon had assembled enormous amount of servers and resources to handle their customers demands during peak seasons. This entire IT infrastructure wasn’t used efficiently for the rest of the year. Therefore, they decided to ___________ their resources to the public. This way the public is able to use computing resources over the internet, any time of the day, and from any place in the world. The third party service provider is responsible for linking the users with the type and amount of IT resources they need, for their document management, and backup storage.</p>\n<p>There are four types of ways in which a ‘cloud’ can be structured. The first type is the public cloud, in which the services are available through the internet from third party sources. The second type of cloud is the community cloud, in which many organizations realize that they’ve got similar needs and requirements, and hence, should share the infrastructure. An example of a community cloud is Google’s Gov cloud, in which the services are specifically modified for the public sector agencies. The third type of structure is the private cloud, in which the business buys, and maintains the software, so that its employees could centrally store the date, and collaborate efficiently. The last type of structure is the hybrid cloud, in which a combination of public and private clouds is used. The advantage of such a structure is that it makes it easier to archive and back up the data on the public cloud.</p>\n<p>There are numerous advantages of cloud computing. Firstly, cloud computing lowers computer costs. As the services are provided over the internet, and there’s no need to install any software, the desktop PC doesn’t need to be powerful processing powers. Along with the hardware requirements, it also reduce software costs. Another advantage of cloud computing is that it makes it easier for groups to collaborate their files. Multiple users can edit a document at the same time, and have discussions over the internet. With cloud computing, organizations can truly run a business without borders. They won’t be restricted to a specific location as all their data is available on the internet.  Along with the numerous advantages, there are some disadvantages of cloud computing. Firstly, cloud computing is dependent on the internet. If the internet connection is down, then the whole ‘cloud’ doesn’t work. It requires a constant internet connection; otherwise a user may not be able to access own files. As the files need to be accessed on the internet, the back and forth communication between the computer and the cloud may be slow to respond because it is busy handling other users. Another disadvantage of cloud computing is that the features that they offer are limited. Another issue is of the privacy of the customers. With the data being shared with the third party, it can use the data for all kind of purposes.</p>\n<p>There are many security and reliability related issues that still need to be answered. As it is still in its initial stages, there is a lot of room for improvement. To increase its usage in the IT industry, cloud service providers will need to address some major issues like security, application <strong>interoperability</strong>, application and data portability, and governance. They’ll need to come up with consistent variables so as to monitor and measure the performance of cloud applications.</p><br><p><strong>Choose the word that is most opposite to the word “viable”.</strong></p>", "options": ["<p>Tenable</p>", "<p>Friable</p>", "<p>Non-feasible</p>", "<p>All of these</p>", "<p>None of these.</p>"], "correctIndex": 2, "solution": "<p><strong>Answer: C</strong></p>\n<p><strong>Viable</strong><strong> - </strong>that can be done; that will be successful.</p>\n<p><strong>Friable </strong><strong>- </strong>easily broken into small pieces.</p>\n<p><strong>Non-feasible</strong><strong> - </strong>not capable of being done or carried out.</p>\n<p><strong>Tenable</strong><strong> - </strong>capable of being held, maintained.</p>\n<p>The word \"non-feasible\" is the antonym for the word \"viable\". Hence, option c is the correct answer.</p>"}, {"question": "<p><strong>Read the following passage and answer the questions given below. Some words are highlighted to help you answer the questions.</strong></p>\n<p>Cloud computing refers to the technology used to access different services over the internet. By using different services through the internet means that the data will be stored on servers, rather than individual drives. Cloud computing allows people to access their files from anywhere, despite of the computer they are using. Cloud computing became a <strong>viable</strong> business model because certain companies like Amazon had assembled enormous amount of servers and resources to handle their customers demands during peak seasons. This entire IT infrastructure wasn’t used efficiently for the rest of the year. Therefore, they decided to ___________ their resources to the public. This way the public is able to use computing resources over the internet, any time of the day, and from any place in the world. The third party service provider is responsible for linking the users with the type and amount of IT resources they need, for their document management, and backup storage.</p>\n<p>There are four types of ways in which a ‘cloud’ can be structured. The first type is the public cloud, in which the services are available through the internet from third party sources. The second type of cloud is the community cloud, in which many organizations realize that they’ve got similar needs and requirements, and hence, should share the infrastructure. An example of a community cloud is Google’s Gov cloud, in which the services are specifically modified for the public sector agencies. The third type of structure is the private cloud, in which the business buys, and maintains the software, so that its employees could centrally store the date, and collaborate efficiently. The last type of structure is the hybrid cloud, in which a combination of public and private clouds is used. The advantage of such a structure is that it makes it easier to archive and back up the data on the public cloud.</p>\n<p>There are numerous advantages of cloud computing. Firstly, cloud computing lowers computer costs. As the services are provided over the internet, and there’s no need to install any software, the desktop PC doesn’t need to be powerful processing powers. Along with the hardware requirements, it also reduce software costs. Another advantage of cloud computing is that it makes it easier for groups to collaborate their files. Multiple users can edit a document at the same time, and have discussions over the internet. With cloud computing, organizations can truly run a business without borders. They won’t be restricted to a specific location as all their data is available on the internet.  Along with the numerous advantages, there are some disadvantages of cloud computing. Firstly, cloud computing is dependent on the internet. If the internet connection is down, then the whole ‘cloud’ doesn’t work. It requires a constant internet connection; otherwise a user may not be able to access own files. As the files need to be accessed on the internet, the back and forth communication between the computer and the cloud may be slow to respond because it is busy handling other users. Another disadvantage of cloud computing is that the features that they offer are limited. Another issue is of the privacy of the customers. With the data being shared with the third party, it can use the data for all kind of purposes.</p>\n<p>There are many security and reliability related issues that still need to be answered. As it is still in its initial stages, there is a lot of room for improvement. To increase its usage in the IT industry, cloud service providers will need to address some major issues like security, application <strong>interoperability</strong>, application and data portability, and governance. They’ll need to come up with consistent variables so as to monitor and measure the performance of cloud applications.</p><br><p><strong>Choose the word that is most suitable for the blank mentioned in the passage.</strong></p>", "options": ["<p>Pass up</p>", "<p>Bring up</p>", "<p>Rent out</p>", "<p>Take over</p>", "<p>None of these.</p>"], "correctIndex": 2, "solution": "<p><strong>Answer: C</strong></p>\n<p><strong>Rent out</strong><strong> - </strong>to allow people to use (a house etc which one owns).</p>\n<p><strong>Take over</strong><strong> - </strong>the act of taking control of something.</p>\n<p><strong>Bring up</strong><strong> - </strong>look after a child until it is an adult; raise a matter for discussion or consideration.</p>\n<p><strong>Pass up</strong><strong> - </strong>refrain from taking up an opportunity.</p>\n<p>The word \"rent out\" would be contextually correct for the blank. Hence, option c is the correct answer.</p>"}, {"question": "<p><strong>Read the following passage and answer the questions given below. Some words are highlighted to help you answer the questions.</strong></p>\n<p>Cloud computing refers to the technology used to access different services over the internet. By using different services through the internet means that the data will be stored on servers, rather than individual drives. Cloud computing allows people to access their files from anywhere, despite of the computer they are using. Cloud computing became a <strong>viable</strong> business model because certain companies like Amazon had assembled enormous amount of servers and resources to handle their customers demands during peak seasons. This entire IT infrastructure wasn’t used efficiently for the rest of the year. Therefore, they decided to ___________ their resources to the public. This way the public is able to use computing resources over the internet, any time of the day, and from any place in the world. The third party service provider is responsible for linking the users with the type and amount of IT resources they need, for their document management, and backup storage.</p>\n<p>There are four types of ways in which a ‘cloud’ can be structured. The first type is the public cloud, in which the services are available through the internet from third party sources. The second type of cloud is the community cloud, in which many organizations realize that they’ve got similar needs and requirements, and hence, should share the infrastructure. An example of a community cloud is Google’s Gov cloud, in which the services are specifically modified for the public sector agencies. The third type of structure is the private cloud, in which the business buys, and maintains the software, so that its employees could centrally store the date, and collaborate efficiently. The last type of structure is the hybrid cloud, in which a combination of public and private clouds is used. The advantage of such a structure is that it makes it easier to archive and back up the data on the public cloud.</p>\n<p>There are numerous advantages of cloud computing. Firstly, cloud computing lowers computer costs. As the services are provided over the internet, and there’s no need to install any software, the desktop PC doesn’t need to be powerful processing powers. Along with the hardware requirements, it also reduce software costs. Another advantage of cloud computing is that it makes it easier for groups to collaborate their files. Multiple users can edit a document at the same time, and have discussions over the internet. With cloud computing, organizations can truly run a business without borders. They won’t be restricted to a specific location as all their data is available on the internet.  Along with the numerous advantages, there are some disadvantages of cloud computing. Firstly, cloud computing is dependent on the internet. If the internet connection is down, then the whole ‘cloud’ doesn’t work. It requires a constant internet connection; otherwise a user may not be able to access own files. As the files need to be accessed on the internet, the back and forth communication between the computer and the cloud may be slow to respond because it is busy handling other users. Another disadvantage of cloud computing is that the features that they offer are limited. Another issue is of the privacy of the customers. With the data being shared with the third party, it can use the data for all kind of purposes.</p>\n<p>There are many security and reliability related issues that still need to be answered. As it is still in its initial stages, there is a lot of room for improvement. To increase its usage in the IT industry, cloud service providers will need to address some major issues like security, application <strong>interoperability</strong>, application and data portability, and governance. They’ll need to come up with consistent variables so as to monitor and measure the performance of cloud applications.</p><br><p><strong>What are the issues need to be addressed in cloud computing by the companies?</strong></p>", "options": ["<p>Data portability and governance.</p>", "<p>Interoperability.</p>", "<p>Data security.</p>", "<p>Both B and C.</p>", "<p>All of these.</p>"], "correctIndex": 4, "solution": "<p><strong>Answer: E</strong></p>\n<p>The answer lies in the last passage, all the issues mentioned in the options are discussed in the passage. Companies should come up with some solutions to figure out these issues. Hence, option e is the correct answer.</p>"}, {"question": "<p><strong>Read the following passage and answer the questions given below. Some words are highlighted to help you answer the questions.</strong></p>\n<p>India is celebrating Azadi Ka Amrit Mahotsav to commemorate 75 years of independence and the glorious history of its people, culture and achievements. This celebration not only marks our achievements during the last 75 years but also encourage us to envision the future prospective of India to make our country world's best nation in every span of life by the year 2047. Since independence on 15th August 1947, India is striving hard to make India Atma Nirbhar in every field and we have also achieved it. It is time to set new goals for vision India 2047 so that when we enter in 100 years of Independence, India will be world's best nation.</p>\n<p>Focusing on the literacy rate of India, it can be observed that we have already achieved a lot in the field of education but we have not reached yet 100% literacy rate. So, government of India has launched New Education Policy to improve education system in India. By the year 2047, we envision that India will be the best place for advanced education system. Student from not only India but also from all over the world will come to <strong>peruse</strong> here due to its best quality of education.</p>\n<p>India is second most populous country in the world which also demand world class medical facility. It has been realized during covid-19 pandemic that there is a strong need to pay attention towards healthcare sector. Realizing the need of hour many new Government hospitals were opened and medical equipment were imported. India also started producing many new medical equipment to make India self reliant in the field of healthcare. Observing the recent developments in healthcare sector in India, we <strong>envision</strong> that, by the year 2047 India will be the leader in healthcare provider.</p>\n<p>India is striving hard to make our nation self dependent in every field and not rely on imports. As government is doing a lot in infrastructural development of the country to make it Atma Nirbhar, efforts are also being made to make every individual self dependent and self empowered so that real goals of Atma Nirbhar Bharat can be achieved.</p>\n<p>This is the era of technology where every work is somehow dependent on Internet and technology. Also progress of a nation can be measured by the progress in the field of technology. India has done a lot in the field of technology and in the past seven decades, India has built satellites, sent probes to the moon and reached Mars in its first attempt. Launch of 5G with high bandwidth internet speed is sign of progress in the field of Internet. National Strategy on Artificial Intelligence released by NITI Ayog focused on economic growth and increasing social inclusion with a goal to “make India a global leader in Artificial Intelligence by ensuring responsible and transformative AI for all.” This all shows that India has strong potential and will power to be leader in computer science and artificial intelligence by the year 2047.</p>\n<p>During the past seven decades we have already achieved a lot and <strong>incessantly</strong> working towards nation building. We hope that when we enter in the year 2047, India will be leader in the every field. All the evils such as corruption, poverty, illiteracy, hunger, discrimination etc. will no longer exist and every person will be educated, self-reliant, self-empowered and living a respectful life and working towards nation building and India's flag will fly across the world.</p><br><p><strong>Why the Government of India has launched New Education Policy?</strong></p>", "options": ["<p>To focus on the literacy rate so that 100% rate can be achieved in the country.</p>", "<p>To focus mainly on the rural area people&rsquo;s education.</p>", "<p>To bridge the gaps in the education field that happened during the Covid pandemic.</p>", "<p>To compete with other countries, so that the country will become first in rank.</p>", "<p>None of these.</p>"], "correctIndex": 0, "solution": "<p><strong>Answer: A</strong></p>\n<p>The question can be answered through the second passage. The country has launched new education policy only to attain the 100% literacy rate in the nation. Hence, option a is the correct answer.</p>"}, {"question": "<p><strong>Read the following passage and answer the questions given below. Some words are highlighted to help you answer the questions.</strong></p>\n<p>India is celebrating Azadi Ka Amrit Mahotsav to commemorate 75 years of independence and the glorious history of its people, culture and achievements. This celebration not only marks our achievements during the last 75 years but also encourage us to envision the future prospective of India to make our country world's best nation in every span of life by the year 2047. Since independence on 15th August 1947, India is striving hard to make India Atma Nirbhar in every field and we have also achieved it. It is time to set new goals for vision India 2047 so that when we enter in 100 years of Independence, India will be world's best nation.</p>\n<p>Focusing on the literacy rate of India, it can be observed that we have already achieved a lot in the field of education but we have not reached yet 100% literacy rate. So, government of India has launched New Education Policy to improve education system in India. By the year 2047, we envision that India will be the best place for advanced education system. Student from not only India but also from all over the world will come to <strong>peruse</strong> here due to its best quality of education.</p>\n<p>India is second most populous country in the world which also demand world class medical facility. It has been realized during covid-19 pandemic that there is a strong need to pay attention towards healthcare sector. Realizing the need of hour many new Government hospitals were opened and medical equipment were imported. India also started producing many new medical equipment to make India self reliant in the field of healthcare. Observing the recent developments in healthcare sector in India, we <strong>envision</strong> that, by the year 2047 India will be the leader in healthcare provider.</p>\n<p>India is striving hard to make our nation self dependent in every field and not rely on imports. As government is doing a lot in infrastructural development of the country to make it Atma Nirbhar, efforts are also being made to make every individual self dependent and self empowered so that real goals of Atma Nirbhar Bharat can be achieved.</p>\n<p>This is the era of technology where every work is somehow dependent on Internet and technology. Also progress of a nation can be measured by the progress in the field of technology. India has done a lot in the field of technology and in the past seven decades, India has built satellites, sent probes to the moon and reached Mars in its first attempt. Launch of 5G with high bandwidth internet speed is sign of progress in the field of Internet. National Strategy on Artificial Intelligence released by NITI Ayog focused on economic growth and increasing social inclusion with a goal to “make India a global leader in Artificial Intelligence by ensuring responsible and transformative AI for all.” This all shows that India has strong potential and will power to be leader in computer science and artificial intelligence by the year 2047.</p>\n<p>During the past seven decades we have already achieved a lot and <strong>incessantly</strong> working towards nation building. We hope that when we enter in the year 2047, India will be leader in the every field. All the evils such as corruption, poverty, illiteracy, hunger, discrimination etc. will no longer exist and every person will be educated, self-reliant, self-empowered and living a respectful life and working towards nation building and India's flag will fly across the world.</p><br><p><strong>What are the areas have been discussed in the passage?</strong></p>", "options": ["<p>Internet technology and health sector.</p>", "<p>Space science.</p>", "<p>Sports and Infrastructure.</p>", "<p>Both A and B.</p>", "<p>Both B and C.</p>"], "correctIndex": 3, "solution": "<p><strong>Answer: D</strong></p>\n<p>Sports and infrastructure has not been discussed in the passage.</p>\n<p><strong>Internet technology - </strong>Launch of 5G with high bandwidth internet speed is sign of progress in the field of Internet<strong> </strong></p>\n<p><strong>Health sector - </strong>India is second most populous country in the world which also demand world class medical facility.</p>\n<p><strong>Space science - </strong>India has done a lot in the field of technology and in the past seven decades, India has built satellites, sent probes to the moon and reached Mars in its first attempt.</p>\n<p>Hence, option d is the correct answer.</p>"}, {"question": "<p><strong>Read the following passage and answer the questions given below. Some words are highlighted to help you answer the questions.</strong></p>\n<p>India is celebrating Azadi Ka Amrit Mahotsav to commemorate 75 years of independence and the glorious history of its people, culture and achievements. This celebration not only marks our achievements during the last 75 years but also encourage us to envision the future prospective of India to make our country world's best nation in every span of life by the year 2047. Since independence on 15th August 1947, India is striving hard to make India Atma Nirbhar in every field and we have also achieved it. It is time to set new goals for vision India 2047 so that when we enter in 100 years of Independence, India will be world's best nation.</p>\n<p>Focusing on the literacy rate of India, it can be observed that we have already achieved a lot in the field of education but we have not reached yet 100% literacy rate. So, government of India has launched New Education Policy to improve education system in India. By the year 2047, we envision that India will be the best place for advanced education system. Student from not only India but also from all over the world will come to <strong>peruse</strong> here due to its best quality of education.</p>\n<p>India is second most populous country in the world which also demand world class medical facility. It has been realized during covid-19 pandemic that there is a strong need to pay attention towards healthcare sector. Realizing the need of hour many new Government hospitals were opened and medical equipment were imported. India also started producing many new medical equipment to make India self reliant in the field of healthcare. Observing the recent developments in healthcare sector in India, we <strong>envision</strong> that, by the year 2047 India will be the leader in healthcare provider.</p>\n<p>India is striving hard to make our nation self dependent in every field and not rely on imports. As government is doing a lot in infrastructural development of the country to make it Atma Nirbhar, efforts are also being made to make every individual self dependent and self empowered so that real goals of Atma Nirbhar Bharat can be achieved.</p>\n<p>This is the era of technology where every work is somehow dependent on Internet and technology. Also progress of a nation can be measured by the progress in the field of technology. India has done a lot in the field of technology and in the past seven decades, India has built satellites, sent probes to the moon and reached Mars in its first attempt. Launch of 5G with high bandwidth internet speed is sign of progress in the field of Internet. National Strategy on Artificial Intelligence released by NITI Ayog focused on economic growth and increasing social inclusion with a goal to “make India a global leader in Artificial Intelligence by ensuring responsible and transformative AI for all.” This all shows that India has strong potential and will power to be leader in computer science and artificial intelligence by the year 2047.</p>\n<p>During the past seven decades we have already achieved a lot and <strong>incessantly</strong> working towards nation building. We hope that when we enter in the year 2047, India will be leader in the every field. All the evils such as corruption, poverty, illiteracy, hunger, discrimination etc. will no longer exist and every person will be educated, self-reliant, self-empowered and living a respectful life and working towards nation building and India's flag will fly across the world.</p><br><p><strong>According to the passage, NITI Ayog released a report called National Strategy on Artificial Intelligence. What does the report focus on?</strong></p>", "options": ["<p>To give assistance in the field of Computer Science.</p>", "<p>To focus on nation&rsquo;s growth in order to compete with other countries.</p>", "<p>Make India a global leader in Artificial Intelligence.</p>", "<p>To take steps to make India proud during the 100<sup>th</sup> year of independence.</p>", "<p>None of these.</p>"], "correctIndex": 2, "solution": "<p><strong>Answer: C</strong></p>\n<p>Niti ayog has released a report called National strategy on artificial intelligence, it mainly focus on making India a global leader in the artificial intelligence field. Hence, option c is the correct answer.</p>"}, {"question": "<p><strong>Read the following passage and answer the questions given below. Some words are highlighted to help you answer the questions.</strong></p>\n<p>India is celebrating Azadi Ka Amrit Mahotsav to commemorate 75 years of independence and the glorious history of its people, culture and achievements. This celebration not only marks our achievements during the last 75 years but also encourage us to envision the future prospective of India to make our country world's best nation in every span of life by the year 2047. Since independence on 15th August 1947, India is striving hard to make India Atma Nirbhar in every field and we have also achieved it. It is time to set new goals for vision India 2047 so that when we enter in 100 years of Independence, India will be world's best nation.</p>\n<p>Focusing on the literacy rate of India, it can be observed that we have already achieved a lot in the field of education but we have not reached yet 100% literacy rate. So, government of India has launched New Education Policy to improve education system in India. By the year 2047, we envision that India will be the best place for advanced education system. Student from not only India but also from all over the world will come to <strong>peruse</strong> here due to its best quality of education.</p>\n<p>India is second most populous country in the world which also demand world class medical facility. It has been realized during covid-19 pandemic that there is a strong need to pay attention towards healthcare sector. Realizing the need of hour many new Government hospitals were opened and medical equipment were imported. India also started producing many new medical equipment to make India self reliant in the field of healthcare. Observing the recent developments in healthcare sector in India, we <strong>envision</strong> that, by the year 2047 India will be the leader in healthcare provider.</p>\n<p>India is striving hard to make our nation self dependent in every field and not rely on imports. As government is doing a lot in infrastructural development of the country to make it Atma Nirbhar, efforts are also being made to make every individual self dependent and self empowered so that real goals of Atma Nirbhar Bharat can be achieved.</p>\n<p>This is the era of technology where every work is somehow dependent on Internet and technology. Also progress of a nation can be measured by the progress in the field of technology. India has done a lot in the field of technology and in the past seven decades, India has built satellites, sent probes to the moon and reached Mars in its first attempt. Launch of 5G with high bandwidth internet speed is sign of progress in the field of Internet. National Strategy on Artificial Intelligence released by NITI Ayog focused on economic growth and increasing social inclusion with a goal to “make India a global leader in Artificial Intelligence by ensuring responsible and transformative AI for all.” This all shows that India has strong potential and will power to be leader in computer science and artificial intelligence by the year 2047.</p>\n<p>During the past seven decades we have already achieved a lot and <strong>incessantly</strong> working towards nation building. We hope that when we enter in the year 2047, India will be leader in the every field. All the evils such as corruption, poverty, illiteracy, hunger, discrimination etc. will no longer exist and every person will be educated, self-reliant, self-empowered and living a respectful life and working towards nation building and India's flag will fly across the world.</p><br><p><strong>According to the passage, how the progress of a nation can be measured?</strong></p>", "options": ["<p>Youth&rsquo;s participation in all the fields which aids in economic growth.</p>", "<p>The nation&rsquo;s progress can be measured by the progress in the field of technology.</p>", "<p>By the literacy rate it possess and the economic growth.</p>", "<p>By providing a world class health facility and education in respective sectors.</p>", "<p>None of these.</p>"], "correctIndex": 1, "solution": "<p><strong>Answer: B</strong></p>\n<p>In the passage the author mentions the nation’s progress can be measured by the progress in the field of technology. Hence, option b is the correct answer.</p>"}, {"question": "<p><strong>Read the following passage and answer the questions given below. Some words are highlighted to help you answer the questions.</strong></p>\n<p>India is celebrating Azadi Ka Amrit Mahotsav to commemorate 75 years of independence and the glorious history of its people, culture and achievements. This celebration not only marks our achievements during the last 75 years but also encourage us to envision the future prospective of India to make our country world's best nation in every span of life by the year 2047. Since independence on 15th August 1947, India is striving hard to make India Atma Nirbhar in every field and we have also achieved it. It is time to set new goals for vision India 2047 so that when we enter in 100 years of Independence, India will be world's best nation.</p>\n<p>Focusing on the literacy rate of India, it can be observed that we have already achieved a lot in the field of education but we have not reached yet 100% literacy rate. So, government of India has launched New Education Policy to improve education system in India. By the year 2047, we envision that India will be the best place for advanced education system. Student from not only India but also from all over the world will come to <strong>peruse</strong> here due to its best quality of education.</p>\n<p>India is second most populous country in the world which also demand world class medical facility. It has been realized during covid-19 pandemic that there is a strong need to pay attention towards healthcare sector. Realizing the need of hour many new Government hospitals were opened and medical equipment were imported. India also started producing many new medical equipment to make India self reliant in the field of healthcare. Observing the recent developments in healthcare sector in India, we <strong>envision</strong> that, by the year 2047 India will be the leader in healthcare provider.</p>\n<p>India is striving hard to make our nation self dependent in every field and not rely on imports. As government is doing a lot in infrastructural development of the country to make it Atma Nirbhar, efforts are also being made to make every individual self dependent and self empowered so that real goals of Atma Nirbhar Bharat can be achieved.</p>\n<p>This is the era of technology where every work is somehow dependent on Internet and technology. Also progress of a nation can be measured by the progress in the field of technology. India has done a lot in the field of technology and in the past seven decades, India has built satellites, sent probes to the moon and reached Mars in its first attempt. Launch of 5G with high bandwidth internet speed is sign of progress in the field of Internet. National Strategy on Artificial Intelligence released by NITI Ayog focused on economic growth and increasing social inclusion with a goal to “make India a global leader in Artificial Intelligence by ensuring responsible and transformative AI for all.” This all shows that India has strong potential and will power to be leader in computer science and artificial intelligence by the year 2047.</p>\n<p>During the past seven decades we have already achieved a lot and <strong>incessantly</strong> working towards nation building. We hope that when we enter in the year 2047, India will be leader in the every field. All the evils such as corruption, poverty, illiteracy, hunger, discrimination etc. will no longer exist and every person will be educated, self-reliant, self-empowered and living a respectful life and working towards nation building and India's flag will fly across the world.</p><br><p><strong>Choose the word that is most similar to the word “envision”.</strong></p>", "options": ["<p>Pertinent</p>", "<p>Envisage</p>", "<p>Contextualize</p>", "<p>Persuade</p>", "<p>None of these.</p>"], "correctIndex": 1, "solution": "<p><strong>Answer: B</strong></p>\n<p><strong>Envision</strong> - imagine as a future possibility; visualize.</p>\n<p><strong>Envisage</strong> - to think of something as being possible in the future; to imagine.</p>\n<p><strong>Persuade</strong> - to make somebody do something by giving him/her good reasons.</p>\n<p><strong>Contextualize</strong> -place or study in context.</p>\n<p><strong>Pertinent</strong> - closely connected with the subject being discussed.</p>\n<p>The word \"envisage\" is the synonym for the word \"envision\". Hence, option b is the correct answer.</p>"}, {"question": "<p><strong>Read the following passage and answer the questions given below. Some words are highlighted to help you answer the questions.</strong></p>\n<p>India is celebrating Azadi Ka Amrit Mahotsav to commemorate 75 years of independence and the glorious history of its people, culture and achievements. This celebration not only marks our achievements during the last 75 years but also encourage us to envision the future prospective of India to make our country world's best nation in every span of life by the year 2047. Since independence on 15th August 1947, India is striving hard to make India Atma Nirbhar in every field and we have also achieved it. It is time to set new goals for vision India 2047 so that when we enter in 100 years of Independence, India will be world's best nation.</p>\n<p>Focusing on the literacy rate of India, it can be observed that we have already achieved a lot in the field of education but we have not reached yet 100% literacy rate. So, government of India has launched New Education Policy to improve education system in India. By the year 2047, we envision that India will be the best place for advanced education system. Student from not only India but also from all over the world will come to <strong>peruse</strong> here due to its best quality of education.</p>\n<p>India is second most populous country in the world which also demand world class medical facility. It has been realized during covid-19 pandemic that there is a strong need to pay attention towards healthcare sector. Realizing the need of hour many new Government hospitals were opened and medical equipment were imported. India also started producing many new medical equipment to make India self reliant in the field of healthcare. Observing the recent developments in healthcare sector in India, we <strong>envision</strong> that, by the year 2047 India will be the leader in healthcare provider.</p>\n<p>India is striving hard to make our nation self dependent in every field and not rely on imports. As government is doing a lot in infrastructural development of the country to make it Atma Nirbhar, efforts are also being made to make every individual self dependent and self empowered so that real goals of Atma Nirbhar Bharat can be achieved.</p>\n<p>This is the era of technology where every work is somehow dependent on Internet and technology. Also progress of a nation can be measured by the progress in the field of technology. India has done a lot in the field of technology and in the past seven decades, India has built satellites, sent probes to the moon and reached Mars in its first attempt. Launch of 5G with high bandwidth internet speed is sign of progress in the field of Internet. National Strategy on Artificial Intelligence released by NITI Ayog focused on economic growth and increasing social inclusion with a goal to “make India a global leader in Artificial Intelligence by ensuring responsible and transformative AI for all.” This all shows that India has strong potential and will power to be leader in computer science and artificial intelligence by the year 2047.</p>\n<p>During the past seven decades we have already achieved a lot and <strong>incessantly</strong> working towards nation building. We hope that when we enter in the year 2047, India will be leader in the every field. All the evils such as corruption, poverty, illiteracy, hunger, discrimination etc. will no longer exist and every person will be educated, self-reliant, self-empowered and living a respectful life and working towards nation building and India's flag will fly across the world.</p><br><p><strong>Choose the word that is most opposite to the word “peruse”.</strong></p>", "options": ["<p>Scrutinize</p>", "<p>Overlook</p>", "<p>Expel</p>", "<p>Recite</p>", "<p>None of these.</p>"], "correctIndex": 1, "solution": "<p><strong>Answer: B</strong></p>\n<p><strong>Peruse</strong> - to read something, especially in a careful way.</p>\n<p><strong>Overlook</strong> - to fail to see or notice something.</p>\n<p><strong>Scrutinize </strong>- to look at or examine something carefully.</p>\n<p><strong>Expel</strong> - to force somebody to leave a country, school, club, etc.</p>\n<p><strong>Recite</strong> - to say aloud a piece of writing, especially a poem or a list, from memory.</p>\n<p>The word \"overlook\" is the antonym for the word \"peruse\". Hence, option b is the correct answer.</p>"}, {"question": "<p><strong>Read the following passage and answer the questions given below. Some words are highlighted to help you answer the questions.</strong></p>\n<p>India is celebrating Azadi Ka Amrit Mahotsav to commemorate 75 years of independence and the glorious history of its people, culture and achievements. This celebration not only marks our achievements during the last 75 years but also encourage us to envision the future prospective of India to make our country world's best nation in every span of life by the year 2047. Since independence on 15th August 1947, India is striving hard to make India Atma Nirbhar in every field and we have also achieved it. It is time to set new goals for vision India 2047 so that when we enter in 100 years of Independence, India will be world's best nation.</p>\n<p>Focusing on the literacy rate of India, it can be observed that we have already achieved a lot in the field of education but we have not reached yet 100% literacy rate. So, government of India has launched New Education Policy to improve education system in India. By the year 2047, we envision that India will be the best place for advanced education system. Student from not only India but also from all over the world will come to <strong>peruse</strong> here due to its best quality of education.</p>\n<p>India is second most populous country in the world which also demand world class medical facility. It has been realized during covid-19 pandemic that there is a strong need to pay attention towards healthcare sector. Realizing the need of hour many new Government hospitals were opened and medical equipment were imported. India also started producing many new medical equipment to make India self reliant in the field of healthcare. Observing the recent developments in healthcare sector in India, we <strong>envision</strong> that, by the year 2047 India will be the leader in healthcare provider.</p>\n<p>India is striving hard to make our nation self dependent in every field and not rely on imports. As government is doing a lot in infrastructural development of the country to make it Atma Nirbhar, efforts are also being made to make every individual self dependent and self empowered so that real goals of Atma Nirbhar Bharat can be achieved.</p>\n<p>This is the era of technology where every work is somehow dependent on Internet and technology. Also progress of a nation can be measured by the progress in the field of technology. India has done a lot in the field of technology and in the past seven decades, India has built satellites, sent probes to the moon and reached Mars in its first attempt. Launch of 5G with high bandwidth internet speed is sign of progress in the field of Internet. National Strategy on Artificial Intelligence released by NITI Ayog focused on economic growth and increasing social inclusion with a goal to “make India a global leader in Artificial Intelligence by ensuring responsible and transformative AI for all.” This all shows that India has strong potential and will power to be leader in computer science and artificial intelligence by the year 2047.</p>\n<p>During the past seven decades we have already achieved a lot and <strong>incessantly</strong> working towards nation building. We hope that when we enter in the year 2047, India will be leader in the every field. All the evils such as corruption, poverty, illiteracy, hunger, discrimination etc. will no longer exist and every person will be educated, self-reliant, self-empowered and living a respectful life and working towards nation building and India's flag will fly across the world.</p><br><p><strong>Choose the word that is most similar to the word “incessantly”.</strong></p>", "options": ["<p>Occasionally</p>", "<p>Repulsively</p>", "<p>Increasingly</p>", "<p>Perpetually</p>", "<p>None of these.</p>"], "correctIndex": 3, "solution": "<p><strong>Answer: D</strong></p>\n<p><strong>Incessantly</strong> - without interruption; constantly.</p>\n<p><strong>Occasionally</strong> - at infrequent or irregular intervals; now and then.</p>\n<p><strong>Perpetually</strong> - in a way that never ends or changes; constantly.</p>\n<p><strong>Increasingly</strong> - to become or to make something larger in number or amount.</p>\n<p><strong>Repulsively</strong> - extremely unpleasant or unacceptable.</p>\n<p>The word \"perpetually\" is the synonym for the word \"incessantly\". Hence, option d is the correct answer.</p>"}];
+
+// ===== STATE & DOM =====
+let currentIndex = 0;
+const totalQuestions = questions.length;
+const userAnswers = new Array(totalQuestions).fill(null); // selected option index or null
+const questionStates = new Array(totalQuestions).fill("notVisited"); // "notVisited", "notAnswered", "answered", "marked"
+
+// Timer
+const timerLabel = document.getElementById('timer-label');
+let timerInterval = null;
+let remainingSeconds = TEST_DURATION_SECONDS;
+
+// DOM elements
+const instructionHeader = document.getElementById('instruction-header');
+const quizHeader = document.getElementById('quiz-header');
+
+const instructionsContainer = document.getElementById('instructions-container');
+const quizContainer = document.getElementById('quiz-container');
+const solutionsContainer = document.getElementById('solutions-container');
+
+const qProgress = document.getElementById('q-progress');
+const questionText = document.getElementById('question-text');
+const optionsContainer = document.getElementById('options-container');
+
+const clearBtn = document.getElementById('clear-btn');
+const markBtn = document.getElementById('mark-btn');
+const nextBtn = document.getElementById('next-btn');
+const submitBtn = document.getElementById('submit-btn');
+
+const paletteContainer = document.getElementById('palette-container');
+const solutionsList = document.getElementById('solutions-list');
+const solutionsBackBtn = document.getElementById('solutions-back-btn');
+
+const resultOverlay = document.getElementById('result-overlay');
+const metricMarks = document.getElementById('metric-marks');
+const metricCorrect = document.getElementById('metric-correct');
+const metricWrong = document.getElementById('metric-wrong');
+const metricAttempted = document.getElementById('metric-attempted');
+const viewSolutionsBtn = document.getElementById('view-solutions-btn');
+const homeBtn = document.getElementById('home-btn');
+
+const instTotalQuestions = document.getElementById('inst-total-questions');
+const instSideTotal = document.getElementById('inst-side-total');
+const startTestBtn = document.getElementById('start-test-btn');
+
+let questionStartTime = null;
+let questionTimes = new Array(totalQuestions).fill(0);
+
+function formatTime(ms) {
+    const sec = Math.floor(ms / 1000);
+    return sec < 60 ? `${sec}s` : `${Math.floor(sec/60)}m ${sec % 60}s`;
+}
+
+// ===== TIMER FUNCTIONS =====
+function updateTimerLabel() {
+    const h = String(Math.floor(remainingSeconds / 3600)).padStart(2, '0');
+    const m = String(Math.floor((remainingSeconds % 3600) / 60)).padStart(2, '0');
+    const s = String(remainingSeconds % 60).padStart(2, '0');
+    timerLabel.textContent = `Time: ${h}:${m}:${s}`;
+}
+function startTimer() {
+    if (timerInterval) clearInterval(timerInterval);
+
+    updateTimerLabel();
+
+    timerInterval = setInterval(() => {
+        remainingSeconds--;
+
+        if (remainingSeconds <= 0) {
+            remainingSeconds = 0;
+            updateTimerLabel();
+            clearInterval(timerInterval);
+
+            // AUTO SUBMIT
+            if (questionStartTime !== null) {
+                questionTimes[currentIndex] +=
+                    (Date.now() - questionStartTime);
+            }
+            saveAnswerForCurrent();
+            showResultOverlay();
+            return;
+        }
+
+        updateTimerLabel();
+    }, 1000);
+}
+
+// ===== RENDERING =====
+function renderQuestion(index) {
+	if (questionStartTime !== null) {
+    questionTimes[currentIndex] += (Date.now() - questionStartTime);
+	}
+	questionStartTime = Date.now();
+
+    const q = questions[index];
+    qProgress.textContent = `Question ${index + 1} of ${totalQuestions}`;
+    questionText.innerHTML = q.question;
+    optionsContainer.innerHTML = '';
+
+    q.options.forEach((optHtml, optIndex) => {
+        const label = document.createElement('label');
+        label.className = 'option';
+
+        const input = document.createElement('input');
+        input.type = 'radio';
+        input.name = 'option';
+        input.value = optIndex;
+
+        if (userAnswers[index] === optIndex) {
+            input.checked = true;
+        }
+
+        const span = document.createElement('div');
+        span.className = 'option-text';
+        span.innerHTML = optHtml;
+
+        label.appendChild(input);
+        label.appendChild(span);
+
+        label.addEventListener('click', () => {
+            input.checked = true;
+        });
+
+        optionsContainer.appendChild(label);
+    });
+
+    // If first visit, mark as notAnswered for palette
+    if (questionStates[index] === "notVisited") {
+        questionStates[index] = (userAnswers[index] != null) ? "answered" : "notAnswered";
+    }
+
+    updatePalette();
+}
+
+function updatePalette() {
+    paletteContainer.innerHTML = '';
+
+    const drawerContainer =
+        document.getElementById('palette-drawer-container');
+    if (drawerContainer) drawerContainer.innerHTML = '';
+
+    for (let i = 0; i < totalQuestions; i++) {
+
+        function createBtn() {
+            const btn = document.createElement('div');
+            let cls = 'palette-item';
+
+            if (questionStates[i] === 'notVisited') cls += ' state-notVisited';
+            else if (questionStates[i] === 'notAnswered') cls += ' state-notAnswered';
+            else if (questionStates[i] === 'answered') cls += ' state-answered';
+            else if (questionStates[i] === 'marked') cls += ' state-marked';
+
+            if (i === currentIndex) cls += ' current';
+
+            btn.className = cls;
+            btn.textContent = i + 1;
+
+            btn.addEventListener('click', () => {
+                saveAnswerForCurrent();
+                currentIndex = i;
+                renderQuestion(currentIndex);
+                closeDrawer(); // safe on desktop
+            });
+
+            return btn;
+        }
+
+        paletteContainer.appendChild(createBtn());
+        if (drawerContainer) drawerContainer.appendChild(createBtn());
+    }
+}
+
+function getSelectedOptionIndex() {
+    const selected = document.querySelector('input[name="option"]:checked');
+    if (!selected) return null;
+    return parseInt(selected.value, 10);
+}
+
+function saveAnswerForCurrent() {
+    const selIndex = getSelectedOptionIndex();
+    if (selIndex !== null) {
+        userAnswers[currentIndex] = selIndex;
+        questionStates[currentIndex] = "answered";
+    } else {
+        // Only change to notAnswered if not marked
+        if (questionStates[currentIndex] !== "marked") {
+            questionStates[currentIndex] = "notAnswered";
+        }
+    }
+    updatePalette();
+}
+
+// ===== RESULT & SOLUTIONS =====
+function showResultOverlay() {
+    let correct = 0;
+    let attempted = 0;
+
+    const MARKS_PER_Q = 1;
+    const NEGATIVE_MARKS = 0.25;
+    const totalQuestions = questions.length;
+    const maxMarks = totalQuestions * MARKS_PER_Q;
+    let totalMarks = 0;
+
+    questions.forEach((q, i) => {
+        const ans = userAnswers[i];
+        if (ans !== null && ans !== undefined) {
+            attempted++;
+            if (ans === q.correctIndex) {
+                correct++;
+                totalMarks += MARKS_PER_Q;
+            } else {
+                totalMarks -= NEGATIVE_MARKS;
+            }
+        }
+    });
+
+    const wrong = attempted - correct;
+    const avgTime =
+        questionTimes.reduce((a, b) => a + b, 0) / totalQuestions;
+
+    metricMarks.textContent =
+        `${totalMarks.toFixed(2)} / ${maxMarks.toFixed(2)}`;
+    metricCorrect.textContent = correct;
+    metricWrong.textContent = wrong;
+    metricAttempted.textContent = attempted;
+    document.getElementById("metric-avgtime").textContent =
+        formatTime(avgTime);
+
+    resultOverlay.style.display = "flex";
+}
+
+function closeResultOverlay() {
+    resultOverlay.style.display = 'none';
+}
+
+function buildSolutionsView() {
+    solutionsList.innerHTML = '';
+    questions.forEach((q, index) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'solution-item';
+
+        const qDiv = document.createElement('div');
+        qDiv.className = 'solution-question';
+        qDiv.innerHTML = `<strong>Q${index + 1}.</strong> ${q.question}`;
+        wrapper.appendChild(qDiv);
+
+        const optsDiv = document.createElement('div');
+        optsDiv.className = 'solution-options';
+
+        q.options.forEach((optHtml, optIndex) => {
+            const optDiv = document.createElement('div');
+            let cls = 'solution-option';
+            if (optIndex === q.correctIndex) {
+                cls += ' correct';
+            } else if (userAnswers[index] === optIndex) {
+                cls += ' wrong';
+            }
+            optDiv.className = cls;
+
+            const labelSpan = document.createElement('div');
+            labelSpan.className = 'solution-label';
+            labelSpan.textContent = String.fromCharCode(65 + optIndex) + '.';
+
+            const textDiv = document.createElement('div');
+            textDiv.className = 'solution-text';
+            textDiv.innerHTML = optHtml;
+
+            optDiv.appendChild(labelSpan);
+            optDiv.appendChild(textDiv);
+            optsDiv.appendChild(optDiv);
+        });
+
+        wrapper.appendChild(optsDiv);
+
+        const solDiv = document.createElement('div');
+        solDiv.className = 'solution-explanation';
+        const solutionHtml = (q.solution || '')
+			.replace(/\\"/g, '"')      // unescape quotes
+			.replace(/\\n/g, '')       // remove escaped newlines
+			.replace(/\\t/g, '');      // remove escaped tabs
+
+		solDiv.innerHTML = `<strong>Solution:</strong><br>${solutionHtml}`;
+        wrapper.appendChild(solDiv);
+
+        solutionsList.appendChild(wrapper);
+    });
+}
+
+// ===== EVENT HANDLERS =====
+startTestBtn.addEventListener('click', () => {
+    // Hide instruction header + screen
+    instructionHeader.style.display = 'none';
+    instructionsContainer.style.display = 'none';
+
+    // Show quiz header + screen
+    quizHeader.style.display = 'flex';
+    quizContainer.style.display = 'block';
+    solutionsContainer.style.display = 'none';
+
+    currentIndex = 0;
+    renderQuestion(currentIndex);
+    startTimer();
+    questionStartTime = Date.now();
+});
+
+clearBtn.addEventListener('click', () => {
+    // Clear selection & mark as "notAnswered" (red)
+    userAnswers[currentIndex] = null;
+    questionStates[currentIndex] = "notAnswered";
+    renderQuestion(currentIndex);
+});
+
+markBtn.addEventListener('click', () => {
+    // Option 2: DO NOT save answer when marking for review
+    userAnswers[currentIndex] = null;
+    questionStates[currentIndex] = "marked";
+    if (currentIndex < totalQuestions - 1) {
+        currentIndex++;
+        renderQuestion(currentIndex);
+    } else {
+        // stay on last, just refresh colors
+        renderQuestion(currentIndex);
+    }
+});
+
+nextBtn.addEventListener('click', () => {
+    saveAnswerForCurrent();
+    if (currentIndex < totalQuestions - 1) {
+        currentIndex++;
+        renderQuestion(currentIndex);
+    } else {
+        // last question: nothing to move, but answer is saved
+        renderQuestion(currentIndex);
+    }
+});
+
+submitBtn.addEventListener('click', () => {
+	if (questionStartTime !== null) {
+    questionTimes[currentIndex] += (Date.now() - questionStartTime);
+    questionStartTime = null;
+	}
+    saveAnswerForCurrent();
+    clearInterval(timerInterval);
+    showResultOverlay();
+});
+
+viewSolutionsBtn.addEventListener('click', () => {
+    resultOverlay.style.display = 'none';
+    quizContainer.style.display = 'none';
+    solutionsContainer.style.display = 'block';
+    buildSolutionsView();
+});
+
+solutionsBackBtn.addEventListener('click', () => {
+    solutionsContainer.style.display = 'none';
+    quizContainer.style.display = 'none';
+    resultOverlay.style.display = 'flex';
+});
+
+homeBtn.addEventListener('click', () => {
+    resultOverlay.style.display = 'none';
+    solutionsContainer.style.display = 'none';
+    quizContainer.style.display = 'none';       // FIXED
+    instructionsContainer.style.display = 'block'; // FIXED
+
+    instructionHeader.style.display = 'block';
+    quizHeader.style.display = 'none';
+
+    currentIndex = 0;
+    userAnswers.fill(null);
+    questionStates.fill("notVisited");
+
+    window.scrollTo(0, 0);
+});
+
+
+// ===== INIT =====
+instTotalQuestions.textContent = totalQuestions;
+instSideTotal.textContent = totalQuestions;
+
+// ===== HAMBURGER MENU LOGIC =====
+const menuBtn = document.getElementById('menu-btn');
+const drawer = document.getElementById('palette-drawer');
+const drawerOverlay = document.getElementById('drawer-overlay');
+
+function openDrawer() {
+    if (!drawer || !drawerOverlay) return;
+    drawer.classList.add('open');
+    drawerOverlay.classList.add('show');
+    document.body.classList.add('drawer-open');
+}
+
+function closeDrawer() {
+    if (!drawer || !drawerOverlay) return;
+    drawer.classList.remove('open');
+    drawerOverlay.classList.remove('show');
+    document.body.classList.remove('drawer-open');
+}
+
+if (menuBtn) {
+    menuBtn.addEventListener('click', openDrawer);
+}
+
+if (drawerOverlay) {
+    drawerOverlay.addEventListener('click', closeDrawer);
+}
+</script>
+
+</body>
+</html>

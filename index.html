@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mock Test Home</title>
+
+    <style>
+      /* ==============================
+   GLOBAL RESET & BASE
+============================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: linear-gradient(135deg, #f8fafc, #eef2ff);
+  color: #111827;
+  min-height: 100vh;
+}
+
+/* ==============================
+   PAGE TITLE
+============================== */
+h1 {
+  text-align: center;
+  font-size: 34px;
+  font-weight: 700;
+  margin: 32px 0 28px;
+  letter-spacing: 0.4px;
+}
+
+/* ==============================
+   CHAPTER GRID
+============================== */
+.chapter-container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 0 16px 50px;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 22px;
+}
+
+/* ==============================
+   CHAPTER BLOCK (CARD + TESTS)
+============================== */
+.chapter-block {
+  width: 100%;
+}
+
+/* ==============================
+   CHAPTER CARD
+============================== */
+.chapter-card {
+  background: #ffffff;
+  padding: 26px 20px;
+  border-radius: 16px;
+
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+
+  cursor: pointer;
+  border: 1px solid #e5e7eb;
+
+  box-shadow:
+    0 10px 25px rgba(15, 23, 42, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.chapter-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 18px 40px rgba(15, 23, 42, 0.15);
+  background: #f9fafb;
+}
+
+.chapter-card:active {
+  transform: translateY(-1px);
+}
+
+/* ==============================
+   TEST LIST (EXPANDS BELOW CARD)
+============================== */
+.test-list {
+  margin-top: 14px;
+}
+
+/* ==============================
+   TEST LINKS
+============================== */
+.test-link {
+  display: block;
+  background: linear-gradient(90deg, #f9fafb, #ffffff);
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+
+  padding: 14px 16px;
+  margin-bottom: 10px;
+
+  text-decoration: none;
+  color: #111827;
+  font-size: 15px;
+  font-weight: 500;
+
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.05);
+
+  transition:
+    background 0.15s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.test-link:hover {
+  background: #eef2ff;
+  transform: translateX(6px);
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.12);
+}
+
+/* ==============================
+   UTILITY
+============================== */
+.hidden {
+  display: none;
+}
+
+/* ==============================
+   MOBILE OPTIMIZATION
+============================== */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 28px;
+    margin: 24px 0 20px;
+  }
+
+  .chapter-container {
+    gap: 18px;
+  }
+
+  .chapter-card {
+    font-size: 16px;
+    padding: 22px 16px;
+  }
+
+  .test-link {
+    font-size: 14px;
+    padding: 12px 14px;
+  }
+}
+
+/* ==============================
+   VERY SMALL DEVICES
+============================== */
+@media (max-width: 420px) {
+  h1 {
+    font-size: 24px;
+  }
+
+  .chapter-card {
+    padding: 20px 14px;
+  }
+}
+
+    </style>
+</head>
+
+<body>
+
+    <h1>English Tests</h1>
+
+    <div class="chapter-container">
+
+        <div class="chapter-block">
+            <div class="chapter-card" onclick="toggleChapter(this, 'Chapter1')">Reading Comprehension</div>
+            <div class="test-list"></div>
+        </div>
+
+        <div class="chapter-block">
+            <div class="chapter-card" onclick="toggleChapter(this, 'Chapter2')">Cloze Test</div>
+            <div class="test-list"></div>
+        </div>
+
+        <div class="chapter-block">
+            <div class="chapter-card" onclick="toggleChapter(this, 'Chapter3')">Word Usage</div>
+            <div class="test-list"></div>
+        </div>
+
+        <div class="chapter-block">
+            <div class="chapter-card" onclick="toggleChapter(this, 'Chapter4')">Word Swapping</div>
+            <div class="test-list"></div>
+        </div>
+
+        <div class="chapter-block">
+            <div class="chapter-card" onclick="toggleChapter(this, 'Chapter5')">Sentence Rearrangement</div>
+            <div class="test-list"></div>
+        </div>
+
+        <div class="chapter-block">
+            <div class="chapter-card" onclick="toggleChapter(this, 'Chapter6')">Match The Column</div>
+            <div class="test-list"></div>
+        </div>
+        <div class="chapter-block">
+            <div class="chapter-card" onclick="toggleChapter(this, 'Chapter7')">Double Fillers</div>
+            <div class="test-list"></div>
+        </div>
+
+        <div class="chapter-block">
+            <div class="chapter-card" onclick="toggleChapter(this, 'Chapter8')">Error Spotting</div>
+            <div class="test-list"></div>
+        </div>
+
+        <div class="chapter-block">
+            <div class="chapter-card" onclick="toggleChapter(this, 'Chapter9')">Jumbled Sentence</div>
+            <div class="test-list"></div>
+        </div>
+
+        <div class="chapter-block">
+            <div class="chapter-card" onclick="toggleChapter(this, 'Chapter10')">Misspelt Words</div>
+            <div class="test-list"></div>
+        </div>
+
+        <div class="chapter-block">
+            <div class="chapter-card" onclick="toggleChapter(this, 'Chapter11')">Sentence Improvement</div>
+            <div class="test-list"></div>
+        </div>
+
+        <div class="chapter-block">
+            <div class="chapter-card" onclick="toggleChapter(this, 'Chapter12')">Starters</div>
+            <div class="test-list"></div>
+        </div>
+        <div class="chapter-block">
+            <div class="chapter-card" onclick="toggleChapter(this, 'Chapter13')">Vocabulary Identity</div>
+            <div class="test-list"></div>
+        </div>
+        <div class="chapter-block">
+            <div class="chapter-card" onclick="toggleChapter(this, 'Chapter14')">Single Fillers</div>
+            <div class="test-list"></div>
+        </div>
+    </div>
+    <script>
+        const chapterTests = {
+            Chapter1: [
+                "Reading Comprehension New.html",
+                "Reading Comprehension Set -1.html",
+                "Reading Comprehension Set -2.html",
+                "Reading Comprehension Set -3.html",
+                "Reading Comprehension Set -4.html",
+                "Reading Comprehension Set -5.html"
+            ],
+
+            Chapter2: [
+                "Cloze Test Set -1.html",
+                "Cloze Test Set -2.html",
+                "Cloze Test Set -3.html",
+                "Cloze Test Set -4.html",
+                "Cloze Test Set -5.html"
+            ],
+
+            Chapter3: [
+                "Word Usage Set-1.html",
+                "Word Usage Set-2.html",
+                "Word Usage Set-3.html",
+                "Word Usage Set-4.html",
+                "Word Usage Set-5.html"
+            ],
+
+            Chapter4: [
+                "Word Swapping Set -1.html",
+                "Word Swapping Set -2.html",
+                "Word Swapping Set -3.html",
+                "Word Swapping Set -4.html",
+                "Word Swapping Set -5.html"
+            ],
+
+            Chapter5: [
+                "Sentence Rearrangement Set -1.html",
+                "Sentence Rearrangement Set -2.html",
+                "Sentence Rearrangement Set -3.html",
+                "Sentence Rearrangement Set -4.html",
+                "Sentence Rearrangement Set -5.html"
+            ],
+
+            Chapter6: [
+                "Match The Column Set -1.html",
+                "Match The Column Set -2.html",
+                "Match The Column Set -3.html",
+                "Match The Column Set -4.html",
+                "Match The Column Set -5.html"
+            ],
+            Chapter7: [
+                "Double Fillers Set -1.html",
+                "Double Fillers Set -2.html",
+                "Double Fillers Set -3.html",
+                "Double Fillers Set -4.html",
+                "Double Fillers Set -5.html"
+            ],
+
+            Chapter8: [
+                "Error Spotting Set -1.html",
+                "Error Spotting Set -2.html",
+                "Error Spotting Set -3.html",
+                "Error Spotting Set -4.html",
+                "Error Spotting Set -5.html"
+            ],
+
+            Chapter9: [
+                "Jumbled Sentence Set -1.html",
+                "Jumbled Sentence Set -2.html",
+                "Jumbled Sentence Set -3.html",
+                "Jumbled Sentence Set -4.html",
+                "Jumbled Sentence Set -5.html"
+            ],
+
+            Chapter10: [
+                "Misspelt Words Set -1.html",
+                "Misspelt Words Set -2.html",
+                "Misspelt Words Set -3.html",
+                "Misspelt Words Set -4.html",
+                "Misspelt Words Set -5.html"
+            ],
+
+            Chapter11: [
+                "Sentence Improvement Set -1.html",
+                "Sentence Improvement Set -2.html",
+                "Sentence Improvement Set -3.html",
+                "Sentence Improvement Set -4.html",
+                "Sentence Improvement Set -5.html"
+            ],
+
+            Chapter12: [
+                "Starters Set -1.html",
+                "Starters Set -2.html",
+                "Starters Set -3.html",
+                "Starters Set -4.html",
+                "Starters Set -5.html"
+            ],
+
+            Chapter13: [
+                "Vocabulary Identity Set -1.html",
+                "Vocabulary Identity Set -2.html",
+                "Vocabulary Identity Set -3.html",
+                "Vocabulary Identity Set -4.html",
+                "Vocabulary Identity Set -5.html"
+            ],
+            Chapter14: [
+                "Single Fillers Set -1.html",
+                "Single Fillers Set -2.html",
+                "Single Fillers Set -3.html",
+                "Single Fillers Set -4.html",
+                "Single Fillers Set -5.html"
+            ]
+
+        };
+function toggleChapter(card, chapter) {
+  if (!chapterTests[chapter]) return;
+}
+
+
+        function toggleChapter(card, chapter) {
+            // close all other lists
+            document.querySelectorAll(".test-list").forEach(t => t.innerHTML = "");
+
+            const container = card.nextElementSibling;
+
+            chapterTests[chapter].forEach((file, i) => {
+                const a = document.createElement("a");
+                a.href = chapter + "/" + file;
+                a.className = "test-link";
+                a.innerText = "Test " + (i + 1);
+                container.appendChild(a);
+            });
+
+            // smooth scroll (mobile UX)
+            card.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+    </script>
+</body>
+
+</html>
